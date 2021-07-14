@@ -1,8 +1,25 @@
 
 import os.path as path
 
+def is_file_already_uploaded(filename,course):
+	return ( not find_file_in_course(filename,course) is None )
 
+def find_file_in_course(filename,course):
+	"""
+	Checks to see of the file at `filename` is already in the "files" part of `course`.
 
+	It tests filename and size as reported on disk.  If it finds a match, then it's up. 
+	"""
+	import os
+
+	base = os.path.split(filename)[1]
+
+	files = course.get_files()
+	for f in files:
+		if f.filename==base and f.size == os.path.getsize(filename):
+			return f
+
+	return None
 
 def get_canvas_key_url():
 	"""
@@ -23,7 +40,8 @@ def get_canvas_key_url():
 		sys.exit()
 
 	# yes, this is scary.  it was also low-hanging fruit, and doing it another way was going to be too much work
-	exec(open(path.join(cred_loc)).read(),locals())
+	with open(path.join(cred_loc)) as cred_file:
+		exec(cred_file.read(),locals())
 
 	if isinstance(locals()['API_KEY'], str):
 		print(f'using canvas with API_KEY as defined in {cred_loc}')
@@ -141,8 +159,9 @@ class Image(object):
 
 		self.alttext = alttext
 
-	def publish(self,course, dest):
-		course.upload(self.filename,parent_folder_path=dest)
+	def publish(self, course, dest):
+		return course.upload(self.filename, parent_folder_path=dest)
+
 
 
 

@@ -1,15 +1,46 @@
+
+
 import sys
 sys.path.insert(0,'../')
-
 import markdown2canvas as mc
+import canvasapi
 
-course_id = 3099 # silviana's sandbox for this development
+import unittest
 
-canvas = mc.make_canvas_obj()
-course = canvas.get_course(course_id) 
 
-file_to_publish = 'has_local_images/hauser_menagerie.jpg'
+class UploadTester(unittest.TestCase):
+	@classmethod
+	def setUpClass(self):
+		import os
+		self.course_id = 3099 # silviana's sandbox for this development
 
-image = mc.Image(file_to_publish,'A menagerie of surfaces from the Hauser gallery')
+		self.canvas = mc.make_canvas_obj()
+		self.course = self.canvas.get_course(self.course_id) 
 
-image.publish(course,'images')
+		self.file_to_publish = 'has_local_images/hauser_menagerie.jpg'
+		self.filename = os.path.split(self.file_to_publish)[1]
+		self.image = mc.Image(self.file_to_publish,'A menagerie of surfaces from the Hauser gallery')
+
+	@classmethod
+	def tearDownClass(self):
+		self.canvas
+
+	def test_can_publish_image(self):
+		self.image.publish(self.course,'images')
+
+	def test_can_find_published_image(self):
+		self.image.publish(self.course,'images')
+		self.assertTrue(mc.is_file_already_uploaded(self.file_to_publish,self.course))
+
+	def test_doesnt_find_deleted_image(self):
+		self.image.publish(self.course,'images')
+		self.assertTrue(mc.is_file_already_uploaded(self.file_to_publish,self.course))
+		f = mc.find_file_in_course(self.file_to_publish,self.course)
+		f.delete()
+		self.assertTrue(not mc.is_file_already_uploaded(self.file_to_publish,self.course))
+
+if __name__ == '__main__':
+    pgnm = 'this_argument_is_ignored_but_necessary'
+    unittest.main(argv=[pgnm], exit=False)
+
+
