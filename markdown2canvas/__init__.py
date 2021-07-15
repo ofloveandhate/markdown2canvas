@@ -159,9 +159,11 @@ class Image(object):
 
 		self.alttext = alttext
 
-	def publish(self, course, dest):
-		return course.upload(self.filename, parent_folder_path=dest)
-
+	def publish(self, course, dest, overwrite=False):
+		if not is_file_already_uploaded(self.filename,course):
+			return course.upload(self.filename, parent_folder_path=dest)
+			
+		return False
 
 
 

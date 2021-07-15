@@ -29,11 +29,11 @@ class UploadTester(unittest.TestCase):
 		self.image.publish(self.course,'images')
 
 	def test_can_find_published_image(self):
-		self.image.publish(self.course,'images')
+		self.image.publish(self.course,'images',overwrite=True)
 		self.assertTrue(mc.is_file_already_uploaded(self.file_to_publish,self.course))
 
 	def test_doesnt_find_deleted_image(self):
-		self.image.publish(self.course,'images')
+		self.image.publish(self.course,'images',overwrite=True)
 		self.assertTrue(mc.is_file_already_uploaded(self.file_to_publish,self.course))
 		f = mc.find_file_in_course(self.file_to_publish,self.course)
 		f.delete()
