@@ -2,6 +2,9 @@
 import os.path as path
 
 def is_file_already_uploaded(filename,course):
+	"""
+	returns a boolean, true if there's a file of `filename` already in `course`.
+	"""
 	return ( not find_file_in_course(filename,course) is None )
 
 def find_file_in_course(filename,course):
@@ -20,6 +23,37 @@ def find_file_in_course(filename,course):
 			return f
 
 	return None
+
+
+
+
+
+
+
+def is_assignment_already_uploaded(name,course):
+	"""
+	returns a boolean indicating whether an assignment of the given `name` is already in the `course`.
+	"""
+	return ( not find_assignment_in_course(name,course) is None )
+
+
+def find_assignment_in_course(name,course):
+	"""
+	Checks to see if there's already an assignment named `name` as part of `course`.
+
+	tests merely based on the name.  assumes assingments are uniquely named. 
+	"""
+	import os
+
+	assignments = course.get_files()
+	for a in assignments:
+		if a.name == name:
+			return a
+
+	return None
+
+
+
 
 def get_canvas_key_url():
 	"""
@@ -52,7 +86,7 @@ def get_canvas_key_url():
 	return locals()['API_KEY'],locals()['API_URL']
 
 
-def make_canvas_obj():
+def make_canvas_api_obj():
 	import canvasapi
 
 	key, url = get_canvas_key_url()
@@ -138,12 +172,43 @@ class Assignment(Page):
 		super(Assignment, self).__init__(pagename, filename)
 
 		self.duedate = ''
-		self.filetypes = []
+		self.accepted_filetypes = []
 
 
 
-	def publish(course):
-		pass
+	def publish(self, course, overwrite=False):
+		"""
+		if `overwrite` is False, then if an assignment is found with the same name already, the function will decline to make any edits.
+
+		That is, if overwrite==False, then this function will only succeed if there's no existing assignment of the same name.
+		"""
+		if is_assignment_already_uploaded(self.pagename,course):
+			if overwrite:
+				a = find_assignment_in_course(self.pagename,course)
+			else:
+				# should i move to a raising model?
+				return False
+		else:
+			# make new assignment of name in course.
+			a = course.create_assignment(assignment={'name':self.pagename})
+
+		# now that we have the assignment, we'll update its content.
+		new_props={
+			'name':self.pagename,
+			'description':self.html
+		}
+		a.edit(assignment=new_props)
+		# a = remote_assignment
+		# a.name
+		# a.due_at_date = datetime.datetime
+		# a.unlock_at_date
+		# a.points_possible
+		# a.allowed_extensions
+
+		# ass[0].edit(assignment={'lock_at':datetime.datetime(2021, 8, 17, 4, 59, 59),'due_at':datetime.datetime(2021, 8, 17, 4, 59, 59)})
+
+
+		return True
 
 
 
@@ -162,7 +227,7 @@ class Image(object):
 	def publish(self, course, dest, overwrite=False):
 		if not is_file_already_uploaded(self.filename,course):
 			return course.upload(self.filename, parent_folder_path=dest)
-			
+
 		return False
 
 

@@ -14,7 +14,7 @@ class UploadTester(unittest.TestCase):
 		import os
 		self.course_id = 3099 # silviana's sandbox for this development
 
-		self.canvas = mc.make_canvas_obj()
+		self.canvas = mc.make_canvas_api_obj()
 		self.course = self.canvas.get_course(self.course_id) 
 
 		self.file_to_publish = 'has_local_images/hauser_menagerie.jpg'
