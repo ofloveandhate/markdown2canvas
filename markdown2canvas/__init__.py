@@ -197,13 +197,9 @@ class CanvasObject(object):
 	A base class for wrapping canvas objects.  
 	"""
 
-	def __init__(self, folder, canvas_obj=None):
+	def __init__(self, canvas_obj=None):
 		import os
 		super(object, self).__init__()
-
-		self.folder = folder
-		self.sourcename = os.path.join(folder,'source.md')
-		self.metaname = os.path.join(folder,'meta.json')
 
 		# try to open, and see if the meta and source files exist.
 		# if not, raise
@@ -227,6 +223,10 @@ class Document(CanvasObject):
 		
 		super(Document,self).__init__(folder)
 		import json, os
+
+		self.folder = folder
+		self.sourcename = os.path.join(folder,'source.md')
+		self.metaname = os.path.join(folder,'meta.json')
 
 		with open(os.path.join(folder,'meta.json'),'r') as f:
 			self.metadata = json.load(f)
@@ -393,9 +393,8 @@ class Image(CanvasObject):
 		super(Image, self).__init__()
 
 		self.filename = filename
-
 		self.name = path.split(filename)[1]
-
+		self.folder = path.split(filename)[0]
 		self.alttext = alttext
 
 	def publish(self, course, dest, overwrite=False):

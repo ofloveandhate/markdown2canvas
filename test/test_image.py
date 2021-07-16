@@ -26,7 +26,7 @@ class UploadTester(unittest.TestCase):
 		self.canvas
 
 	def test_can_publish_image(self):
-		self.image.publish(self.course,'images')
+		self.image.publish(self.course,'images',overwrite=True)
 
 	def test_can_find_published_image(self):
 		self.image.publish(self.course,'images',overwrite=True)
