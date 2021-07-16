@@ -37,5 +37,6 @@ This is how you'll be successful in this assignment:
 * arst
 * ast
 
-
+![a cute little penguin](penguin.jpg)
+From [wikimedia commons, CC-BY-SA](https://commons.wikimedia.org/wiki/File:Ping%C3%BCino_(1).JPG)
 

@@ -37,6 +37,14 @@ class AssignmentTester(unittest.TestCase):
 		self.assignment.publish(self.course,overwrite=True)
 		self.assertTrue(mc.is_assignment_already_uploaded(self.assignment.name,self.course))
 
+	def test_already_online_raises(self):
+		# publish once, forcefully.
+		self.assignment.publish(self.course,overwrite=True)
+
+		# the second publish, with overwrite=False, should raise
+		with self.assertRaises(mc.AlreadyExists):
+			self.assignment.publish(self.course,overwrite=False) # default is False
+
 	def test_doesnt_find_deleted(self):
 		name = self.assignment.name
 

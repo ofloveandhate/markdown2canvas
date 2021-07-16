@@ -357,7 +357,6 @@ class Assignment(Document):
 		try:
 			assignment = create_or_get_assignment(self.name, course, overwrite)
 		except AlreadyExists as e:
-			print('AlreadyExists')
 			if not overwrite:
 				raise e
 
