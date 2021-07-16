@@ -30,12 +30,13 @@ class PageTester(unittest.TestCase):
 	def test_aaa_meta(self):
 		self.assertEqual(self.page.name,'Test Has Local Images')
 
-	def test_can_publish(self):
+
+
+
+	def test_bbb_can_publish(self):
 		self.page.publish(self.course,overwrite=True)
 
-	def test_zzz_can_find_published(self):
-		self.page.publish(self.course,overwrite=True)
-		self.assertTrue(mc.is_page_already_uploaded(self.page.name,self.course))
+
 
 	def test_already_online_raises(self):
 		# publish once, forcefully.
@@ -44,6 +45,10 @@ class PageTester(unittest.TestCase):
 		# the second publish, with overwrite=False, should raise
 		with self.assertRaises(mc.AlreadyExists):
 			self.page.publish(self.course,overwrite=False) # default is False
+
+
+
+
 
 	def test_yyy_doesnt_find_deleted(self):
 		name = self.page.name
@@ -54,6 +59,15 @@ class PageTester(unittest.TestCase):
 		f.delete()
 		# print([i.name for i in self.course.get_pages()])
 		self.assertTrue(not mc.is_page_already_uploaded(name,self.course))
+
+
+
+	def test_zzz_can_find_published(self):
+		self.page.publish(self.course,overwrite=True)
+		self.assertTrue(mc.is_page_already_uploaded(self.page.name,self.course))
+
+
+
 
 if __name__ == '__main__':
     pgnm = 'this_argument_is_ignored_but_necessary'
