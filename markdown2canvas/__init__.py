@@ -28,6 +28,27 @@ def find_file_in_course(filename,course):
 
 
 
+def is_page_already_uploaded(name,course):
+	"""
+	returns a boolean indicating whether a page of the given `name` is already in the `course`.
+	"""
+	return ( not find_page_in_course(name,course) is None )
+
+
+def find_page_in_course(name,course):
+	"""
+	Checks to see if there's already a page named `name` as part of `course`.
+
+	tests merely based on the name.  assumes assingments are uniquely named. 
+	"""
+	import os
+	pages = course.get_pages()
+	for p in pages:
+		if p.title == name:
+			return p
+
+	return None
+
 
 
 def is_assignment_already_uploaded(name,course):
@@ -121,7 +142,7 @@ def markdown2html(filename):
 
 
 
-def deal_with_images(html):
+def deal_with_local_images(html):
 	from bs4 import BeautifulSoup
 
 	soup = BeautifulSoup(html,features="lxml")
@@ -171,16 +192,16 @@ def create_or_get_assignment(name, course, even_if_exists = False):
 
 
 def create_or_get_page(name, course, even_if_exists):
-
 	if is_page_already_uploaded(name,course):
 
 		if even_if_exists:
-			a = find_page_in_course(name,course)
+			return find_page_in_course(name,course)
 		else:
 			raise AlreadyExists(f"page {name} already exists")
 	else:
 		# make new assignment of name in course.
-		a = course.create_page(assignment={'name':name})
+		result = course.create_page(wiki_page={'body':"empty page",'title':name})
+		return result
 
 
 
@@ -236,12 +257,13 @@ class Document(CanvasObject):
 		self._set_from_metadata()
 		
 		self.translated_html = markdown2html(self.sourcename)
-		self.images = deal_with_images(self.translated_html)
+		self.local_images = deal_with_local_images(self.translated_html)
 
 
 
 	def _set_from_metadata(self):
-		self.name = self.metadata['name'] # this one's required
+		self.name = self.metadata['name']
+
 
 
 	def _dict_of_props(self):
@@ -249,15 +271,9 @@ class Document(CanvasObject):
 		construct a dictionary of properties, such that it can be used to `edit` a canvas object.
 		"""
 		d = {}
-
-		d['description'] = self.translated_html
-		d['name'] = self.name
-
 		return d
 
 
-	def publish(self, course, overwrite=False):
-		pass
 
 
 
@@ -275,9 +291,9 @@ class Page(Document):
 
 	def _set_from_metadata(self):
 		super(Page,self)._set_from_metadata()
-		# nothing special for Pages
 
-	def publish(course, overwrite=False):
+
+	def publish(self,course, overwrite=False):
 		"""
 		if `overwrite` is False, then if an assignment is found with the same name already, the function will decline to make any edits.
 
@@ -289,9 +305,8 @@ class Page(Document):
 
 		returns the can
 		"""
-
 		try:
-			page = create_or_get_page(self.name, course)
+			page = create_or_get_page(self.name, course, even_if_exists=overwrite)
 		except AlreadyExists as e:
 			if not overwrite:
 				raise e
@@ -299,14 +314,16 @@ class Page(Document):
 		self.canvas_obj = page
 
 		d = self._dict_of_props()
-
-		page.edit(something=d) # obvs, this `something` is wrong
+		page.edit(wiki_page=d) # obvs, this `something` is wrong
 
 
 
 	def _dict_of_props(self):
 
-		d = super(Page)._dict_of_props()
+		d = super(Page,self)._dict_of_props()
+
+		d['body'] = self.translated_html
+		d['title'] = self.name 
 
 		return d
 
@@ -322,7 +339,7 @@ class Assignment(Document):
 
 	def _set_from_metadata(self):
 		super(Assignment,self)._set_from_metadata()
-
+		
 		if 'allowed_extensions' in self.metadata:
 			self.allowed_extensions = self.metadata['allowed_extensions']
 		else:
@@ -337,7 +354,8 @@ class Assignment(Document):
 	def _dict_of_props(self):
 
 		d = super(Assignment,self)._dict_of_props()
-
+		d['name'] = self.name
+		d['description'] = self.translated_html
 		if not self.allowed_extensions is None:
 			d['allowed_extensions'] = self.allowed_extensions
 		if not self.points_possible is None:
@@ -363,7 +381,6 @@ class Assignment(Document):
 
 		self.canvas_obj = assignment
 
-		super(Assignment, self).publish(course, overwrite)
 
 		# now that we have the assignment, we'll update its content.
 
