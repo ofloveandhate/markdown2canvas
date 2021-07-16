@@ -1,0 +1,6 @@
+{
+	"type": "assignment",
+	"points_possible": 100,
+	"allowed_extensions": ["pdf","docx","jpg"],
+	"name": "Test Programming Assignment"
+}

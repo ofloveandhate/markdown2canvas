@@ -44,9 +44,9 @@ def find_assignment_in_course(name,course):
 	tests merely based on the name.  assumes assingments are uniquely named. 
 	"""
 	import os
-
-	assignments = course.get_files()
+	assignments = course.get_assignments()
 	for a in assignments:
+		
 		if a.name == name:
 			return a
 
@@ -122,57 +122,228 @@ def markdown2html(filename):
 
 
 def deal_with_images(html):
+	from bs4 import BeautifulSoup
 
 	soup = BeautifulSoup(html,features="lxml")
 
 	images = []
 
-	print('\n\nbefore:\n\n')
-	print(soup)
+	# print('\n\nbefore:\n\n')
+	# print(soup)
 
 
 	found_imgs = soup.findAll("img")
 
 	if found_imgs:
-		print(f'found {len(found_imgs)} images!!!')
+		# print(f'found {len(found_imgs)} images!!!')
 
 		for img in found_imgs:
 			src = img["src"]
 			images.append(Image(src))
 			# img['src'] = path.abspath(path.join(root,src))
 
-	print('\n\nafter:\n\n')
-	print(soup)
+	# print('\n\nafter:\n\n')
+	# print(soup)
 
 	return images
 
 
-class Page(object):
-	"""docstring for Page
 
-	pagename -- a string, the name of the page on Canvas
+class AlreadyExists(Exception):
+
+    def __init__(self, message, errors=""):            
+        # Call the base class constructor with the parameters it needs
+        super().__init__(message)
+            
+        self.errors = errors
+
+
+def create_or_get_assignment(name, course, even_if_exists = False):
+
+	if is_assignment_already_uploaded(name,course):
+		if even_if_exists:
+			return find_assignment_in_course(name,course)
+		else:
+			raise AlreadyExists(f"assignment {name} already exists")
+	else:
+		# make new assignment of name in course.
+		return course.create_assignment(assignment={'name':name})
+
+
+def create_or_get_page(name, course, even_if_exists):
+
+	if is_page_already_uploaded(name,course):
+
+		if even_if_exists:
+			a = find_page_in_course(name,course)
+		else:
+			raise AlreadyExists(f"page {name} already exists")
+	else:
+		# make new assignment of name in course.
+		a = course.create_page(assignment={'name':name})
+
+
+
+
+
+
+
+
+################## classes
+
+
+class CanvasObject(object):
 	"""
-	def __init__(self, pagename, filename):
-		super(Page, self).__init__()
-		self.pagename = pagename
-		self.html = markdown2html(filename)
-		self.images = []
+	A base class for wrapping canvas objects.  
+	"""
+
+	def __init__(self, folder, canvas_obj=None):
+		import os
+		super(object, self).__init__()
+
+		self.folder = folder
+		self.sourcename = os.path.join(folder,'source.md')
+		self.metaname = os.path.join(folder,'meta.json')
+
+		# try to open, and see if the meta and source files exist.
+		# if not, raise
+
+		self.canvas_obj = canvas_obj
 
 
-	def publish(course):
+
+
+class Document(CanvasObject):
+	"""
+	A base class which handles common pieces of interface for things like Pages and Assignments
+	"""
+
+	def __init__(self,folder):
+		""" 
+		Construct a Document.  
+		Reads the meta.json file and source.md files
+		from the specified folder.
+		"""
+		
+		super(Document,self).__init__(folder)
+		import json, os
+
+		with open(os.path.join(folder,'meta.json'),'r') as f:
+			self.metadata = json.load(f)
+
+		self.name = None
+
+		self._set_from_metadata()
+		
+		self.translated_html = markdown2html(self.sourcename)
+		self.images = deal_with_images(self.translated_html)
+
+
+
+	def _set_from_metadata(self):
+		self.name = self.metadata['name'] # this one's required
+
+
+	def _dict_of_props(self):
+		"""
+		construct a dictionary of properties, such that it can be used to `edit` a canvas object.
+		"""
+		d = {}
+
+		d['description'] = self.translated_html
+		d['name'] = self.name
+
+		return d
+
+
+	def publish(self, course, overwrite=False):
 		pass
 
 
 
 
 
-class Assignment(Page):
-	"""docstring for Assignment"""
-	def __init__(self, pagename, filename):
-		super(Assignment, self).__init__(pagename, filename)
+class Page(Document):
+	"""
+	a Page is an abstraction around content for plain old canvas pages, which facilitates uploading to Canvas.
 
-		self.duedate = ''
-		self.accepted_filetypes = []
+	folder -- a string, the name of the folder we're going to read data from.
+	"""
+	def __init__(self, folder):
+		super(Page, self).__init__(folder)
+
+
+	def _set_from_metadata(self):
+		super(Page,self)._set_from_metadata()
+		# nothing special for Pages
+
+	def publish(course, overwrite=False):
+		"""
+		if `overwrite` is False, then if an assignment is found with the same name already, the function will decline to make any edits.
+
+		That is, if overwrite==False, then this function will only succeed if there's no existing assignment of the same name.
+
+		This base-class function will handle things like the html, images, etc.
+
+		Other derived-class `publish` functions will handle things like due-dates for assignments, etc.
+
+		returns the can
+		"""
+
+		try:
+			page = create_or_get_page(self.name, course)
+		except AlreadyExists as e:
+			if not overwrite:
+				raise e
+
+		self.canvas_obj = page
+
+		d = self._dict_of_props()
+
+		page.edit(something=d) # obvs, this `something` is wrong
+
+
+
+	def _dict_of_props(self):
+
+		d = super(Page)._dict_of_props()
+
+		return d
+
+
+
+class Assignment(Document):
+	"""docstring for Assignment"""
+	def __init__(self, folder):
+		super(Assignment, self).__init__(folder)
+
+		# self._set_from_metadata() # <-- this is called from the base __init__
+
+
+	def _set_from_metadata(self):
+		super(Assignment,self)._set_from_metadata()
+
+		if 'allowed_extensions' in self.metadata:
+			self.allowed_extensions = self.metadata['allowed_extensions']
+		else:
+			self.allowed_extensions = None
+
+		if 'points_possible' in self.metadata:
+			self.points_possible = self.metadata['points_possible']
+		else:
+			self.points_possible = None
+
+
+	def _dict_of_props(self):
+
+		d = super(Assignment,self)._dict_of_props()
+
+		if not self.allowed_extensions is None:
+			d['allowed_extensions'] = self.allowed_extensions
+		if not self.points_possible is None:
+			d['points_possible'] = self.points_possible
+
+		return d
 
 
 
@@ -182,39 +353,43 @@ class Assignment(Page):
 
 		That is, if overwrite==False, then this function will only succeed if there's no existing assignment of the same name.
 		"""
-		if is_assignment_already_uploaded(self.pagename,course):
-			if overwrite:
-				a = find_assignment_in_course(self.pagename,course)
-			else:
-				# should i move to a raising model?
-				return False
-		else:
-			# make new assignment of name in course.
-			a = course.create_assignment(assignment={'name':self.pagename})
+		assignment = None
+		try:
+			assignment = create_or_get_assignment(self.name, course, overwrite)
+		except AlreadyExists as e:
+			print('AlreadyExists')
+			if not overwrite:
+				raise e
+
+
+		self.canvas_obj = assignment
+
+		super(Assignment, self).publish(course, overwrite)
 
 		# now that we have the assignment, we'll update its content.
-		new_props={
-			'name':self.pagename,
-			'description':self.html
-		}
-		a.edit(assignment=new_props)
-		# a = remote_assignment
-		# a.name
-		# a.due_at_date = datetime.datetime
-		# a.unlock_at_date
-		# a.points_possible
-		# a.allowed_extensions
 
+		new_props=self._dict_of_props()
+
+		# for example,
 		# ass[0].edit(assignment={'lock_at':datetime.datetime(2021, 8, 17, 4, 59, 59),'due_at':datetime.datetime(2021, 8, 17, 4, 59, 59)})
+		# we construct the dict of values in the _dict_of_props() function.
 
+		assignment.edit(assignment=new_props) 
 
 		return True
 
 
 
 
-class Image(object):
-	"""docstring for Image"""
+
+
+
+class Image(CanvasObject):
+	"""
+	A wrapper class for images on Canvas
+	"""
+
+
 	def __init__(self, filename,alttext = ''):
 		super(Image, self).__init__()
 
@@ -227,8 +402,23 @@ class Image(object):
 	def publish(self, course, dest, overwrite=False):
 		if not is_file_already_uploaded(self.filename,course):
 			return course.upload(self.filename, parent_folder_path=dest)
+		else:
+			if not overwrite:
+				raise AlreadyExists(f'image {self.filename} already exists in course {course.name}')
 
-		return False
+		return True
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -237,6 +427,8 @@ class Image(object):
 
 def translate_and_publish(pagename, filename, course):
 	"""
+	Translates markdown files to html, including dealing with images, and publishes them to Canvas.
+
 	pagename -- a string, giving the name of the page on Canvas
 	filename -- the name of a markdown file
 	canvas -- a CanvasAPI instance
