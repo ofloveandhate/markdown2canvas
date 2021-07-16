@@ -4,6 +4,8 @@ import os.path as path
 def is_file_already_uploaded(filename,course):
 	"""
 	returns a boolean, true if there's a file of `filename` already in `course`.
+
+	This function wants the full path to the file.
 	"""
 	return ( not find_file_in_course(filename,course) is None )
 
@@ -12,11 +14,12 @@ def find_file_in_course(filename,course):
 	Checks to see of the file at `filename` is already in the "files" part of `course`.
 
 	It tests filename and size as reported on disk.  If it finds a match, then it's up. 
+
+	This function wants the full path to the file.
 	"""
 	import os
 
 	base = os.path.split(filename)[1]
-
 	files = course.get_files()
 	for f in files:
 		if f.filename==base and f.size == os.path.getsize(filename):
@@ -131,43 +134,75 @@ def markdown2html(filename):
 
 
 	html = markdown.markdown(emojified, extensions=['codehilite','fenced_code'])
-
-	# gotta something about images...  is beautiful soup in play?
-
-
 	soup = BeautifulSoup(html,features="lxml")
+
+	all_imgs = soup.findAll("img")
+	for img in all_imgs:
+			src = img["src"]
+			if 'http://' not in src:
+				img["src"] = path.join(root,src)
+
 	return soup.prettify()
 	
 	
 
 
 
-def deal_with_local_images(html):
+def find_local_images(html):
 	from bs4 import BeautifulSoup
 
 	soup = BeautifulSoup(html,features="lxml")
 
-	local_images = []
+	local_images = {}
 
-	# print('\n\nbefore:\n\n')
-	# print(soup)
+	all_imgs = soup.findAll("img")
 
-
-	found_imgs = soup.findAll("img")
-
-	if found_imgs:
-		# print(f'found {len(found_imgs)} total images!!!')
-
-		for img in found_imgs:
+	if all_imgs:
+		for img in all_imgs:
 			src = img["src"]
-			if 'http://' not in src:
-				local_images.append(Image(src))
-			# img['src'] = path.abspath(path.join(root,src))
-
-	# print('\n\nafter:\n\n')
-	# print(soup)
+			if src[:7] not in ['https:/','http://']:
+				local_images[src] = Image(path.abspath(src))
 
 	return local_images
+
+
+
+
+def adjust_html_for_images(html, published_images, courseid):
+	"""
+	this function edits the html source, replacing local url's
+	with url's to images on Canvas.
+	"""
+	from bs4 import BeautifulSoup
+
+	soup = BeautifulSoup(html,features="lxml")
+
+	all_imgs = soup.findAll("img")
+	if all_imgs:
+		for img in all_imgs:
+			src = img["src"]
+			if src[:7] not in ['https:/','http://']:
+				# find the image in the list of published images, replace url, do more stuff.
+				local_img = published_images[src]
+				img['src'] = local_img.make_src_url(courseid)
+				img['class'] = "instructure_file_link inline_disabled"
+				img['data-api-endpoint'] = local_img.make_api_endpoint_url(courseid)
+				img['data-api-returntype'] = 'File'
+	return soup.prettify()
+
+	# <p>
+	#     <img class="instructure_file_link inline_disabled" src="https://uws-td.instructure.com/courses/3099/files/219835/preview" alt="hauser_menagerie.jpg" data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835" data-api-returntype="File" />
+	# </p>
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -258,7 +293,24 @@ class Document(CanvasObject):
 		self._set_from_metadata()
 		
 		self.translated_html = markdown2html(self.sourcename)
-		self.local_images = deal_with_local_images(self.translated_html)
+		self.local_images = find_local_images(self.translated_html)
+
+		# print(f'local images: {self.local_images}')
+
+	def publish_images_and_adjust_html(self,course,overwrite=False):
+		# first, publish the local images. 
+		for im in self.local_images.values():
+			im.publish(course,'images')
+
+
+		# then, deal with the urls
+		self.translated_html = adjust_html_for_images(self.translated_html, self.local_images, course.id)
+
+		
+		with open(f'{self.folder}/result.html','w') as result:
+			result.write(self.translated_html)
+
+
 
 
 
@@ -317,7 +369,7 @@ class Page(Document):
 		d = self._dict_of_props()
 		page.edit(wiki_page=d) # obvs, this `something` is wrong
 
-
+		self.publish_images_and_adjust_html(course)
 
 	def _dict_of_props(self):
 
@@ -407,35 +459,104 @@ class Image(CanvasObject):
 	"""
 
 
-	def __init__(self, filename,alttext = ''):
+	def __init__(self, filename, alttext = ''):
 		super(Image, self).__init__()
 
-		self.filename = filename
+		self.givenpath = filename
 		self.name = path.split(filename)[1]
 		self.folder = path.split(filename)[0]
 		self.alttext = alttext
 
-	def publish(self, course, dest, overwrite=False):
+
+		# <p>
+		#     <img class="instructure_file_link inline_disabled" src="https://uws-td.instructure.com/courses/3099/files/219835/preview" alt="hauser_menagerie.jpg" data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835" data-api-returntype="File" />
+		# </p>
+
+	def publish(self, course, dest, force_overwrite=False, raise_if_already_uploaded = False):
 		"""
-	
+		
 
 		see also https://canvas.instructure.com/doc/api/file.file_uploads.html
 		"""
-		if overwrite:
+
+		if force_overwrite:
 			on_duplicate = 'overwrite'
 		else:
 			on_duplicate = 'rename'
 
-		if overwrite or (not is_file_already_uploaded(self.filename,course)):
-			return course.upload(self.filename, parent_folder_path=dest,on_duplicate=on_duplicate)
+
+		# this still needs to be adjusted to capture the Canvas image, in case it exists
+		if force_overwrite:
+			success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
+			if not success_code:
+				print(f'failed to upload...  {self.givenpath}')
+
+
+			self.canvas_obj = course.get_file(json_response['id'])
+			return img_on_canvas
+
 		else:
-			if not overwrite:
-				raise AlreadyExists(f'image {self.filename} already exists in course {course.name}')
+			if is_file_already_uploaded(self.givenpath,course):
+				if raise_if_already_uploaded:
+					raise AlreadyExists(f'image {self.name} already exists in course {course.name}, but you don\'t want to overwrite.')
+				else:
+					img_on_canvas = find_file_in_course(self.givenpath,course)
+			else:
+				# get the remote image
+				print(f'file not already uploaded, uploading {self.name}')
+				
+				success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
+				self.canvas_obj = course.get_file(json_response['id'])
+				if not success_code:
+					print(f'failed to upload...  {self.givenpath}')
 
 
+			self.canvas_obj = img_on_canvas
+			return img_on_canvas
+
+	def make_src_url(self,courseid):
+		"""
+		constructs a string which can be used to embed the image in a Canvas page.
+
+		sadly, the JSON back from Canvas doesn't just produce this for us.  lame.
+
+		"""
+		import canvasapi
+		im = self.canvas_obj
+		assert(isinstance(self.canvas_obj, canvasapi.file.File))
+
+		n = im.url.find('/files')
+
+		url = im.url[:n]+'/courses/'+str(courseid)+'/files/'+str(im.id)+'/preview'
+
+		return url
+
+	def make_api_endpoint_url(self,courseid):
+		import canvasapi
+		im = self.canvas_obj
+		assert(isinstance(self.canvas_obj, canvasapi.file.File))
+
+		n = im.url.find('/files')
+
+		url = im.url[:n] + '/api/v1/courses/' + str(courseid) + '/files/' + str(im.id)
+		return url
+		# data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835" 
 
 
+	def __str__(self):
+		result = "\n"
+		result = result + f'givenpath: {self.givenpath}\n'
+		result = result + f'name: {self.name}\n'
+		result = result + f'folder: {self.folder}\n'
+		result = result + f'alttext: {self.alttext}\n'
+		result = result + f'canvas_obj: {self.canvas_obj}\n'
+		url = self.make_src_url('fakecoursenumber')
+		result = result + f'constructed canvas url: {url}\n'
 
+		return result+'\n'
+
+	def __repr__(self):
+		return str(self)
 
 
 
