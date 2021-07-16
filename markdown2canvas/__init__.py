@@ -366,10 +366,10 @@ class Page(Document):
 
 		self.canvas_obj = page
 
+		self.publish_images_and_adjust_html(course)
+
 		d = self._dict_of_props()
 		page.edit(wiki_page=d) # obvs, this `something` is wrong
-
-		self.publish_images_and_adjust_html(course)
 
 	def _dict_of_props(self):
 
@@ -506,7 +506,7 @@ class Image(CanvasObject):
 				print(f'file not already uploaded, uploading {self.name}')
 				
 				success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
-				self.canvas_obj = course.get_file(json_response['id'])
+				img_on_canvas = course.get_file(json_response['id'])
 				if not success_code:
 					print(f'failed to upload...  {self.givenpath}')
 

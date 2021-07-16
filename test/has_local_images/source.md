@@ -2,6 +2,14 @@
 
 testing source including images
 
+arsioetiaoerntioears
+
+arsietonarieotnrasioen
+raiot
+nrioen
+
+
+
 ## an image using html
 
 <img src="hauser_menagerie.jpg" alt="A menagerie of Herwig Hauser surfaces" width="400"/>
