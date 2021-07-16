@@ -147,7 +147,7 @@ def deal_with_local_images(html):
 
 	soup = BeautifulSoup(html,features="lxml")
 
-	images = []
+	local_images = []
 
 	# print('\n\nbefore:\n\n')
 	# print(soup)
@@ -156,17 +156,18 @@ def deal_with_local_images(html):
 	found_imgs = soup.findAll("img")
 
 	if found_imgs:
-		# print(f'found {len(found_imgs)} images!!!')
+		# print(f'found {len(found_imgs)} total images!!!')
 
 		for img in found_imgs:
 			src = img["src"]
-			images.append(Image(src))
+			if 'http://' not in src:
+				local_images.append(Image(src))
 			# img['src'] = path.abspath(path.join(root,src))
 
 	# print('\n\nafter:\n\n')
 	# print(soup)
 
-	return images
+	return local_images
 
 
 
@@ -415,13 +416,21 @@ class Image(CanvasObject):
 		self.alttext = alttext
 
 	def publish(self, course, dest, overwrite=False):
-		if not is_file_already_uploaded(self.filename,course):
-			return course.upload(self.filename, parent_folder_path=dest)
+		"""
+	
+
+		see also https://canvas.instructure.com/doc/api/file.file_uploads.html
+		"""
+		if overwrite:
+			on_duplicate = 'overwrite'
+		else:
+			on_duplicate = 'rename'
+
+		if overwrite or (not is_file_already_uploaded(self.filename,course)):
+			return course.upload(self.filename, parent_folder_path=dest,on_duplicate=on_duplicate)
 		else:
 			if not overwrite:
 				raise AlreadyExists(f'image {self.filename} already exists in course {course.name}')
-
-		return True
 
 
 
