@@ -27,17 +27,24 @@ class AssignmentTester(unittest.TestCase):
 
 
 
-	def test_meta(self):
+	def test_aaa_meta(self):
 		self.assertEqual(self.assignment.name,'Test Programming Assignment')
+		self.assertEqual(self.assignment.points_possible,100)
 
-	def test_can_publish(self):
+	def test_bbb_can_publish(self):
 		self.assignment.publish(self.course,overwrite=True)
 
-	def test_can_find_published(self):
+	def test_yyy_can_find_published(self):
 		self.assignment.publish(self.course,overwrite=True)
 		self.assertTrue(mc.is_assignment_already_uploaded(self.assignment.name,self.course))
 
-	def test_already_online_raises(self):
+
+	def test_ccc_published_has_properties(self):
+		self.assignment.publish(self.course,overwrite=True)
+		on_canvas = mc.find_assignment_in_course(self.assignment.name,self.course)
+		self.assertEqual(on_canvas.points_possible, self.assignment.points_possible)
+
+	def test_zzz_already_online_raises(self):
 		# publish once, forcefully.
 		self.assignment.publish(self.course,overwrite=True)
 
@@ -45,7 +52,7 @@ class AssignmentTester(unittest.TestCase):
 		with self.assertRaises(mc.AlreadyExists):
 			self.assignment.publish(self.course,overwrite=False) # default is False
 
-	def test_doesnt_find_deleted(self):
+	def test_ttt_doesnt_find_deleted(self):
 		name = self.assignment.name
 
 		self.assignment.publish(self.course,overwrite=True)
