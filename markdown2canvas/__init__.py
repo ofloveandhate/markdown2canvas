@@ -393,15 +393,20 @@ class Assignment(Document):
 	def _set_from_metadata(self):
 		super(Assignment,self)._set_from_metadata()
 		
-		if 'allowed_extensions' in self.metadata:
-			self.allowed_extensions = self.metadata['allowed_extensions']
-		else:
-			self.allowed_extensions = None
 
-		if 'points_possible' in self.metadata:
-			self.points_possible = self.metadata['points_possible']
-		else:
-			self.points_possible = None
+		self.allowed_extensions = self.metadata['allowed_extensions'] if 'allowed_extensions' in self.metadata else None
+
+		self.points_possible = self.metadata['points_possible'] if 'points_possible' in self.metadata else None
+		
+		self.unlock_at = self.metadata['unlock_at'] if 'unlock_at' in self.metadata else None
+		self.lock_at = self.metadata['lock_at'] if 'lock_at' in self.metadata else None
+		self.due_at = self.metadata['due_at'] if 'due_at' in self.metadata else None
+
+		self.published = self.metadata['published'] if 'published' in self.metadata else None
+
+		self.submission_types = self.metadata['submission_types'] if 'submission_types' in self.metadata else None
+
+		self.external_tool_tag_attributes = self.metadata['external_tool_tag_attributes'] if 'external_tool_tag_attributes' in self.metadata else None
 
 
 	def _dict_of_props(self):
@@ -409,10 +414,29 @@ class Assignment(Document):
 		d = super(Assignment,self)._dict_of_props()
 		d['name'] = self.name
 		d['description'] = self.translated_html
+
 		if not self.allowed_extensions is None:
 			d['allowed_extensions'] = self.allowed_extensions
+
 		if not self.points_possible is None:
 			d['points_possible'] = self.points_possible
+
+		if not self.unlock_at is None:
+			d['unlock_at'] = self.unlock_at
+		if not self.due_at is None:
+			d['due_at'] = self.due_at
+		if not self.lock_at is None:
+			d['lock_at'] = self.lock_at
+
+		if not self.published is None:
+			d['published'] = self.published
+
+		if not self.submission_types is None:
+			d['submission_types'] = self.submission_types
+
+		if not self.external_tool_tag_attributes is None:
+			d['external_tool_tag_attributes'] = self.external_tool_tag_attributes
+
 
 		return d
 
