@@ -1,4 +1,8 @@
-A library for containerizing local markdown content to be published into the Canvas learning management system.
+A library for containerizing local markdown content to be published into the Canvas learning management system.  
+
+:warning: This library is under active development and the interface is NOT stable.
+
+---
 
 # Why I wrote/maintain this library
 
