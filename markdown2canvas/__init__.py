@@ -3,10 +3,17 @@ import os.path as path
 import logging
 
 import datetime
-now = datetime.datetime.today().strftime("%Y-%m-%d")
+today = datetime.datetime.today().strftime("%Y-%m-%d")
 
 log_level=logging.DEBUG
-logging.basicConfig(filename=f'markdown2canvas_{now}.log', encoding='utf-8', level=log_level,filemode = 'a')
+log_filename = f'markdown2canvas_{today}.log'
+log_encoding = 'utf-8'
+
+root_logger = logging.getLogger()
+root_logger.setLevel(log_level)
+handler = logging.FileHandler(log_filename, 'a', log_encoding)
+root_logger.addHandler(handler)
+
 logging.debug(f'starting logging at {datetime.datetime.now()}')
 
 def is_file_already_uploaded(filename,course):
