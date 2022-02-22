@@ -28,7 +28,7 @@ def find_file_in_course(filename,course):
 	"""
 	Checks to see of the file at `filename` is already in the "files" part of `course`.
 
-	It tests filename and size as reported on disk.  If it finds a match, then it's up. 
+	It tests filename and size as reported on disk.  If it finds a match, then it's up.
 
 	This function wants the full path to the file.
 	"""
@@ -57,7 +57,7 @@ def find_page_in_course(name,course):
 	"""
 	Checks to see if there's already a page named `name` as part of `course`.
 
-	tests merely based on the name.  assumes assingments are uniquely named. 
+	tests merely based on the name.  assumes assingments are uniquely named.
 	"""
 	import os
 	pages = course.get_pages()
@@ -80,12 +80,12 @@ def find_assignment_in_course(name,course):
 	"""
 	Checks to see if there's already an assignment named `name` as part of `course`.
 
-	tests merely based on the name.  assumes assingments are uniquely named. 
+	tests merely based on the name.  assumes assingments are uniquely named.
 	"""
 	import os
 	assignments = course.get_assignments()
 	for a in assignments:
-		
+
 		if a.name == name:
 			return a
 
@@ -96,11 +96,11 @@ def find_assignment_in_course(name,course):
 
 def get_canvas_key_url():
 	"""
-	reads a file using an environment variable, namely the file specified in `CANVAS_CREDENTIAL_FILE`.  
+	reads a file using an environment variable, namely the file specified in `CANVAS_CREDENTIAL_FILE`.
 
-	We need the 
+	We need the
 
-	* API_KEY 
+	* API_KEY
 	* API_URL
 
 	variables from that file.
@@ -140,7 +140,7 @@ def markdown2html(filename):
 
 	with open(filename,'r',encoding='utf-8') as file:
 		markdown_source = file.read()
-	
+
 	emojified = emoji.emojize(markdown_source)
 
 
@@ -154,8 +154,8 @@ def markdown2html(filename):
 				img["src"] = path.join(root,src)
 
 	return soup.prettify()
-	
-	
+
+
 
 
 
@@ -219,10 +219,10 @@ def adjust_html_for_images(html, published_images, courseid):
 
 class AlreadyExists(Exception):
 
-    def __init__(self, message, errors=""):            
+    def __init__(self, message, errors=""):
         # Call the base class constructor with the parameters it needs
         super().__init__(message)
-            
+
         self.errors = errors
 
 class SetupError(Exception):
@@ -273,7 +273,7 @@ def create_or_get_page(name, course, even_if_exists):
 
 class CanvasObject(object):
 	"""
-	A base class for wrapping canvas objects.  
+	A base class for wrapping canvas objects.
 	"""
 
 	def __init__(self, canvas_obj=None):
@@ -294,12 +294,12 @@ class Document(CanvasObject):
 	"""
 
 	def __init__(self,folder):
-		""" 
-		Construct a Document.  
+		"""
+		Construct a Document.
 		Reads the meta.json file and source.md files
 		from the specified folder.
 		"""
-		
+
 		super(Document,self).__init__(folder)
 		import json, os
 
@@ -313,14 +313,14 @@ class Document(CanvasObject):
 		self.name = None
 
 		self._set_from_metadata()
-		
+
 		self.translated_html = markdown2html(self.sourcename)
 		self.local_images = find_local_images(self.translated_html)
 
 		# print(f'local images: {self.local_images}')
 
 	def publish_images_and_adjust_html(self,course,overwrite=False):
-		# first, publish the local images. 
+		# first, publish the local images.
 		for im in self.local_images.values():
 			im.publish(course,'images')
 
@@ -328,7 +328,7 @@ class Document(CanvasObject):
 		# then, deal with the urls
 		self.translated_html = adjust_html_for_images(self.translated_html, self.local_images, course.id)
 
-		
+
 		with open(f'{self.folder}/result.html','w') as result:
 			result.write(self.translated_html)
 
@@ -398,7 +398,7 @@ class Page(Document):
 		d = super(Page,self)._dict_of_props()
 
 		d['body'] = self.translated_html
-		d['title'] = self.name 
+		d['title'] = self.name
 
 		return d
 
@@ -414,12 +414,12 @@ class Assignment(Document):
 
 	def _set_from_metadata(self):
 		super(Assignment,self)._set_from_metadata()
-		
+
 
 		self.allowed_extensions = self.metadata['allowed_extensions'] if 'allowed_extensions' in self.metadata else None
 
 		self.points_possible = self.metadata['points_possible'] if 'points_possible' in self.metadata else None
-		
+
 		self.unlock_at = self.metadata['unlock_at'] if 'unlock_at' in self.metadata else None
 		self.lock_at = self.metadata['lock_at'] if 'lock_at' in self.metadata else None
 		self.due_at = self.metadata['due_at'] if 'due_at' in self.metadata else None
@@ -489,7 +489,7 @@ class Assignment(Document):
 		# ass[0].edit(assignment={'lock_at':datetime.datetime(2021, 8, 17, 4, 59, 59),'due_at':datetime.datetime(2021, 8, 17, 4, 59, 59)})
 		# we construct the dict of values in the _dict_of_props() function.
 
-		assignment.edit(assignment=new_props) 
+		assignment.edit(assignment=new_props)
 
 		return True
 
@@ -520,7 +520,7 @@ class Image(CanvasObject):
 
 	def publish(self, course, dest, force_overwrite=False, raise_if_already_uploaded = False):
 		"""
-		
+
 
 		see also https://canvas.instructure.com/doc/api/file.file_uploads.html
 		"""
@@ -550,7 +550,7 @@ class Image(CanvasObject):
 			else:
 				# get the remote image
 				print(f'file not already uploaded, uploading {self.name}')
-				
+
 				success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
 				img_on_canvas = course.get_file(json_response['id'])
 				if not success_code:
@@ -586,7 +586,7 @@ class Image(CanvasObject):
 
 		url = im.url[:n] + '/api/v1/courses/' + str(courseid) + '/files/' + str(im.id)
 		return url
-		# data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835" 
+		# data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835"
 
 
 	def __str__(self):
@@ -644,7 +644,7 @@ def page2markdown(destination, page, even_if_exists=False):
 		raise AlreadyExists(f'you want to save a page into directory {destination}, but it exists and is not a directory')
 
 
-	
+
 
 	r = page.show_latest_revision()
 	body = r.body # this is the content of the page, in html.
@@ -693,4 +693,3 @@ def download_pages(destination, course, even_if_exists=False, name_filter=None):
 
 def download_assignments(destination, course):
 	assignments = course.get_assignments()
-
