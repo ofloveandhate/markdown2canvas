@@ -2,34 +2,34 @@
 import sys
 sys.path.insert(0,'../')
 import markdown2canvas as mc
-import canvasapi
 
 import unittest
 
 
-class PageTester(unittest.TestCase):
+class DropletsTester(unittest.TestCase):
 	@classmethod
 	def setUpClass(self):
 		import os
+
 		from course_id import test_course_id
 		self.course_id = test_course_id # silviana's sandbox for this development
 
 		self.canvas = mc.make_canvas_api_obj()
 		self.course = self.canvas.get_course(self.course_id) 
 
-		self.folder = 'has_local_images'
+		self.folder = 'uses_droplets'
 		self.filename = os.path.split(self.folder)[1]
 
 		self.page = mc.Page(self.folder)
 
 	@classmethod
 	def tearDownClass(self):
-		self.canvas
+		pass
 
 
 
 	def test_aaa_meta(self):
-		self.assertEqual(self.page.name,'Test Has Local Images')
+		self.assertEqual(self.page.name,'Test Uses Droplets')
 
 
 

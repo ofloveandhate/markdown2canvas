@@ -12,7 +12,8 @@ class UploadTester(unittest.TestCase):
 	@classmethod
 	def setUpClass(self):
 		import os
-		self.course_id = 3099 # silviana's sandbox for this development
+		from course_id import test_course_id
+		self.course_id = test_course_id # silviana's sandbox for this development
 
 		self.canvas = mc.make_canvas_api_obj()
 		self.course = self.canvas.get_course(self.course_id) 
