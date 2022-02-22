@@ -31,6 +31,8 @@ This library comes with several test pages/assignments:
 2. Move to repo location in terminal
 3. `pip install .`
 
+## Critical setup step, do not skip this
+
 You must also define an environment variable called `CANVAS_CREDENTIAL_FILE`, which is the location of a `.py` file containing two variables:
 1. `API_URL` -- a string, the url of how to access your Canvas install.  At UW Eau Claire, it's `https://uweau.instructure.com/`
 2. `API_KEY` -- a string, the key you can get from Canvas.  Here's [a link to a guide on how to generate yours](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-obtain-an-API-access-token-in-the-Canvas-Data-Portal/ta-p/157).  Do not share it with anyone -- having only this one piece of data, anyone can act as you.  Protect it at least as much as you would any other password or sensitive information.
@@ -38,3 +40,20 @@ You must also define an environment variable called `CANVAS_CREDENTIAL_FILE`, wh
 # Use
 
 This library is under active development, and will see major use leading up to the Fall 2022 semester.  I suggest checking out the `test_*.py` files in the `test` folder for example code.
+
+## Some quick examples
+
+Assuming you did my setup step, defining the environment variable and creating that file.  Do that first.
+
+### Download all pages, with a filter on the name of the pages
+```
+course_id = 127210000000003099 # silviana's sandbox for development
+
+canvas = mc.make_canvas_api_obj()
+course = canvas.get_course(course_id) 
+
+destination = 'downloaded_pages' 
+
+my_filter = lambda title: 'Images' in title
+mc.download_pages(destination, self.course, even_if_exists=True, name_filter=my_filter)
+```
