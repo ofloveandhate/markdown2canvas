@@ -12,7 +12,7 @@ A secondary problem this library solves is that of images.  Images on Canvas are
 
 # Containerization of content to be published to Canvas
 
-Containerization is accomplished by making pages/assignments live in folders.  The name of the folder is arbitrary; the metadata for the page lives in a JSON file, while the page itself is simply a markdown file.  That is, the structure of a page/assignment to be published on Canvas, using this library, is 
+Containerization is accomplished by making pages/assignments live in folders.  The name of the folder is arbitrary; the metadata for the page lives in a JSON file, while the page itself is simply a markdown file.  That is, the structure of a page/assignment to be published on Canvas, using this library, is
 
 - folder
   - `meta.json` -- a json file containing attributes.  keys should be compliant with the expectations of `canvasapi`.
@@ -47,13 +47,14 @@ Assuming you did my setup step, defining the environment variable and creating t
 
 ### Download all pages, with a filter on the name of the pages
 ```
+import markdown2canvas as mc
 course_id = 127210000000003099 # silviana's sandbox for development
 
 canvas = mc.make_canvas_api_obj()
-course = canvas.get_course(course_id) 
+course = canvas.get_course(course_id)
 
-destination = 'downloaded_pages' 
+destination = 'downloaded_pages'
 
 my_filter = lambda title: 'Images' in title
-mc.download_pages(destination, self.course, even_if_exists=True, name_filter=my_filter)
+mc.download_pages(destination, course, even_if_exists=True, name_filter=my_filter)
 ```
