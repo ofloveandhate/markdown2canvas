@@ -658,20 +658,20 @@ def page2markdown(destination, page, even_if_exists=False):
 
 
 
-def download_pages(destination, course, even_if_exists=False, name_matching_filter=None):
+def download_pages(destination, course, even_if_exists=False, name_filter=None):
 	"""
 	downloads the regular pages from a course, saving them
 	into a markdown2canvas compatible format.  that is, as
 	a folder with markdown source and json metadata.
 	"""
 
-	if name_matching_filter is None:
-		name_matching_filter = lambda x: True
+	if name_filter is None:
+		name_filter = lambda x: True
 
 	logging.info(f'downloading all pages from course {course.name}, saving to folder {destination}')
 	pages = course.get_pages()
 	for p in pages:
-		if name_matching_filter(p.show_latest_revision().title):
+		if name_filter(p.show_latest_revision().title):
 			page2markdown(destination,p,even_if_exists)
 
 

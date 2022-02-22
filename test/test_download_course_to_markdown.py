@@ -37,6 +37,15 @@ class DownloadTester(unittest.TestCase):
 
 		mc.download_pages(destination, self.course, even_if_exists=False)
 
+	def test_aaa_can_download_some_pages(self):
+		import os, shutil
+		destination = 'testresult_filtered_downloaded_content'
+		if os.path.exists(destination):
+			shutil.rmtree(destination)
+
+		my_filter = lambda title: 'Images' in title
+		mc.download_pages(destination, self.course, even_if_exists=False, name_filter=my_filter)
+
 
 if __name__ == '__main__':
     pgnm = 'this_argument_is_ignored_but_necessary'
