@@ -19,10 +19,6 @@ class DownloadTester(unittest.TestCase):
 		self.canvas = mc.make_canvas_api_obj()
 		self.course = self.canvas.get_course(self.course_id) 
 
-		
-
-		self.destination = 'downloaded'
-
 
 	@classmethod
 	def tearDownClass(self):
@@ -43,7 +39,7 @@ class DownloadTester(unittest.TestCase):
 		if os.path.exists(destination):
 			shutil.rmtree(destination)
 
-		my_filter = lambda title: 'Images' in title
+		my_filter = lambda title: 'test' in title.lower()
 		mc.download_pages(destination, self.course, even_if_exists=False, name_filter=my_filter)
 
 
