@@ -102,7 +102,7 @@ def get_canvas_key_url():
 
 	cred_loc = environ.get('CANVAS_CREDENTIAL_FILE')
 	if cred_loc is None:
-		print('`get_current_students.py` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
+		print('`get_canvas_key_url.py` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
 		sys.exit()
 
 	# yes, this is scary.  it was also low-hanging fruit, and doing it another way was going to be too much work
