@@ -109,18 +109,16 @@ def get_canvas_key_url():
 
 	cred_loc = environ.get('CANVAS_CREDENTIAL_FILE')
 	if cred_loc is None:
-		print('`get_canvas_key_url.py` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
-		sys.exit()
+		raise SetupError('`get_canvas_key_url.py` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
 
 	# yes, this is scary.  it was also low-hanging fruit, and doing it another way was going to be too much work
 	with open(path.join(cred_loc)) as cred_file:
 		exec(cred_file.read(),locals())
 
 	if isinstance(locals()['API_KEY'], str):
-		print(f'using canvas with API_KEY as defined in {cred_loc}')
+		logging.info(f'using canvas with API_KEY as defined in {cred_loc}')
 	else:
-		print(f'failing to use canvas.  Make sure that file {cred_loc} contains a line of code defining a string variable `API_KEY="keyhere"`')
-		sys.exit()
+		raise SetupError(f'failing to use canvas.  Make sure that file {cred_loc} contains a line of code defining a string variable `API_KEY="keyhere"`')
 
 	return locals()['API_KEY'],locals()['API_URL']
 
@@ -226,6 +224,17 @@ class AlreadyExists(Exception):
         super().__init__(message)
             
         self.errors = errors
+
+class SetupError(Exception):
+
+    def __init__(self, message, errors=""):            
+        # Call the base class constructor with the parameters it needs
+        super().__init__(message)
+            
+        self.errors = errors
+
+
+
 
 
 def create_or_get_assignment(name, course, even_if_exists = False):
