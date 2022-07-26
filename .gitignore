@@ -6,3 +6,4 @@
 build/
 *downloaded_content/
 *.log
+.DS_Store
