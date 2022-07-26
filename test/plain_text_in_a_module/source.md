@@ -1,4 +1,4 @@
-# Plain text
+# Plain text in a module
 
 testing source
 
