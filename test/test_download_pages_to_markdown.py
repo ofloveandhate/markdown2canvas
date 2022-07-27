@@ -16,10 +16,9 @@ class DownloadTester(unittest.TestCase):
 		import os
 		
 		from course_id import test_course_id
-		self.course_id = test_course_id # silviana's sandbox for this development
-
-		self.canvas = mc.make_canvas_api_obj()
-		self.course = self.canvas.get_course(self.course_id) 
+		from canvas_url import canvas_url
+		self.canvas = mc.make_canvas_api_obj(url=canvas_url)
+		self.course = self.canvas.get_course(test_course_id) 
 
 
 	@classmethod

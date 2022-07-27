@@ -57,7 +57,7 @@ def find_page_in_course(name,course):
 	"""
 	Checks to see if there's already a page named `name` as part of `course`.
 
-	tests merely based on the name.  assumes assingments are uniquely named.
+	tests merely based on the name.  assumes assignments are uniquely named.
 	"""
 	import os
 	pages = course.get_pages()
@@ -109,7 +109,7 @@ def get_canvas_key_url():
 
 	cred_loc = environ.get('CANVAS_CREDENTIAL_FILE')
 	if cred_loc is None:
-		raise SetupError('`get_canvas_key_url.py` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
+		raise SetupError('`get_canvas_key_url()` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
 
 	# yes, this is scary.  it was also low-hanging fruit, and doing it another way was going to be too much work
 	with open(path.join(cred_loc)) as cred_file:
@@ -123,9 +123,61 @@ def get_canvas_key_url():
 	return locals()['API_KEY'],locals()['API_URL']
 
 
-def make_canvas_api_obj():
-	key, url = get_canvas_key_url()
+def make_canvas_api_obj(url=None):
+	"""
+	- reads the key from a python file, path to which must be in environment variable CANVAS_CREDENTIAL_FILE.
+	- optionally, pass in a url to use, in case you don't want the default one you put in your CANVAS_CREDENTIAL_FILE.
+	"""
+
+	key, default_url = get_canvas_key_url()
+	if not url:
+		url = default_url
+
 	return canvasapi.Canvas(url, key)
+
+
+
+
+
+
+
+def apply_style_markdown(sourcename, style_path, outname):
+	from os.path import join
+
+	# need to add header and footer.  assume they're called `header.md` and `footer.md`.  we're just going to concatenate them and dump to file.
+
+	with open(sourcename,'r',encoding='utf-8') as f:
+		body = f.read()
+
+	with open(join(style_path,'header.md'),'r',encoding='utf-8') as f:
+		header = f.read()
+
+	with open(join(style_path,'footer.md'),'r',encoding='utf-8') as f:
+		footer = f.read()
+
+
+	with open(outname,'w',encoding='utf-8') as f:
+		f.write(f'{header}\n{body}\n{footer}')
+
+
+
+
+def apply_style_html(translated_html_without_hf, style_path, outname):
+	from os.path import join
+
+	# need to add header and footer.  assume they're called `header.html` and `footer.html`.  we're just going to concatenate them and dump to file.
+
+	with open(join(style_path,'header.html'),'r',encoding='utf-8') as f:
+		header = f.read()
+
+	with open(join(style_path,'footer.html'),'r',encoding='utf-8') as f:
+		footer = f.read()
+
+
+	return f'{header}\n{translated_html_without_hf}\n{footer}'
+
+
+
 
 
 
@@ -144,13 +196,13 @@ def markdown2html(filename):
 	emojified = emoji.emojize(markdown_source)
 
 
-	html = markdown.markdown(emojified, extensions=['codehilite','fenced_code'])
+	html = markdown.markdown(emojified, extensions=['codehilite','fenced_code','md_in_html'])
 	soup = BeautifulSoup(html,features="lxml")
 
 	all_imgs = soup.findAll("img")
 	for img in all_imgs:
 			src = img["src"]
-			if 'http://' not in src:
+			if ('http://' not in src) and ('https://' not in src):
 				img["src"] = path.join(root,src)
 
 	return soup.prettify()
@@ -236,6 +288,19 @@ class SetupError(Exception):
 
 
 
+class DoesntExist(Exception):
+	"""
+	Used when getting a thing, but it doesn't exist
+	"""
+
+	def __init__(self, message, errors=""):            
+	    # Call the base class constructor with the parameters it needs
+	    super().__init__(message)
+	        
+	    self.errors = errors
+
+
+
 
 def create_or_get_assignment(name, course, even_if_exists = False):
 
@@ -247,6 +312,7 @@ def create_or_get_assignment(name, course, even_if_exists = False):
 	else:
 		# make new assignment of name in course.
 		return course.create_assignment(assignment={'name':name})
+
 
 
 def create_or_get_page(name, course, even_if_exists):
@@ -264,7 +330,47 @@ def create_or_get_page(name, course, even_if_exists):
 
 
 
+def create_or_get_module(module_name, course):
 
+	try:
+		return get_module(module_name, course)
+	except DoesntExist as e:
+		return course.create_module(module={'name':module_name})
+
+
+
+
+def get_module(module_name, course):
+	"""
+	returns 
+	* course id (an integer) if such a module exists, 
+	* None if not
+	"""
+	modules = course.get_modules()
+
+	for m in modules:
+		if m.name == module_name:
+			return m
+
+	raise DoesntExist(f"tried to get module {module_name}, but it doesn't exist in the course")
+
+
+
+
+	
+def delete_module(module_name, course, even_if_exists):
+
+	if even_if_exists:
+		try:
+			m = get_module(module_name, course)
+			m.delete()
+		except DoesntExist as e:
+			return
+
+	else:
+		# this path is expected to raise if the module doesn't exist
+		m = get_module(module_name, course)
+		m.delete()
 
 
 
@@ -302,6 +408,7 @@ class Document(CanvasObject):
 
 		super(Document,self).__init__(folder)
 		import json, os
+		from os.path import join
 
 		self.folder = folder
 		self.sourcename = path.join(folder,'source.md')
@@ -314,10 +421,30 @@ class Document(CanvasObject):
 
 		self._set_from_metadata()
 
-		self.translated_html = markdown2html(self.sourcename)
+		if 'style' in self.metadata:
+			outname = join(self.folder,"styled_source.md")
+			apply_style_markdown(self.sourcename, self.metadata['style'], outname)
+
+			translated_html_without_hf = markdown2html(outname)
+
+			self.translated_html = apply_style_html(translated_html_without_hf, self.metadata['style'], outname)
+		else:
+			self.translated_html = markdown2html(self.sourcename)
+
 		self.local_images = find_local_images(self.translated_html)
 
 		# print(f'local images: {self.local_images}')
+
+
+
+
+
+
+
+
+
+
+
 
 	def publish_images_and_adjust_html(self,course,overwrite=False):
 		# first, publish the local images.
@@ -339,6 +466,11 @@ class Document(CanvasObject):
 	def _set_from_metadata(self):
 		self.name = self.metadata['name']
 
+		if 'modules' in self.metadata:
+			self.modules = self.metadata['modules']
+		else:
+			self.modules = []
+
 
 
 	def _dict_of_props(self):
@@ -349,9 +481,53 @@ class Document(CanvasObject):
 		return d
 
 
+	def ensure_in_modules(self, course):
+
+		if not self.canvas_obj:
+			raise DoesntExist(f"trying to make sure an object is in its modules, but this item ({self.name}) doesn't exist on canvas yet.  publish it first.")
+
+		for module_name in self.modules:
+			module = create_or_get_module(module_name, course)
+
+			if self.metadata['type'] == 'page':
+				content_id = self.canvas_obj.page_id
+			elif self.metadata['type'] == 'assignment':
+				content_id = self.canvas_obj.id
 
 
+			module.create_module_item(module_item={'type':self.metadata['type'], 'content_id':content_id})
 
+
+	def is_in_module(self, module_name, course):
+		"""
+		checks whether this content is an item in the listed module
+
+		passthrough raise if the module doesn't exist
+		"""
+
+		module = get_module(module_name,course)
+
+		for item in module.get_module_items():
+
+			if item.type=='Page':
+				if self.metadata['type']=='page':
+
+					if course.get_page(item.page_url).title == self.name:
+						return True
+
+				else:	
+					continue
+
+
+			if item.type=='Assignment':
+				if self.metadata['type']=='assignment':
+
+					if course.get_assignment(assignment=a.content_id).name == self.name:
+						return True
+				else:
+					continue
+
+		return False
 
 
 class Page(Document):
@@ -377,8 +553,6 @@ class Page(Document):
 		This base-class function will handle things like the html, images, etc.
 
 		Other derived-class `publish` functions will handle things like due-dates for assignments, etc.
-
-		returns the can
 		"""
 		try:
 			page = create_or_get_page(self.name, course, even_if_exists=overwrite)
@@ -391,7 +565,11 @@ class Page(Document):
 		self.publish_images_and_adjust_html(course)
 
 		d = self._dict_of_props()
-		page.edit(wiki_page=d) # obvs, this `something` is wrong
+		page.edit(wiki_page=d) 
+
+
+
+
 
 	def _dict_of_props(self):
 

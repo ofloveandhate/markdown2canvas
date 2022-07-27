@@ -1,4 +1,9 @@
 
+Markdown header content here
+
+
+![an image](640px-Zhuravlyne_ozero.jpeg)
+
 # Testing upload of pages using Droplets
 
 
@@ -27,4 +32,7 @@ X,Y = np.meshgrid(x,y)</code>
   <h4>Heading</h4>
   <p>Fred and George, who had been spying on the Slytherin team, had seen for themselves the speed of those new Nimbus Two Thousand and Ones.</p>
 </div>
+
+
+Markdown footer content here.  🦶
 

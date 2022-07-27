@@ -1,4 +1,0 @@
-Footer content here.  🦶
-
-</div>
-
