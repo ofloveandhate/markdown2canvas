@@ -140,6 +140,22 @@ def make_canvas_api_obj(url=None):
 
 
 
+def compute_relative_style_path(style_path):
+	here = path.abspath('.')
+	there = path.abspath(style_path)
+
+	return path.join(path.commonpath([here,there]), style_path)
+
+
+
+def preprocess_markdown_images(contents,style_path):
+
+	rel_style_path = compute_relative_style_path(style_path)
+
+	contents = contents.replace('$PATHTOMD2CANVASSTYLEFILE',rel_style_path)
+
+	return contents
+
 
 def apply_style_markdown(sourcename, style_path, outname):
 	from os.path import join
@@ -156,8 +172,11 @@ def apply_style_markdown(sourcename, style_path, outname):
 		footer = f.read()
 
 
+	contents = f'{header}\n{body}\n{footer}'
+	contents = preprocess_markdown_images(contents, style_path)
+
 	with open(outname,'w',encoding='utf-8') as f:
-		f.write(f'{header}\n{body}\n{footer}')
+		f.write(contents)
 
 
 

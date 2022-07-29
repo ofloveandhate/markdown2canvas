@@ -76,3 +76,40 @@ destination = 'downloaded_pages'
 my_filter = lambda title: 'Images' in title
 mc.download_pages(destination, course, even_if_exists=True, name_filter=my_filter)
 ```
+
+
+## Images and embedded content
+
+List your images relative the the folder containing the `source.md` for the content.  
+
+## Headers and footers
+
+This library attempts to provide a way to uniformly style pages across sections of content.  In particular, I have provided a mechanism to programmatically concatenate headers and footers onto markdown content before publishing.  Example application of this might be:
+* I have content in my course in four blocks, and want a different header for each block.  But, copypasta for that header content sucks (avoid repitition is a key tenet of programming).  So, I'd rather specify a "style" for the four blocks, and make the pages refer to the styles.  
+* I use Droplets from UWEX, and don't want to have to put that code in *every single page*.  I'd rather put it one place (or, at least, only a few places).  So the html code that brings in Droplets lives in a header/footer html code file.
+
+### Style basics
+
+Put your "style" folders in a folder in your course.  In my DS150 course, I have the following structure:
+
+* `_styles/`
+  * `/generic`
+  * `/assignments`
+
+And in the `meta.json` file for the pages / assignments, I simply have to put the record `"style":"_styles/generic"` or whatever. 
+
+As of July 2022, there is no default style -- if a page doesn't list a style, it gets no style.
+
+### Additional notes about styles:
+
+The folder for each style should have the following four files:
+* `header.html`
+* `header.md`
+* `footer.md`
+* `footer.html`
+
+They'll get concatenated around `source.md` in that order.  HTML around markdown, and header/footer around source.  
+
+If you want to use images in your header/footer, put them in the markdown part (even if they appear in html tags), and use the text `$PATHTOMD2CANVASSTYLEFILE` before naming the file, so that its filepath gets listed correctly.
+
+

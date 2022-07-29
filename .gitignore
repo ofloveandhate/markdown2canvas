@@ -7,3 +7,5 @@ build/
 *downloaded_content/
 *.log
 .DS_Store
+result.html
+styled_source.md
