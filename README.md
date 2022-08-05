@@ -110,6 +110,34 @@ The folder for each style should have the following four files:
 
 They'll get concatenated around `source.md` in that order.  HTML around markdown, and header/footer around source.  
 
-If you want to use images in your header/footer, put them in the markdown part (even if they appear in html tags), and use the text `$PATHTOMD2CANVASSTYLEFILE` before naming the file, so that its filepath gets listed correctly.
+If you want to use images in your header/footer, put them in the markdown part (even if they appear in html tags), and use the text `$PATHTOMD2CANVASSTYLEFILE` before typing the name of the file, so that its filepath gets listed correctly.  (This happens via a simple string replacement)
+
+
+## Assignments
+
+
+### Due dates
+
+Due dates are encoded relative to the first day of class, by week number and day of week.  Week numbers start at 1.
+
+| Day code | Day of week | 
+| --- | --- |
+| M | Monday |
+| T | Tuesday |
+| W | Wednesday |
+| R | Thursday |
+| F | Friday |
+| Sa | Saturday |
+| Su | Sunday |
+
+In the `meta.json` file for an assignment, the due date is encoded like this example:
+
+```
+"due":{"time":"10pm", "week":11, "day":"R"}
+```
+
+A default time for all assignents can be set in `_course_metadata/defaults.json` with entry `"due_time":"10pm"`, for example.  If this record is not present, and no due time is set for an individual assignment, then the Canvas default time will be used (this is not an adjustable time in Canvas, for some unexplained reason).  On UWEC's system, this is 11:59pm.
+
+The first day of class is set ...  HOW??
 
 
