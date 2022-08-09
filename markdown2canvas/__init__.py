@@ -807,10 +807,25 @@ class Image(CanvasObject):
 
 
 
+class Link(CanvasObject):
+	"""docstring for Link"""
+	def __init__(self, arg):
+		super(Link, self).__init__()
+		self.arg = arg
+		raise NotImplementedError()
+	
+	def __str__(self):
+		result = f"Link({self.url})"
+		raise NotImplementedError()
+		return result
+
+	def __repr__(self):
+		return str(self)
 
 
+	def publish(course):
 
-
+		raise NotImplementedError()
 
 
 def translate_and_publish(pagename, filename, course):
