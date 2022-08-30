@@ -29,7 +29,7 @@ class PageTester(unittest.TestCase):
 
 
 	def test_aaa_meta(self):
-		self.assertEqual(self.content.metadata['name_in_module'],'ds150 course logo.pdf')
+		self.assertEqual(self.content.metadata['title'],'automatically uploaded file: ds150_course_logo.pdf')
 
 
 

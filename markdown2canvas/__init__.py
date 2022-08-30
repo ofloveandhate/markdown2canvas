@@ -721,6 +721,7 @@ class Image(CanvasObject):
         super(Image, self).__init__()
 
         self.givenpath = filename
+        self.filename = filename
         self.name = path.split(filename)[1]
         self.folder = path.split(filename)[0]
         self.alttext = alttext
@@ -730,28 +731,28 @@ class Image(CanvasObject):
         #     <img class="instructure_file_link inline_disabled" src="https://uws-td.instructure.com/courses/3099/files/219835/preview" alt="hauser_menagerie.jpg" data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835" data-api-returntype="File" />
         # </p>
 
-    def publish(self, course, dest, force_overwrite=False, raise_if_already_uploaded = False):
+    def publish(self, course, dest, overwrite=False, raise_if_already_uploaded = False):
         """
 
 
         see also https://canvas.instructure.com/doc/api/file.file_uploads.html
         """
 
-        if force_overwrite:
+        if overwrite:
             on_duplicate = 'overwrite'
         else:
             on_duplicate = 'rename'
 
 
         # this still needs to be adjusted to capture the Canvas image, in case it exists
-        if force_overwrite:
+        if overwrite:
             success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
             if not success_code:
                 print(f'failed to upload...  {self.givenpath}')
 
 
             self.canvas_obj = course.get_file(json_response['id'])
-            return img_on_canvas
+            return self.canvas_obj
 
         else:
             if is_file_already_uploaded(self.givenpath,course):
