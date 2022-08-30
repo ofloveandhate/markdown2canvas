@@ -136,7 +136,7 @@ In the `meta.json` file for an assignment, the due date is encoded like this exa
 "due":{"time":"10pm", "week":11, "day":"R"}
 ```
 
-A default time for all assignents can be set in `_course_metadata/defaults.json` with entry `"due_time":"10pm"`, for example.  If this record is not present, and no due time is set for an individual assignment, then the Canvas default time will be used (this is not an adjustable time in Canvas, for some unexplained reason).  On UWEC's system, this is 11:59pm.
+A default time for all assignents can be set in `_course_metadata/defaults.json` with entry `"due_time":"10pm"`, for example.  If this record is not present, and no due time is set for an individual assignment, then the Canvas default time for the course will be used.  On UWEC's system, this can be changed in the course settings. The default value is 11:59pm.
 
 The first day of class is set ...  HOW??
 
