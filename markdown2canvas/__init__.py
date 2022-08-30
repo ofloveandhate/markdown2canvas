@@ -601,6 +601,7 @@ class Page(Document):
         d = self._dict_of_props()
         page.edit(wiki_page=d) 
 
+        self.ensure_in_modules(course)
 
 
 
@@ -703,6 +704,8 @@ class Assignment(Document):
 
         assignment.edit(assignment=new_props)
 
+        self.ensure_in_modules(course)
+
         return True
 
 
@@ -771,6 +774,7 @@ class Image(CanvasObject):
 
 
             self.canvas_obj = img_on_canvas
+
             return img_on_canvas
 
     def make_src_url(self,courseid):
@@ -882,6 +886,8 @@ class Link(CanvasObject):
 
         return None
 
+    
+
 
 class File(CanvasObject):
     """
@@ -903,7 +909,6 @@ class File(CanvasObject):
     
     def __str__(self):
         result = f"File({self.metadata})"
-        raise NotImplementedError()
         return result
 
     def __repr__(self):
@@ -944,6 +949,7 @@ class File(CanvasObject):
 
             file_on_canvas = reply[1]
             content_id = file_on_canvas['id']
+
 
         # now to make sure it's in the right modules
         for module_name in self.metadata['modules']:
