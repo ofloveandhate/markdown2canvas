@@ -615,6 +615,9 @@ class Page(Document):
 
         return d
 
+    def __str__(self):
+        result = f"Page({self.folder})"
+        return result
 
 
 class Assignment(Document):
@@ -624,6 +627,9 @@ class Assignment(Document):
 
         # self._set_from_metadata() # <-- this is called from the base __init__
 
+    def __str__(self):
+        result = f"Assignment({self.folder})"
+        return result
 
     def _set_from_metadata(self):
         super(Assignment,self)._set_from_metadata()
