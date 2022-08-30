@@ -523,13 +523,15 @@ class Document(CanvasObject):
         for module_name in self.modules:
             module = create_or_get_module(module_name, course)
 
-            if self.metadata['type'] == 'page':
-                content_id = self.canvas_obj.page_id
-            elif self.metadata['type'] == 'assignment':
-                content_id = self.canvas_obj.id
+            if not self.is_in_module(module_name, course):
+
+                if self.metadata['type'] == 'page':
+                    content_id = self.canvas_obj.page_id
+                elif self.metadata['type'] == 'assignment':
+                    content_id = self.canvas_obj.id
 
 
-            module.create_module_item(module_item={'type':self.metadata['type'], 'content_id':content_id})
+                module.create_module_item(module_item={'type':self.metadata['type'], 'content_id':content_id})
 
 
     def is_in_module(self, module_name, course):
@@ -556,7 +558,7 @@ class Document(CanvasObject):
             if item.type=='Assignment':
                 if self.metadata['type']=='assignment':
 
-                    if course.get_assignment(assignment=a.content_id).name == self.name:
+                    if course.get_assignment(assignment=item.content_id).name == self.name:
                         return True
                 else:
                     continue
