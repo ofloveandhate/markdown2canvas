@@ -224,7 +224,7 @@ def markdown2html(filename):
             if ('http://' not in src) and ('https://' not in src):
                 img["src"] = path.join(root,src)
 
-    return soup.prettify()
+    return soup
 
 
 
