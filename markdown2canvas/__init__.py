@@ -215,7 +215,7 @@ def markdown2html(filename):
     emojified = emoji.emojize(markdown_source)
 
 
-    html = markdown.markdown(emojified, extensions=['codehilite','fenced_code','md_in_html','tables'])
+    html = markdown.markdown(emojified, extensions=['codehilite','fenced_code','md_in_html','tables','nl2br']) # see https://python-markdown.github.io/extensions/
     soup = BeautifulSoup(html,features="lxml")
 
     all_imgs = soup.findAll("img")
