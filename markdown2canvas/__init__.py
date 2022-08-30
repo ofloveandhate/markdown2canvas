@@ -365,8 +365,8 @@ def create_or_get_module(module_name, course):
 def get_module(module_name, course):
     """
     returns 
-    * course id (an integer) if such a module exists, 
-    * None if not
+    * Module if such a module exists, 
+    * raises if not
     """
     modules = course.get_modules()
 
@@ -823,31 +823,69 @@ class Image(CanvasObject):
 
 
 class Link(CanvasObject):
-    """docstring for Link"""
-    def __init__(self, arg):
+    """
+    a containerization of url's, for uploading to Canvas modules
+    """
+    def __init__(self, folder):
         super(Link, self).__init__()
-        self.arg = arg
-        raise NotImplementedError()
+        self.folder = folder
+
+        import json, os
+        from os.path import join
+
+        self.metaname = path.join(folder,'meta.json')
+        with open(path.join(folder,'meta.json'),'r') as f:
+            self.metadata = json.load(f)
     
     def __str__(self):
-        result = f"Link({self.url})"
-        raise NotImplementedError()
+        result = f"Link({self.metadata['external_url']})"
         return result
 
     def __repr__(self):
         return str(self)
 
 
-    def publish(course):
+    def publish(self, course, overwrite=False):
 
-        raise NotImplementedError()
+        for m in self.metadata['modules']:
+            if link_on_canvas:= self.is_in_module(course, m):
+                if not overwrite:
+                    n = self.metadata['external_url']
+                    raise AlreadyExists(f'trying to upload {self}, but is already on Canvas')
+                else:
+                    link_on_canvas.edit(module_item={'external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab'])})
+
+            else:
+                mod = get_module(m, course)
+                mod.create_module_item(module_item={'type':'ExternalUrl','external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab'])})
+
+
+    def is_already_uploaded(self, course):
+        for m in self.metadata['modules']:
+            if not self.is_in_module(course, m):
+                return False
+
+        return True
 
 
 
+    def is_in_module(self, course, module_name):
+        module = get_module(module_name,course)
+
+        for item in module.get_module_items():
+
+            if item.type=='ExternalUrl' and item.external_url==self.metadata['external_url']:
+                return item
+            else:   
+                continue
+
+        return None
 
 
 class File(CanvasObject):
-    """a containerization of arbitrary files, for uploading to Canvas"""
+    """
+    a containerization of arbitrary files, for uploading to Canvas
+    """
     def __init__(self, folder):
         super(File, self).__init__(folder)
 
