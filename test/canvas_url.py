@@ -1,1 +1,1 @@
-canvas_url = "https://uws-td.instructure.com/"
+canvas_url = "https://uws.instructure.com/"
