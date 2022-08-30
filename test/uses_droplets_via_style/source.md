@@ -28,3 +28,12 @@ X,Y = np.meshgrid(x,y)</code>
   <p>Fred and George, who had been spying on the Slytherin team, had seen for themselves the speed of those new Nimbus Two Thousand and Ones.</p>
 </div>
 
+
+
+## a table should be below
+
+| header 1 | header 2 |
+| --- | --- | 
+| val 1 | val 2 |
+| arst | axzcv |
+
