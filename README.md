@@ -68,15 +68,18 @@ Assuming you did my setup step, defining the environment variable and creating t
 import markdown2canvas as mc
 course_id = 127210000000003099 # silviana's sandbox for development
 
-canvas = mc.make_canvas_api_obj()
+canvas = mc.make_canvas_api_obj() # gets link and api key via environment variable
 course = canvas.get_course(course_id)
 
 destination = 'downloaded_pages'
 
-my_filter = lambda title: 'Images' in title
+my_filter = lambda title: '📖' in title # pages about readings have an open book in their names.
 mc.download_pages(destination, course, even_if_exists=True, name_filter=my_filter)
 ```
 
+## Emoji
+
+This library supports the conversion of shortcodes to emoji.  For example, `:open_book:` goes to 📖.  I use the [`emoji`](https://pypi.org/project/emoji/) library to do this.  [Shortcodes can be found here](https://carpedm20.github.io/emoji/).
 
 ## Images and embedded content
 
@@ -93,10 +96,10 @@ This library attempts to provide a way to uniformly style pages across sections 
 Put your "style" folders in a folder in your course.  In my DS150 course, I have the following structure:
 
 * `_styles/`
-  * `/generic`
-  * `/assignments`
+  * `/generic.style`
+  * `/assignments.style`
 
-And in the `meta.json` file for the pages / assignments, I simply have to put the record `"style":"_styles/generic"` or whatever. 
+And in the `meta.json` file for the pages / assignments, I simply have to put the record `"style":"_styles/generic.style"` or whatever. 
 
 As of July 2022, there is no default style -- if a page doesn't list a style, it gets no style.
 
@@ -117,6 +120,8 @@ If you want to use images in your header/footer, put them in the markdown part (
 
 
 ### Due dates
+
+⚠️ this is not yet implemented in `mc`
 
 Due dates are encoded relative to the first day of class, by week number and day of week.  Week numbers start at 1.
 
