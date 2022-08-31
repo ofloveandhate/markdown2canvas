@@ -12,7 +12,7 @@ setup(name='markdown2canvas',
       author='Silviana Amethyst',
       author_email='amethyst@uwec.edu',
       packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
-      install_requires=['canvasapi','emoji','markdown', 'beautifulsoup4','Pygments'],
+      install_requires=['canvasapi','emoji','markdown', 'beautifulsoup4','Pygments','lxml'],
       extras_require=extras,
       package_dir={'markdown2canvas': 'markdown2canvas'},
       zip_safe=False)
