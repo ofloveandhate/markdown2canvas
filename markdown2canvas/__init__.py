@@ -113,7 +113,7 @@ def get_canvas_key_url():
         raise SetupError('`get_canvas_key_url()` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
 
     # yes, this is scary.  it was also low-hanging fruit, and doing it another way was going to be too much work
-    with open(path.join(cred_loc)) as cred_file:
+    with open(path.join(cred_loc),encoding='utf-8') as cred_file:
         exec(cred_file.read(),locals())
 
     if isinstance(locals()['API_KEY'], str):
@@ -225,11 +225,12 @@ def markdown2html(filename):
             if ('http://' not in src) and ('https://' not in src):
                 img["src"] = path.join(root,src)
 
-    all_files = soup.findAll("a")
-    for f in all_files:
-            src = f["href"]
-            if ('http://' not in src) and ('https://' not in src):
-                f["href"] = path.join(root,src)
+    all_links = soup.findAll("a")
+    for f in all_links:
+            href = f["href"]
+            root_href = path.join(root,href)
+            if path.exists(path.abspath(root_href)):
+                f["href"] = root_href
 
     return str(soup)
 
@@ -309,7 +310,7 @@ def find_local_files(html):
     if all_links:
         for file in all_links:
             href = file["href"]
-            if href[:7] not in ['https:/','http://'] and path.exists(path.abspath(href)):
+            if path.exists(path.abspath(href)):
                 local_files[href] = BareFile(path.abspath(href))
 
     return local_files
@@ -328,13 +329,14 @@ def adjust_html_for_files(html, published_files, courseid):
     soup = BeautifulSoup(html,features="lxml")
 
     all_files = soup.findAll("a")
+
     if all_files:
         for file in all_files:
-            src = file["href"]
-            if src[:7] not in ['https:/','http://']:
+            href = file["href"]
+            if path.exists(path.abspath(href)):
                 # find the image in the list of published images, replace url, do more stuff.
-                local_file = published_files[src]
-                file['href'] = local_file.make_src_url(courseid)
+                local_file = published_files[href]
+                file['href'] = local_file.make_href_url(courseid)
                 file['class'] = "instructure_file_link instructure_scribd_file"
                 file['title'] = local_file.name # what it's called when you download it???
                 file['data-api-endpoint'] = local_file.make_api_endpoint_url(courseid)
@@ -509,7 +511,7 @@ class Document(CanvasObject):
         self.folder = folder
 
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r') as f:
+        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
 
 
@@ -559,7 +561,7 @@ class Document(CanvasObject):
         self.translated_html = adjust_html_for_files(self.translated_html, self.local_files, course.id)
 
 
-        with open(f'{self.folder}/result.html','w') as result:
+        with open(f'{self.folder}/result.html','w',encoding='utf-8') as result:
             result.write(self.translated_html)
 
 
@@ -779,6 +781,8 @@ class Assignment(Document):
         self.canvas_obj = assignment
 
 
+        self.publish_linked_content_and_adjust_html(course)
+        
         # now that we have the assignment, we'll update its content.
 
         new_props=self._dict_of_props()
@@ -978,7 +982,7 @@ class BareFile(CanvasObject):
 
 
 
-    def make_src_url(self,courseid):
+    def make_href_url(self,courseid):
         """
         constructs a string which can be used to reference the file in a Canvas page.
 
@@ -1015,7 +1019,7 @@ class BareFile(CanvasObject):
         result = result + f'folder: {self.folder}\n'
         result = result + f'alttext: {self.alttext}\n'
         result = result + f'canvas_obj: {self.canvas_obj}\n'
-        url = self.make_src_url('fakecoursenumber')
+        url = self.make_href_url('fakecoursenumber')
         result = result + f'constructed canvas url: {url}\n'
 
         return result+'\n'
@@ -1055,7 +1059,7 @@ class Link(CanvasObject):
         from os.path import join
 
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r') as f:
+        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
     
     def __str__(self):
@@ -1118,7 +1122,7 @@ class File(CanvasObject):
         self.folder = folder
         
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r') as f:
+        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
 
 
@@ -1265,7 +1269,7 @@ def page2markdown(destination, page, even_if_exists=False):
 
     logging.info(f'downloading page {title}, saving to folder {destdir}')
 
-    with open(path.join(destdir,'source.md'),'w') as file:
+    with open(path.join(destdir,'source.md'),'w',encoding='utf-8') as file:
         file.write(body)
 
 
@@ -1273,7 +1277,7 @@ def page2markdown(destination, page, even_if_exists=False):
 
     d['name'] = title
     d['type'] = 'page'
-    with open(path.join(destdir,'meta.json'),'w') as file:
+    with open(path.join(destdir,'meta.json'),'w',encoding='utf-8') as file:
         import json
         json.dump(d, file)
 
@@ -1297,5 +1301,60 @@ def download_pages(destination, course, even_if_exists=False, name_filter=None):
             page2markdown(destination,p,even_if_exists)
 
 
-def download_assignments(destination, course):
+def assignment2markdown(destination, assignment, even_if_exists=False):
+    """
+    takes a Page from Canvas, and saves it to a folder inside `destination`
+    into a markdown2canvas compatible format.
+
+    the folder is automatically named, at your own peril.
+    """
+
+    import os
+
+    assert(isinstance(assignment,canvasapi.assignment.Assignment))
+
+    if (path.exists(destination)) and not path.isdir(destination):
+        raise AlreadyExists(f'you want to save a page into directory {destination}, but it exists and is not a directory')
+
+
+
+
+    body = assignment.description # this is the content of the page, in html.
+    title = assignment.name
+
+    destdir = path.join(destination,title)
+    if (not even_if_exists) and path.exists(destdir):
+        raise AlreadyExists(f'trying to save page {title} to folder {destdir}, but that already exists.  If you want to force, use `even_if_exists=True`.')
+
+    if not path.exists(destdir):
+        os.makedirs(destdir)
+
+    logging.info(f'downloading page {title}, saving to folder {destdir}')
+
+    with open(path.join(destdir,'source.md'),'w',encoding='utf-8') as file:
+        file.write(body)
+
+
+    d = {}
+
+    d['name'] = title
+    d['type'] = 'assignment'
+    with open(path.join(destdir,'meta.json'),'w',encoding='utf-8') as file:
+        import json
+        json.dump(d, file)
+    
+def download_assignments(destination, course, even_if_exists=False, name_filter=None):
+    """
+    downloads the regular pages from a course, saving them
+    into a markdown2canvas compatible format.  that is, as
+    a folder with markdown source and json metadata.
+    """
+
+    if name_filter is None:
+        name_filter = lambda x: True
+
+    logging.info(f'downloading all pages from course {course.name}, saving to folder {destination}')
     assignments = course.get_assignments()
+    for a in assignments:
+        if name_filter(a.name):
+            assignment2markdown(destination,a,even_if_exists)
