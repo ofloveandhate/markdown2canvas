@@ -81,6 +81,8 @@ mc.download_pages(destination, course, even_if_exists=True, name_filter=my_filte
 
 This library supports the conversion of shortcodes to emoji.  For example, `:open_book:` goes to 📖.  I use the [`emoji`](https://pypi.org/project/emoji/) library to do this.  [Shortcodes can be found here](https://carpedm20.github.io/emoji/).
 
+Right now, emoji shortcodes can only be used in content, not in names of things -- shortcodes in names will not be emojized.
+
 ## Images and embedded content
 
 List your images relative the the folder containing the `source.md` for the content.  
