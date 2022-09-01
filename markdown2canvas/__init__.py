@@ -113,7 +113,7 @@ def get_canvas_key_url():
         raise SetupError('`get_canvas_key_url()` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
 
     # yes, this is scary.  it was also low-hanging fruit, and doing it another way was going to be too much work
-    with open(path.join(cred_loc)) as cred_file:
+    with open(path.join(cred_loc),encoding='utf-8') as cred_file:
         exec(cred_file.read(),locals())
 
     if isinstance(locals()['API_KEY'], str):
@@ -511,7 +511,7 @@ class Document(CanvasObject):
         self.folder = folder
 
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r') as f:
+        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
 
 
@@ -561,7 +561,7 @@ class Document(CanvasObject):
         self.translated_html = adjust_html_for_files(self.translated_html, self.local_files, course.id)
 
 
-        with open(f'{self.folder}/result.html','w') as result:
+        with open(f'{self.folder}/result.html','w',encoding='utf-8') as result:
             result.write(self.translated_html)
 
 
@@ -1059,7 +1059,7 @@ class Link(CanvasObject):
         from os.path import join
 
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r') as f:
+        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
     
     def __str__(self):
@@ -1122,7 +1122,7 @@ class File(CanvasObject):
         self.folder = folder
         
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r') as f:
+        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
 
 
@@ -1269,7 +1269,7 @@ def page2markdown(destination, page, even_if_exists=False):
 
     logging.info(f'downloading page {title}, saving to folder {destdir}')
 
-    with open(path.join(destdir,'source.md'),'w') as file:
+    with open(path.join(destdir,'source.md'),'w',encoding='utf-8') as file:
         file.write(body)
 
 
@@ -1277,7 +1277,7 @@ def page2markdown(destination, page, even_if_exists=False):
 
     d['name'] = title
     d['type'] = 'page'
-    with open(path.join(destdir,'meta.json'),'w') as file:
+    with open(path.join(destdir,'meta.json'),'w',encoding='utf-8') as file:
         import json
         json.dump(d, file)
 
