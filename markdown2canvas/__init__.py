@@ -304,12 +304,12 @@ def find_local_files(html):
 
     local_files = {}
 
-    all_files = soup.findAll("a")
+    all_links = soup.findAll("a")
 
-    if all_files:
-        for file in all_files:
+    if all_links:
+        for file in all_links:
             href = file["href"]
-            if href[:7] not in ['https:/','http://']:
+            if href[:7] not in ['https:/','http://'] and path.exists(path.abspath(href)):
                 local_files[href] = BareFile(path.abspath(href))
 
     return local_files
