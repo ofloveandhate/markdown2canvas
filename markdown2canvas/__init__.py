@@ -35,6 +35,7 @@ def find_file_in_course(filename,course):
     import os
 
     base = path.split(filename)[1]
+
     files = course.get_files()
     for f in files:
         if f.filename==base and f.size == path.getsize(filename):
@@ -224,13 +225,22 @@ def markdown2html(filename):
             if ('http://' not in src) and ('https://' not in src):
                 img["src"] = path.join(root,src)
 
-    return soup
+    all_files = soup.findAll("a")
+    for f in all_files:
+            src = f["href"]
+            if ('http://' not in src) and ('https://' not in src):
+                f["href"] = path.join(root,src)
+
+    return str(soup)
 
 
 
 
 
 def find_local_images(html):
+    """
+    constructs a map of local url's : Images
+    """
     from bs4 import BeautifulSoup
 
     soup = BeautifulSoup(html,features="lxml")
@@ -250,8 +260,12 @@ def find_local_images(html):
 
 
 
+
 def adjust_html_for_images(html, published_images, courseid):
     """
+    
+    published_images: a dict of Image objects, which should have been published (so we have their canvas objects stored into them)
+
     this function edits the html source, replacing local url's
     with url's to images on Canvas.
     """
@@ -270,13 +284,63 @@ def adjust_html_for_images(html, published_images, courseid):
                 img['class'] = "instructure_file_link inline_disabled"
                 img['data-api-endpoint'] = local_img.make_api_endpoint_url(courseid)
                 img['data-api-returntype'] = 'File'
-    return soup.prettify()
+    
+    return str(soup)
 
     # <p>
     #     <img class="instructure_file_link inline_disabled" src="https://uws-td.instructure.com/courses/3099/files/219835/preview" alt="hauser_menagerie.jpg" data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835" data-api-returntype="File" />
     # </p>
 
 
+
+
+def find_local_files(html):
+    """
+    constructs a list of BareFiles, so that they can later be replaced with a url to a canvas thing
+    """
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html,features="lxml")
+
+    local_files = {}
+
+    all_files = soup.findAll("a")
+
+    if all_files:
+        for file in all_files:
+            href = file["href"]
+            if href[:7] not in ['https:/','http://']:
+                local_files[href] = BareFile(path.abspath(href))
+
+    return local_files
+
+
+
+def adjust_html_for_files(html, published_files, courseid):
+
+
+    # need to write a url like this :
+    # <a class="instructure_file_link instructure_scribd_file" title="airport.csv" href="https://uws.instructure.com/courses/501155/files/47304001/download?wrap=1" data-api-endpoint="https://uws.instructure.com/api/v1/courses/501155/files/47304001" data-api-returntype="File">Download</a>
+
+
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html,features="lxml")
+
+    all_files = soup.findAll("a")
+    if all_files:
+        for file in all_files:
+            src = file["href"]
+            if src[:7] not in ['https:/','http://']:
+                # find the image in the list of published images, replace url, do more stuff.
+                local_file = published_files[src]
+                file['href'] = local_file.make_src_url(courseid)
+                file['class'] = "instructure_file_link instructure_scribd_file"
+                file['title'] = local_file.name # what it's called when you download it???
+                file['data-api-endpoint'] = local_file.make_api_endpoint_url(courseid)
+                file['data-api-returntype'] = 'File'
+
+    return str(soup)
 
 
 
@@ -466,6 +530,7 @@ class Document(CanvasObject):
             self.translated_html = markdown2html(self.sourcename)
 
         self.local_images = find_local_images(self.translated_html)
+        self.local_files = find_local_files(self.translated_html)
 
         # print(f'local images: {self.local_images}')
 
@@ -480,14 +545,18 @@ class Document(CanvasObject):
 
 
 
-    def publish_images_and_adjust_html(self,course,overwrite=False):
+    def publish_linked_content_and_adjust_html(self,course,overwrite=False):
         # first, publish the local images.
         for im in self.local_images.values():
             im.publish(course,'images')
 
+        for file in self.local_files.values():
+            file.publish(course,'automatically_uploaded_files')
+
 
         # then, deal with the urls
         self.translated_html = adjust_html_for_images(self.translated_html, self.local_images, course.id)
+        self.translated_html = adjust_html_for_files(self.translated_html, self.local_files, course.id)
 
 
         with open(f'{self.folder}/result.html','w') as result:
@@ -598,7 +667,7 @@ class Page(Document):
 
         self.canvas_obj = page
 
-        self.publish_images_and_adjust_html(course)
+        self.publish_linked_content_and_adjust_html(course)
 
         d = self._dict_of_props()
         page.edit(wiki_page=d) 
@@ -632,6 +701,12 @@ class Assignment(Document):
     def __str__(self):
         result = f"Assignment({self.folder})"
         return result
+
+    def _get_list_of_canvas_properties_(self):
+        doc_url = "https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.update"
+        thing = "Request Parameters:"
+
+
 
     def _set_from_metadata(self):
         super(Assignment,self)._set_from_metadata()
@@ -682,7 +757,7 @@ class Assignment(Document):
 
         if not self.omit_from_final_grade is None:
             d['omit_from_final_grade'] = self.omit_from_final_grade
-            
+
         return d
 
 
@@ -735,8 +810,12 @@ class Image(CanvasObject):
 
         self.givenpath = filename
         self.filename = filename
+        # self.name = path.basename(filename)
+        # self.folder = path.abspath(filename)
+
         self.name = path.split(filename)[1]
         self.folder = path.split(filename)[0]
+
         self.alttext = alttext
 
 
@@ -830,6 +909,133 @@ class Image(CanvasObject):
 
     def __repr__(self):
         return str(self)
+
+
+
+
+class BareFile(CanvasObject):
+    """
+    A wrapper class for bare, unwrapped files on Canvas, for link to inline.
+    """
+
+
+    def __init__(self, filename):
+        super(BareFile, self).__init__()
+
+        self.givenpath = filename
+        self.filename = filename
+        self.name = path.basename(filename)
+        self.folder = path.abspath(filename)
+
+        # self.name = path.split(filename)[1]
+        # self.folder = path.split(filename)[0]
+
+
+
+    def publish(self, course, dest, overwrite=False, raise_if_already_uploaded = False):
+        """
+
+
+        see also https://canvas.instructure.com/doc/api/file.file_uploads.html
+        """
+
+        if overwrite:
+            on_duplicate = 'overwrite'
+        else:
+            on_duplicate = 'rename'
+
+
+        # this still needs to be adjusted to capture the Canvas file, in case it exists
+        if overwrite:
+            success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
+            if not success_code:
+                print(f'failed to upload...  {self.givenpath}')
+
+
+            self.canvas_obj = course.get_file(json_response['id'])
+            return self.canvas_obj
+
+        else:
+            if is_file_already_uploaded(self.givenpath,course):
+                if raise_if_already_uploaded:
+                    raise AlreadyExists(f'file {self.name} already exists in course {course.name}, but you don\'t want to overwrite.')
+                else:
+                    file_on_canvas = find_file_in_course(self.givenpath,course)
+            else:
+                # get the remote file
+                print(f'file not already uploaded, uploading {self.name}')
+
+                success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
+                file_on_canvas = course.get_file(json_response['id'])
+                if not success_code:
+                    print(f'failed to upload...  {self.givenpath}')
+
+
+            self.canvas_obj = file_on_canvas
+
+            return file_on_canvas
+
+
+
+
+    def make_src_url(self,courseid):
+        """
+        constructs a string which can be used to reference the file in a Canvas page.
+
+        sadly, the JSON back from Canvas doesn't just produce this for us.  lame.
+
+        """
+        import canvasapi
+        file = self.canvas_obj
+        assert(isinstance(self.canvas_obj, canvasapi.file.File))
+
+        n = file.url.find('/files')
+
+        url = file.url[:n]+'/courses/'+str(courseid)+'/files/'+str(file.id)+'/download?wrap=1'
+
+        return url
+
+
+    def make_api_endpoint_url(self,courseid):
+        import canvasapi
+        file = self.canvas_obj
+        assert(isinstance(self.canvas_obj, canvasapi.file.File))
+
+        n = file.url.find('/files')
+
+        url = file.url[:n] + '/api/v1/courses/' + str(courseid) + '/files/' + str(file.id)
+        return url
+        # data-api-endpoint="https://uws-td.instructure.com/api/v1/courses/3099/files/219835"
+
+
+    def __str__(self):
+        result = "\n"
+        result = result + f'givenpath: {self.givenpath}\n'
+        result = result + f'name: {self.name}\n'
+        result = result + f'folder: {self.folder}\n'
+        result = result + f'alttext: {self.alttext}\n'
+        result = result + f'canvas_obj: {self.canvas_obj}\n'
+        url = self.make_src_url('fakecoursenumber')
+        result = result + f'constructed canvas url: {url}\n'
+
+        return result+'\n'
+
+    def __repr__(self):
+        return str(self)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

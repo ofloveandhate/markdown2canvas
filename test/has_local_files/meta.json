@@ -1,0 +1,5 @@
+{
+	"type": "page",
+	"name": "Test Has Local Files",
+	"modules": ["Automatically Added Test Module"]
+}
