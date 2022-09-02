@@ -56,6 +56,15 @@ class TestLink(unittest.TestCase):
 
 
 
+	def test_ddd_new_module_works(self):
+		old_modules = self.content.metadata['modules']
+		import random
+		
+		self.content.metadata['modules'] = [f'randomly created module {random.randint(100000000,200000000)}']
+
+		self.content.publish(self.course)
+		self.content.metadata['modules'] = old_modules
+
 
 
 

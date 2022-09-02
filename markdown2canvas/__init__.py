@@ -1076,12 +1076,12 @@ class Link(CanvasObject):
             if link_on_canvas:= self.is_in_module(course, m):
                 if not overwrite:
                     n = self.metadata['external_url']
-                    raise AlreadyExists(f'trying to upload {self}, but is already on Canvas')
+                    raise AlreadyExists(f'trying to upload {self}, but is already on Canvas in module {m}')
                 else:
                     link_on_canvas.edit(module_item={'external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab'])})
 
             else:
-                mod = get_module(m, course)
+                mod = create_or_get_module(m, course)
                 mod.create_module_item(module_item={'type':'ExternalUrl','external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab'])})
 
 
@@ -1095,7 +1095,11 @@ class Link(CanvasObject):
 
 
     def is_in_module(self, course, module_name):
-        module = get_module(module_name,course)
+        try:
+            module = get_module(module_name,course)
+        except DoesntExist as e:
+            return None
+
 
         for item in module.get_module_items():
 
