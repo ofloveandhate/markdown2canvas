@@ -1128,7 +1128,11 @@ class File(CanvasObject):
         self.metaname = path.join(folder,'meta.json')
         with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
-
+        
+        try:
+            self.title = self.metadata['title']
+        except:
+            self.title = self.metadata['filename']
 
     
     def __str__(self):
@@ -1184,9 +1188,13 @@ class File(CanvasObject):
             for item in items:
                 if item.type=='File' and item.content_id==content_id:
                     is_in = True
+                    break
 
             if not is_in:
-                module.create_module_item(module_item={'type':'File', 'content_id':content_id})
+                module.create_module_item(module_item={'type':'File', 'content_id':content_id, 'title':self.title})
+            # if the title doesn't match, update it
+            elif item.title != self.title:
+                item.edit(module_item={'type':'File', 'content_id':content_id, 'title':self.title},module=module)
 
 
     def is_in_module(self, course, module_name):
