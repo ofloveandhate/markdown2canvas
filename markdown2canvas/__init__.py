@@ -956,7 +956,7 @@ class BareFile(CanvasObject):
             if not success_code:
                 print(f'failed to upload...  {self.givenpath}')
             else:
-                print(f'overwrote {self.name}')
+                print(f'overwrote {self.name}\n{self.givenpath}')
 
             self.canvas_obj = course.get_file(json_response['id'])
             return self.canvas_obj
@@ -1155,30 +1155,29 @@ class File(CanvasObject):
             if not overwrite:
                 n = self.metadata['filename']
                 raise AlreadyExists(f'trying to upload file {n}, but is already on Canvas')
-
             content_id = file_on_canvas.id
 
-        else:
-            root = get_root_folder(course)
+        #else:
+        root = get_root_folder(course)
 
-            d = self.metadata['destination']
-            d = d.split('/')
+        d = self.metadata['destination']
+        d = d.split('/')
 
-            curr_dir = root
-            for subd in d:
-                try:
-                    curr_dir = get_subfolder_named(curr_dir, subd)
-                except DoesntExist as e:
-                    curr_dir = curr_dir.create_folder(subd)
-            
-            filepath_to_upload = path.join(self.folder,self.metadata['filename'])
-            reply = curr_dir.upload(file=filepath_to_upload)
-            
-            if not reply[0]:
-                raise RuntimeError(f'something went wrong uploading {filepath_to_upload}')
+        curr_dir = root
+        for subd in d:
+            try:
+                curr_dir = get_subfolder_named(curr_dir, subd)
+            except DoesntExist as e:
+                curr_dir = curr_dir.create_folder(subd)
+        
+        filepath_to_upload = path.join(self.folder,self.metadata['filename'])
+        reply = curr_dir.upload(file=filepath_to_upload)
+        
+        if not reply[0]:
+            raise RuntimeError(f'something went wrong uploading {filepath_to_upload}')
 
-            file_on_canvas = reply[1]
-            content_id = file_on_canvas['id']
+        file_on_canvas = reply[1]
+        content_id = file_on_canvas['id']
 
 
         # now to make sure it's in the right modules
