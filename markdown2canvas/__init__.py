@@ -1150,11 +1150,12 @@ class File(CanvasObject):
 
     def publish(self, course, overwrite=False):
         
-
+        on_duplicate='overwrite'
         if file_on_canvas:= self.is_already_uploaded(course):
             if not overwrite:
                 n = self.metadata['filename']
-                raise AlreadyExists(f'trying to upload file {n}, but is already on Canvas')
+                on_duplicate='rename'
+                #raise AlreadyExists(f'trying to upload file {n}, but is already on Canvas')
             content_id = file_on_canvas.id
 
         #else:
@@ -1171,7 +1172,7 @@ class File(CanvasObject):
                 curr_dir = curr_dir.create_folder(subd)
         
         filepath_to_upload = path.join(self.folder,self.metadata['filename'])
-        reply = curr_dir.upload(file=filepath_to_upload)
+        reply = curr_dir.upload(file=filepath_to_upload,on_duplicate=on_duplicate)
         
         if not reply[0]:
             raise RuntimeError(f'something went wrong uploading {filepath_to_upload}')
