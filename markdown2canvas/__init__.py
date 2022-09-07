@@ -550,10 +550,10 @@ class Document(CanvasObject):
     def publish_linked_content_and_adjust_html(self,course,overwrite=False):
         # first, publish the local images.
         for im in self.local_images.values():
-            im.publish(course,'images')
+            im.publish(course,'images', overwrite=overwrite)
 
         for file in self.local_files.values():
-            file.publish(course,'automatically_uploaded_files')
+            file.publish(course,'automatically_uploaded_files', overwrite=overwrite)
 
 
         # then, deal with the urls
