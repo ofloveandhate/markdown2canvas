@@ -669,7 +669,7 @@ class Page(Document):
 
         self.canvas_obj = page
 
-        self.publish_linked_content_and_adjust_html(course)
+        self.publish_linked_content_and_adjust_html(course, overwrite=overwrite)
 
         d = self._dict_of_props()
         page.edit(wiki_page=d) 
@@ -781,7 +781,7 @@ class Assignment(Document):
         self.canvas_obj = assignment
 
 
-        self.publish_linked_content_and_adjust_html(course)
+        self.publish_linked_content_and_adjust_html(course, overwrite=overwrite)
         
         # now that we have the assignment, we'll update its content.
 
@@ -947,6 +947,7 @@ class BareFile(CanvasObject):
             on_duplicate = 'overwrite'
         else:
             on_duplicate = 'rename'
+        
 
 
         # this still needs to be adjusted to capture the Canvas file, in case it exists
@@ -954,7 +955,8 @@ class BareFile(CanvasObject):
             success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
             if not success_code:
                 print(f'failed to upload...  {self.givenpath}')
-
+            else:
+                print(f'overwrote {self.name}')
 
             self.canvas_obj = course.get_file(json_response['id'])
             return self.canvas_obj
