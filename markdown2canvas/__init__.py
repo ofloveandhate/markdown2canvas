@@ -550,10 +550,10 @@ class Document(CanvasObject):
     def publish_linked_content_and_adjust_html(self,course,overwrite=False):
         # first, publish the local images.
         for im in self.local_images.values():
-            im.publish(course,'images')
+            im.publish(course,'images', overwrite=overwrite)
 
         for file in self.local_files.values():
-            file.publish(course,'automatically_uploaded_files')
+            file.publish(course,'automatically_uploaded_files', overwrite=overwrite)
 
 
         # then, deal with the urls
@@ -669,7 +669,7 @@ class Page(Document):
 
         self.canvas_obj = page
 
-        self.publish_linked_content_and_adjust_html(course)
+        self.publish_linked_content_and_adjust_html(course, overwrite=overwrite)
 
         d = self._dict_of_props()
         page.edit(wiki_page=d) 
@@ -781,7 +781,7 @@ class Assignment(Document):
         self.canvas_obj = assignment
 
 
-        self.publish_linked_content_and_adjust_html(course)
+        self.publish_linked_content_and_adjust_html(course, overwrite=overwrite)
         
         # now that we have the assignment, we'll update its content.
 
@@ -947,6 +947,7 @@ class BareFile(CanvasObject):
             on_duplicate = 'overwrite'
         else:
             on_duplicate = 'rename'
+        
 
 
         # this still needs to be adjusted to capture the Canvas file, in case it exists
@@ -954,7 +955,8 @@ class BareFile(CanvasObject):
             success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
             if not success_code:
                 print(f'failed to upload...  {self.givenpath}')
-
+            else:
+                print(f'overwrote {self.name}\n{self.givenpath}')
 
             self.canvas_obj = course.get_file(json_response['id'])
             return self.canvas_obj
@@ -1148,12 +1150,11 @@ class File(CanvasObject):
 
     def publish(self, course, overwrite=False):
         
-
-        if file_on_canvas:= self.is_already_uploaded(course):
-            if not overwrite:
-                n = self.metadata['filename']
-                raise AlreadyExists(f'trying to upload file {n}, but is already on Canvas')
-
+        on_duplicate='overwrite'
+        if (file_on_canvas:= self.is_already_uploaded(course)) and not overwrite:
+            on_duplicate='rename'
+            n = self.metadata['filename']
+            print(f'The file {n} but is already on Canvas, and is not being overwritten.')
             content_id = file_on_canvas.id
 
         else:
@@ -1170,7 +1171,7 @@ class File(CanvasObject):
                     curr_dir = curr_dir.create_folder(subd)
             
             filepath_to_upload = path.join(self.folder,self.metadata['filename'])
-            reply = curr_dir.upload(file=filepath_to_upload)
+            reply = curr_dir.upload(file=filepath_to_upload,on_duplicate=on_duplicate)
             
             if not reply[0]:
                 raise RuntimeError(f'something went wrong uploading {filepath_to_upload}')
