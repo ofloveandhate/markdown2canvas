@@ -147,7 +147,11 @@ def generate_course_link(type,name,course):
         the_item = next( (p for p in course.get_pages() if p.title == name) , None)
     elif type == 'assignment':
         the_item = next( (a for a in course.get_assignments() if a.name == name) , None)
-    return the_item.html_url
+    if the_item is None:
+        import warnings
+        warnings.warn(f"No {type} named {name} exists.")
+    else:
+        return the_item.html_url
     
 
 
@@ -246,6 +250,7 @@ def markdown2html(filename,course=None):
                 get_link = generate_course_link(split_at_colon[0],split_at_colon[1],course)
                 if get_link:
                     f["href"] = get_link
+                    
 
     return str(soup)
 
@@ -971,7 +976,7 @@ class BareFile(CanvasObject):
             if not success_code:
                 print(f'failed to upload...  {self.givenpath}')
             else:
-                print(f'overwrote {self.name}\n{self.givenpath}')
+                print(f'overwrote {self.name}')
 
             self.canvas_obj = course.get_file(json_response['id'])
             return self.canvas_obj
