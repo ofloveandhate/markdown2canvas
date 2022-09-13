@@ -138,7 +138,17 @@ def make_canvas_api_obj(url=None):
 
 
 
-
+def generate_course_link(type,name,course):
+    '''
+    Given a type (assignment or page) and the name of said object, generate a link
+    within course to that object.
+    '''
+    if type == 'page':
+        the_item = next( (p for p in course.get_pages() if p.title == name) , None)
+    elif type == 'assignment':
+        the_item = next( (a for a in course.get_assignments() if a.name == name) , None)
+    return the_item.html_url
+    
 
 
 def compute_relative_style_path(style_path):
@@ -201,7 +211,7 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 
 
-def markdown2html(filename):
+def markdown2html(filename,course=None):
 
     root = path.split(filename)[0]
 
@@ -229,8 +239,13 @@ def markdown2html(filename):
     for f in all_links:
             href = f["href"]
             root_href = path.join(root,href)
+            split_at_colon = href.split(":")
             if path.exists(path.abspath(root_href)):
                 f["href"] = root_href
+            elif course and split_at_colon[0] in ['assignment','page']:
+                get_link = generate_course_link(split_at_colon[0],split_at_colon[1],course)
+                if get_link:
+                    f["href"] = get_link
 
     return str(soup)
 
@@ -497,7 +512,7 @@ class Document(CanvasObject):
     A base class which handles common pieces of interface for things like Pages and Assignments
     """
 
-    def __init__(self,folder):
+    def __init__(self,folder,course=None):
         """
         Construct a Document.
         Reads the meta.json file and source.md files
@@ -525,11 +540,11 @@ class Document(CanvasObject):
             outname = join(self.folder,"styled_source.md")
             apply_style_markdown(self.sourcename, self.metadata['style'], outname)
 
-            translated_html_without_hf = markdown2html(outname)
+            translated_html_without_hf = markdown2html(outname,course)
 
             self.translated_html = apply_style_html(translated_html_without_hf, self.metadata['style'], outname)
         else:
-            self.translated_html = markdown2html(self.sourcename)
+            self.translated_html = markdown2html(self.sourcename,course)
 
         self.local_images = find_local_images(self.translated_html)
         self.local_files = find_local_files(self.translated_html)
@@ -643,8 +658,8 @@ class Page(Document):
 
     folder -- a string, the name of the folder we're going to read data from.
     """
-    def __init__(self, folder):
-        super(Page, self).__init__(folder)
+    def __init__(self, folder, course=None):
+        super(Page, self).__init__(folder, course)
 
 
     def _set_from_metadata(self):
@@ -695,8 +710,8 @@ class Page(Document):
 
 class Assignment(Document):
     """docstring for Assignment"""
-    def __init__(self, folder):
-        super(Assignment, self).__init__(folder)
+    def __init__(self, folder,course=None):
+        super(Assignment, self).__init__(folder,course)
 
         # self._set_from_metadata() # <-- this is called from the base __init__
 
