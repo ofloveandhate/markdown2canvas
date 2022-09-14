@@ -138,15 +138,15 @@ def make_canvas_api_obj(url=None):
 
 
 
-def generate_course_link(type,name,course):
+def generate_course_link(type,name,all_of_type):
     '''
     Given a type (assignment or page) and the name of said object, generate a link
     within course to that object.
     '''
     if type == 'page':
-        the_item = next( (p for p in course.get_pages() if p.title == name) , None)
+        the_item = next( (p for p in all_of_type if p.title == name) , None)
     elif type == 'assignment':
-        the_item = next( (a for a in course.get_assignments() if a.name == name) , None)
+        the_item = next( (a for a in all_of_type if a.name == name) , None)
     if the_item is None:
         print(f"WARNING: No {type} named {name} exists.")
     else:
@@ -238,7 +238,12 @@ def markdown2html(filename,course=None):
             if ('http://' not in src) and ('https://' not in src):
                 img["src"] = path.join(root,src)
 
-    all_links = soup.findAll("a")
+    all_links = soup.findAll("a")   
+    course_page_and_assignments = {}
+    if any(l['href'].startswith("page:") for l in all_links) and course:
+        course_page_and_assignments['page'] = course.get_pages()
+    if any(l['href'].startswith("assignment:") for l in all_links) and course:
+        course_page_and_assignments['assignment'] = course.get_assignments()
     for f in all_links:
             href = f["href"]
             root_href = path.join(root,href)
@@ -246,9 +251,9 @@ def markdown2html(filename,course=None):
             if path.exists(path.abspath(root_href)):
                 f["href"] = root_href
             elif course and split_at_colon[0] in ['assignment','page']:
-                type = split_at_colon[0].strip()
+                type = split_at_colon[0]
                 name = split_at_colon[1].strip()
-                get_link = generate_course_link(type,name,course)
+                get_link = generate_course_link(type,name,course_page_and_assignments[type])
                 if get_link:
                     f["href"] = get_link
                     
