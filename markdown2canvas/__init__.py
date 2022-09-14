@@ -755,7 +755,6 @@ class Assignment(Document):
         self.external_tool_tag_attributes = self.metadata['external_tool_tag_attributes'] if 'external_tool_tag_attributes' in self.metadata else None
         self.omit_from_final_grade = self.metadata['omit_from_final_grade'] if 'omit_from_final_grade' in self.metadata else None
         
-        self.assignment_group_name = self.metadata['assignment_group_name'] if 'assignment_group_name' in self.metadata else None
 
     def _dict_of_props(self):
 
@@ -788,8 +787,6 @@ class Assignment(Document):
         if not self.omit_from_final_grade is None:
             d['omit_from_final_grade'] = self.omit_from_final_grade
             
-        if not self.assignment_group_name is None:
-            d['assignment_group_name'] = self.assignment_group_name
 
         return d
 
