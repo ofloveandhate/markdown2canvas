@@ -148,8 +148,7 @@ def generate_course_link(type,name,course):
     elif type == 'assignment':
         the_item = next( (a for a in course.get_assignments() if a.name == name) , None)
     if the_item is None:
-        import warnings
-        warnings.warn(f"No {type} named {name} exists.")
+        print(f"WARNING: No {type} named {name} exists.")
     else:
         return the_item.html_url
     
@@ -243,11 +242,13 @@ def markdown2html(filename,course=None):
     for f in all_links:
             href = f["href"]
             root_href = path.join(root,href)
-            split_at_colon = href.split(":")
+            split_at_colon = href.split(":",1)
             if path.exists(path.abspath(root_href)):
                 f["href"] = root_href
             elif course and split_at_colon[0] in ['assignment','page']:
-                get_link = generate_course_link(split_at_colon[0],split_at_colon[1],course)
+                type = split_at_colon[0].strip()
+                name = split_at_colon[1].strip()
+                get_link = generate_course_link(type,name,course)
                 if get_link:
                     f["href"] = get_link
                     
