@@ -1265,20 +1265,6 @@ class File(CanvasObject):
 
 
 
-
-
-def translate_and_publish(pagename, filename, course):
-    """
-    Translates markdown files to html, including dealing with images, and publishes them to Canvas.
-
-    pagename -- a string, giving the name of the page on Canvas
-    filename -- the name of a markdown file
-    canvas -- a CanvasAPI instance
-    courseid -- an integer, giving the number of the canvas course in your system
-    """
-    page = Page(pagename, filename)
-    page.publish(canvas,courseid)
-
 def page2markdown(destination, page, even_if_exists=False):
     """
     takes a Page from Canvas, and saves it to a folder inside `destination`
