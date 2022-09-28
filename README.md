@@ -77,6 +77,16 @@ my_filter = lambda title: '📖' in title # pages about readings have an open bo
 mc.download_pages(destination, course, even_if_exists=True, name_filter=my_filter)
 ```
 
+## Referencing assignments and pages
+
+You must use a link of the form
+
+```[Test Assignment](assignment:Test Assignment)```
+
+or
+
+```<a href="page:Test Page">Link to page titled Test Page</a>```
+
 ## Emoji
 
 This library supports the conversion of shortcodes to emoji.  For example, `:open_book:` goes to 📖.  I use the [`emoji`](https://pypi.org/project/emoji/) library to do this.  [Shortcodes can be found here](https://carpedm20.github.io/emoji/).
