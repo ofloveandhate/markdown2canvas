@@ -138,7 +138,20 @@ def make_canvas_api_obj(url=None):
 
 
 
-
+def generate_course_link(type,name,all_of_type):
+    '''
+    Given a type (assignment or page) and the name of said object, generate a link
+    within course to that object.
+    '''
+    if type == 'page':
+        the_item = next( (p for p in all_of_type if p.title == name) , None)
+    elif type == 'assignment':
+        the_item = next( (a for a in all_of_type if a.name == name) , None)
+    if the_item is None:
+        print(f"WARNING: No {type} named {name} exists.")
+    else:
+        return the_item.html_url
+    
 
 
 def compute_relative_style_path(style_path):
@@ -201,7 +214,7 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 
 
-def markdown2html(filename):
+def markdown2html(filename,course=None):
 
     root = path.split(filename)[0]
 
@@ -225,12 +238,25 @@ def markdown2html(filename):
             if ('http://' not in src) and ('https://' not in src):
                 img["src"] = path.join(root,src)
 
-    all_links = soup.findAll("a")
+    all_links = soup.findAll("a")   
+    course_page_and_assignments = {}
+    if any(l['href'].startswith("page:") for l in all_links) and course:
+        course_page_and_assignments['page'] = course.get_pages()
+    if any(l['href'].startswith("assignment:") for l in all_links) and course:
+        course_page_and_assignments['assignment'] = course.get_assignments()
     for f in all_links:
             href = f["href"]
             root_href = path.join(root,href)
+            split_at_colon = href.split(":",1)
             if path.exists(path.abspath(root_href)):
                 f["href"] = root_href
+            elif course and split_at_colon[0] in ['assignment','page']:
+                type = split_at_colon[0]
+                name = split_at_colon[1].strip()
+                get_link = generate_course_link(type,name,course_page_and_assignments[type])
+                if get_link:
+                    f["href"] = get_link
+                    
 
     return str(soup)
 
@@ -497,7 +523,7 @@ class Document(CanvasObject):
     A base class which handles common pieces of interface for things like Pages and Assignments
     """
 
-    def __init__(self,folder):
+    def __init__(self,folder,course=None):
         """
         Construct a Document.
         Reads the meta.json file and source.md files
@@ -525,11 +551,11 @@ class Document(CanvasObject):
             outname = join(self.folder,"styled_source.md")
             apply_style_markdown(self.sourcename, self.metadata['style'], outname)
 
-            translated_html_without_hf = markdown2html(outname)
+            translated_html_without_hf = markdown2html(outname,course)
 
             self.translated_html = apply_style_html(translated_html_without_hf, self.metadata['style'], outname)
         else:
-            self.translated_html = markdown2html(self.sourcename)
+            self.translated_html = markdown2html(self.sourcename,course)
 
         self.local_images = find_local_images(self.translated_html)
         self.local_files = find_local_files(self.translated_html)
@@ -643,8 +669,8 @@ class Page(Document):
 
     folder -- a string, the name of the folder we're going to read data from.
     """
-    def __init__(self, folder):
-        super(Page, self).__init__(folder)
+    def __init__(self, folder, course=None):
+        super(Page, self).__init__(folder, course)
 
 
     def _set_from_metadata(self):
@@ -695,8 +721,8 @@ class Page(Document):
 
 class Assignment(Document):
     """docstring for Assignment"""
-    def __init__(self, folder):
-        super(Assignment, self).__init__(folder)
+    def __init__(self, folder,course=None):
+        super(Assignment, self).__init__(folder,course)
 
         # self._set_from_metadata() # <-- this is called from the base __init__
 
@@ -728,6 +754,9 @@ class Assignment(Document):
 
         self.external_tool_tag_attributes = self.metadata['external_tool_tag_attributes'] if 'external_tool_tag_attributes' in self.metadata else None
         self.omit_from_final_grade = self.metadata['omit_from_final_grade'] if 'omit_from_final_grade' in self.metadata else None
+        
+        self.grading_type = self.metadata['grading_type'] if 'grading_type' in self.metadata else None
+        
 
     def _dict_of_props(self):
 
@@ -759,6 +788,9 @@ class Assignment(Document):
 
         if not self.omit_from_final_grade is None:
             d['omit_from_final_grade'] = self.omit_from_final_grade
+                
+        if not self.grading_type is None:
+            d['grading_type'] = self.grading_type
 
         return d
 
@@ -956,7 +988,7 @@ class BareFile(CanvasObject):
             if not success_code:
                 print(f'failed to upload...  {self.givenpath}')
             else:
-                print(f'overwrote {self.name}\n{self.givenpath}')
+                print(f'overwrote {self.name}')
 
             self.canvas_obj = course.get_file(json_response['id'])
             return self.canvas_obj
@@ -1236,20 +1268,6 @@ class File(CanvasObject):
 
 
 
-
-
-
-def translate_and_publish(pagename, filename, course):
-    """
-    Translates markdown files to html, including dealing with images, and publishes them to Canvas.
-
-    pagename -- a string, giving the name of the page on Canvas
-    filename -- the name of a markdown file
-    canvas -- a CanvasAPI instance
-    courseid -- an integer, giving the number of the canvas course in your system
-    """
-    page = Page(pagename, filename)
-    page.publish(canvas,courseid)
 
 def page2markdown(destination, page, even_if_exists=False):
     """
