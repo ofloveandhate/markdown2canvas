@@ -6,7 +6,7 @@ EXCLUDE_FROM_PACKAGES = []
 extras = {}
 
 setup(name='markdown2canvas',
-      version='0.1',  # TODO make this set programmatically
+      version='0.2',  # TODO make this set programmatically
       description='code for publishing markdown documents to Canvas pages',
       url='https://github.com/ofloveandhate/markdown2canvas',
       author='Silviana Amethyst',

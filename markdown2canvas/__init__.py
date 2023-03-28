@@ -1,5 +1,10 @@
 import canvasapi
 import os.path as path
+
+import requests
+
+
+
 import logging
 
 import datetime
@@ -16,6 +21,13 @@ root_logger.addHandler(handler)
 
 logging.debug(f'starting logging at {datetime.datetime.now()}')
 
+
+logging.debug(f'reducing logging level of `requests` to WARNING')
+logging.getLogger('canvasapi.requester').setLevel(logging.WARNING)
+logging.getLogger('requests').setLevel(logging.WARNING)
+
+
+
 def is_file_already_uploaded(filename,course):
     """
     returns a boolean, true if there's a file of `filename` already in `course`.
@@ -23,6 +35,9 @@ def is_file_already_uploaded(filename,course):
     This function wants the full path to the file.
     """
     return ( not find_file_in_course(filename,course) is None )
+
+
+
 
 def find_file_in_course(filename,course):
     """
@@ -131,6 +146,7 @@ def make_canvas_api_obj(url=None):
     """
 
     key, default_url = get_canvas_key_url()
+
     if not url:
         url = default_url
 
@@ -147,6 +163,7 @@ def generate_course_link(type,name,all_of_type):
         the_item = next( (p for p in all_of_type if p.title == name) , None)
     elif type == 'assignment':
         the_item = next( (a for a in all_of_type if a.name == name) , None)
+        
     if the_item is None:
         print(f"WARNING: No {type} named {name} exists.")
     else:
@@ -162,6 +179,14 @@ def compute_relative_style_path(style_path):
 
 
 
+def preprocess_substitutions(contents, subfile=None):
+    """
+    attempts to read in a file containing substitutions to make, and then makes those substitutions
+    """
+    raise NotImplementedError("dude, this functionality would be sweet.  do it.")
+
+    
+
 def preprocess_markdown_images(contents,style_path):
 
     rel_style_path = compute_relative_style_path(style_path)
@@ -169,6 +194,28 @@ def preprocess_markdown_images(contents,style_path):
     contents = contents.replace('$PATHTOMD2CANVASSTYLEFILE',rel_style_path)
 
     return contents
+
+
+
+def get_default_style_name():
+
+    defaults_name = compute_relative_style_path("_course_metadata/defaults.json")
+
+    try:
+        logging.info(f'trying to use default style from {defaults_name}')
+        with open(defaults_name,'r',encoding='utf-8') as f:
+            import json
+            defaults = json.loads(f.read())
+
+        if 'style' in defaults:
+            return defaults['style']
+        else:
+            return None
+
+    except Exception as e:
+        print(f'WARNING: failed to load defaults from `{defaults_name}`')
+        raise e
+
 
 
 def apply_style_markdown(sourcename, style_path, outname):
@@ -416,6 +463,26 @@ class DoesntExist(Exception):
 
 
 
+
+
+def get_assignment_group_id(assignment_group_name, course, create_if_necessary=False):
+
+    existing_groups = course.get_assignment_groups()
+
+    for g in existing_groups:
+        if g.name == assignment_group_name:
+            return g.id
+
+    if create_if_necessary:
+        logging.info(f'making new assignment group because `{assignment_group_name}` did not already exist')
+        return course.create_assignment_group(something={'name':assignment_group_name})
+    else:
+        raise DoesntExist(f'cannot get assignment group id because an assignment group of name {assignment_group_name} does not already exist, and `create_if_necessary` is set to False')
+
+    
+
+
+
 def create_or_get_assignment(name, course, even_if_exists = False):
 
     if is_assignment_already_uploaded(name,course):
@@ -548,14 +615,21 @@ class Document(CanvasObject):
         self._set_from_metadata()
 
         if 'style' in self.metadata:
+            stylename = self.metadata['style']
+        else:
+            stylename = get_default_style_name() # could be None if doesn't exist
+
+
+        if stylename:
             outname = join(self.folder,"styled_source.md")
-            apply_style_markdown(self.sourcename, self.metadata['style'], outname)
+            apply_style_markdown(self.sourcename, stylename, outname)
 
             translated_html_without_hf = markdown2html(outname,course)
 
-            self.translated_html = apply_style_html(translated_html_without_hf, self.metadata['style'], outname)
+            self.translated_html = apply_style_html(translated_html_without_hf, stylename, outname)
         else:
             self.translated_html = markdown2html(self.sourcename,course)
+
 
         self.local_images = find_local_images(self.translated_html)
         self.local_files = find_local_files(self.translated_html)
@@ -687,6 +761,10 @@ class Page(Document):
 
         Other derived-class `publish` functions will handle things like due-dates for assignments, etc.
         """
+
+        logging.info(f'starting translate and upload process for Page `{self.name}`')
+
+
         try:
             page = create_or_get_page(self.name, course, even_if_exists=overwrite)
         except AlreadyExists as e:
@@ -702,6 +780,7 @@ class Page(Document):
 
         self.ensure_in_modules(course)
 
+        logging.info(f'done uploading {self.name}')
 
 
 
@@ -739,24 +818,25 @@ class Assignment(Document):
     def _set_from_metadata(self):
         super(Assignment,self)._set_from_metadata()
 
+        default_to_none = lambda propname: self.metadata[propname] if propname in self.metadata else None
 
-        self.allowed_extensions = self.metadata['allowed_extensions'] if 'allowed_extensions' in self.metadata else None
+        self.allowed_extensions = default_to_none('allowed_extensions')
 
-        self.points_possible = self.metadata['points_possible'] if 'points_possible' in self.metadata else None
+        self.points_possible = default_to_none('points_possible')
 
-        self.unlock_at = self.metadata['unlock_at'] if 'unlock_at' in self.metadata else None
-        self.lock_at = self.metadata['lock_at'] if 'lock_at' in self.metadata else None
-        self.due_at = self.metadata['due_at'] if 'due_at' in self.metadata else None
+        self.unlock_at = default_to_none('unlock_at')
+        self.lock_at = default_to_none('lock_at')
+        self.due_at = default_to_none('due_at')
 
-        self.published = self.metadata['published'] if 'published' in self.metadata else None
+        self.published = default_to_none('published')
 
-        self.submission_types = self.metadata['submission_types'] if 'submission_types' in self.metadata else None
+        self.submission_types = default_to_none('submission_types')
 
-        self.external_tool_tag_attributes = self.metadata['external_tool_tag_attributes'] if 'external_tool_tag_attributes' in self.metadata else None
-        self.omit_from_final_grade = self.metadata['omit_from_final_grade'] if 'omit_from_final_grade' in self.metadata else None
+        self.external_tool_tag_attributes = default_to_none('external_tool_tag_attributes')
+        self.omit_from_final_grade = default_to_none('omit_from_final_grade')
         
-        self.grading_type = self.metadata['grading_type'] if 'grading_type' in self.metadata else None
-        
+        self.grading_type = default_to_none('grading_type')
+        self.assignment_group_name = default_to_none('assignment_group_name')
 
     def _dict_of_props(self):
 
@@ -796,19 +876,35 @@ class Assignment(Document):
 
 
 
+
+    def ensure_in_assignment_group(self, course, create_if_necessary=False):
+
+        if self.assignment_group_name is None:
+            logging.info(f'when putting assignment {self.name} into group, taking no action because no assignment group specified')
+            return
+
+        assignment_group_id = get_assignment_group_id(self.assignment_group_name, course, create_if_necessary)
+        self.canvas_obj.edit(assignment={'assignment_group_id':assignment_group_id})
+        
+
+
     def publish(self, course, overwrite=False):
         """
         if `overwrite` is False, then if an assignment is found with the same name already, the function will decline to make any edits.
 
         That is, if overwrite==False, then this function will only succeed if there's no existing assignment of the same name.
         """
+
+        logging.info(f'starting translate and upload process for Assignment `{self.name}`')
+
+
+        # need a remote object to work with
         assignment = None
         try:
             assignment = create_or_get_assignment(self.name, course, overwrite)
         except AlreadyExists as e:
             if not overwrite:
                 raise e
-
 
         self.canvas_obj = assignment
 
@@ -826,6 +922,9 @@ class Assignment(Document):
         assignment.edit(assignment=new_props)
 
         self.ensure_in_modules(course)
+        self.ensure_in_assignment_group(course)
+
+        logging.info(f'done uploading {self.name} to Canvas')
 
         return True
 
