@@ -156,7 +156,7 @@ There are more, but I'll have you set the last important one after you do some o
 -------------------------------------
 
 
-## 12. Save two webwork webpages to disk
+## 5. Save two webwork webpages to disk
 
 
 🎯 Make a Folder on your computer, and name it something memorable, like "webwork2canvas_20230824" or whatever.   I'll call this `$FOLDER` from now on.
@@ -164,7 +164,7 @@ There are more, but I'll have you set the last important one after you do some o
 ⚠️ Do not put spaces in the names of things on computers.  It's more difficult to code around.  I am not sure if my tool works correctly with a space in the path / name.
 
 
-### 12.A. Save the "Hmwk Sets Editor page" from Webwork
+### 5.A. Save the "Hmwk Sets Editor page" from Webwork
 
 * "Hmwk Sets Editor" from the left
 * In your browser, save page source as `dates.html` to `$FOLDER`.
@@ -174,9 +174,9 @@ There are more, but I'll have you set the last important one after you do some o
 
 
 
-### 12.B. Save a student view of the list of assigned content
+### 5.B. Save a student view of the list of assigned content
 
-#### 12.B.i. Make a fake student in Webwork
+#### 5.B.i. Make a fake student in Webwork
 
 * "Classlist editor" tool on the left
 * Select the "Add" tab, leave at 1 user to add, click "Add"
@@ -185,7 +185,7 @@ There are more, but I'll have you set the last important one after you do some o
 * Click "Add Students"
 * Classlist Editor, and verify the new fake student exists
 
-#### 12.B.ii. Assign that fake student all content you wish to send to Canvas
+#### 5.B.ii. Assign that fake student all content you wish to send to Canvas
 
 This step is nearly trivial if the set of visible homework sets in the "Hmwk Sets Editor" is exactly the set you'll assign to your students.  Go back and do step 1 if you didn't already.  
 
@@ -211,7 +211,7 @@ The fake user should now have all of your visible content assigned to them.
 * Look at the list.  Is it correct?
 
 
-#### 12.B.iii. Save the "Homework Sets" page from Webwork while 'acting as' the fake student
+#### 5.B.iii. Save the "Homework Sets" page from Webwork while 'acting as' the fake student
 
 Are you still on the "Student Progress for fakename" page?  If not, 
 
@@ -231,18 +231,24 @@ Ok, now you're definitely on "Student Progress for fakename".  Click "Act as: fa
 
 
 
+## 6. Get course_id number for Canvas course
 
-## Make a fake Canvas course for experimenting
+The "course_id" number can be found as the first six-digit number in the URL of your Canvas course, from your browser.  
+
+🎯 Copy-paste it into the `config.json` file.
+
+
+### Cautious option: make a fake Canvas course for experimenting
 
 The location for this button is stupid.  Follow my instructions:
 
 1. Open any page in Canvas
 2. Far left bar, the ? Help button at the bottom.
 3. "Create a Sandox Course"
+4. Visit the new course, grab the course_id number, and copy-paste it into `config.json`
 
 
-
-
+ℹ️ If you ever "reset all content" in a canvas course, it generates a new 6-digit number.
 
 
 
@@ -251,35 +257,79 @@ The location for this button is stupid.  Follow my instructions:
 
 
 
-## Get Python ready  🐍
+## 7. Get Python ready  🐍
 
 If you cannot install software or are unwilling to deal with Python yourself, please ask silviana.  She'll complete this with you at her computer.
 
 
-### Get your Canvas API key
+### Set up credentials file
 
 
+1. Make a python file called `canvas_credentials.py` at arbitrary non-shared location on your computer.  It must contain at least one variable: `API_KEY = "your_token_here"`, a string variable, which contains the API key you'll make.  
+2. Go to canvas, "Account", "Settings".  Then, under "Approved integrations", click "New access token".  Give it a name and expiration, the next day is ideal unless you plan to use the API more than for this one task.  To help you identify the correct number to copy, my token / key / whatever starts with the string `11830~S` and maybe yours does, too?
+3. Save the token to the .py file.  
 
-make a python file called `canvas_credentials.py` at arbitrary location.  it must contain at least one variable: `API_KEY = "your_token_here"`, a string variable, which contains the API key you'll make.  
-
-go to canvas, "account", "settings".  under "approved integrations", click "new access token".  give it a name and expiration.  save the token to the .py file.  my token / key / whatever starts with `11830~S`.
-
-make an environment variable in the shell from terminal, called `CANVAS_CREDENTIAL_FILE`, having value the full path to the `canvas_credentials.py` file, including the `canvas_credentials.py` part.  (this means that the file doesn't actually need to be named `canvas_credentials.py`)
+4. OS-dependent step!  
+    * If on Windows, ask Mckenzie West for help, she's used a version of this Python tool from Windows.
+    * If on Mac or Linux, make an environment variable in a terminal, called `CANVAS_CREDENTIAL_FILE`, having value the full path to the `canvas_credentials.py` file, including the `canvas_credentials.py` part.  (this means that the file doesn't actually need to be named `canvas_credentials.py`).  
 
 
 
 
 ### Install markdown2canvas
 
-In a Python-enabled terminal / command prompt
+In a Python 3-enabled terminal / command prompt with `git`:
 
 * `pip install canvasapi, bs4`
 * `git clone https://github.com/ofloveandhate/markdown2canvas`
 * `cd markdown2canvas`
 * `pip install .`
 
-The `webwork2canvas` tool should be at `markdown2canvas/tools/webwork2canvas.py`.  You'll later execute the script via `python3`.  This readme file is in there, too.
+ℹ️ The `webwork2canvas` tool should be at `markdown2canvas/tools/webwork2canvas.py`.  This readme file is in there, too.
 
+
+
+
+
+## 8. Run!
+
+Cautious option: change `dry_run` to `true` in file `config.json` if you want.  
+
+🎯 run `python3 path/to/markdown2canvas/tools/webwork2canvas.py`.  
+
+* While uploading you may reload your Canvas homepage.  Verify is as desired.  I do not suggest modifying content on Canvas while this process runs, I have no idea what happens if you do.
+* Be patient.  It will take up to 30-40 minutes to complete.  If you know Python feel free to contribute to my library to help speed it up, I'm sure it could be.  
+* While running, it should print the names of the assignments as it uploads, to help you have confidence it's working.
+
+⚠️ Don't let the computer go to sleep while this happens.  You don't want to have to start it over.
+
+
+ℹ️ The code produces some temporary files/folders: 
+* inspectme.json
+* automatically_generated_assignments/
+* `_logs/markdown2canvas_$datestamp.log`
+
+
+
+
+
+## Summary
+
+webwork state:
+* due dates and visibility set
+
+in one folder:
+* downloaded files `dates.html`, `homework_sets.html`
+* customized files `name_map.json`, `config.json`
+
+installed packages:
+* `markdown2canvas`, `bs4`, `canvasapi`
+
+made credentials text file:
+* `canvas_credentials.py`, with environment variable `CANVAS_CREDENTIAL_FILE` pointing to it, and containing `API_KEY = "my_key"`.
+
+run:
+* `python webwork2canvas.py`
 
 
 
@@ -308,60 +358,4 @@ I generated the .json file for naming / modules by:
 * copy-pasted into text document in Sublime text (maybe another can, idk)
 * go nuts with the cursor making .json structure
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## get api key for canvas
-
-
-
-
-
-## adjust `webwork2canvas.py`
-
-in the python code i sent you (change the extension `.zip` --> `.py`, otherwise you can't send python code in our email system):
-enter the canvas course id number for the course you're publishing to, line 163.
-
-## run!
-
-comment out the publish line (line 197) for a dry run, if you want.
-
-run python `webwork2canvas.py`.
-
-the code produces some temporary files/folders: 
-* inspectme.json
-* automatically_generated_assignments/
-* markdown2canvas_datestamp.log
-
-reload canvas page.  verify is as desired.
-
-
-
-## summary
-
-in one folder:
-* dates.html, homework_sets.html
-* name_map.json
-* webwork2canvas.py
-
-installed packages:
-* markdown2canvas, bs4, canvasapi
-
-made credentials file:
-* `canvas_credentials.py`, with environment variable `CANVAS_CREDENTIAL_FILE` pointing to it, and containing `API_KEY = "my_key"`.
-
-run:
-* `python webwork2canvas.py`
 
