@@ -831,7 +831,7 @@ class Assignment(Document):
     def _get_list_of_canvas_properties_(self):
         doc_url = "https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.update"
         thing = "Request Parameters:"
-
+        raise NotImplementedError(f"this function is not implemented, but is intended to provide a programmatic way to determine the validity of a property name.  see `{doc_url}`")
 
 
     def _set_from_metadata(self):
