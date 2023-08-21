@@ -16,6 +16,30 @@ silviana amethyst
 * Easier setting of names for assignments using a modern text editor, for fun patterning using "selection selection".
 
 
+---
+
+## Summary overview
+
+webwork state:
+* due dates and visibility set
+
+in one folder:
+* downloaded files `dates.html`, `homework_sets.html`
+* customized files `name_map.json`, `config.json`
+
+installed packages:
+* `markdown2canvas`, `bs4`, `canvasapi`
+
+course id saved in 
+* `config.log`
+
+made credentials text file:
+* On a Mac, `canvas_credentials.py`, with environment variable `CANVAS_CREDENTIAL_FILE` pointing to it, and containing `API_KEY = "my_key"`.
+* On a windows, ask Mckenzie West for help.
+
+run:
+* `python webwork2canvas.py`
+
 
 ---
 
@@ -42,18 +66,23 @@ There are four kinds of content in the Webwork problems:
 
 ### 1.B. Making the selection
 
-1. togo the Hmwk Sets Editor
+1. Goto the "Hmwk Sets Editor" in the left bar
 2. Select the "Edit" tab
 3. Check to select all sets ☑️ .  The upper left does it for you, do not click hundreds of times.
 4. Click "Edit"
 5. Use the "Visible" column.  Uncheck to declare your intent to not assign that to students.  Check to make sure that new users created in the system are assigned that content.
+6. Click "Save Edit".  Or, keep open and do due dates at same time.  But probably save now, because you're a cautious person.
 
+
+
+
+---
 
 ## 2. Adjust your due dates in  Webwork
 
 ℹ️ You have to do this step yourself, regardless of whether you use my Python tool.  
 
-1. goto Hmwk Sets Editor
+1. goto "Hmwk Sets Editor"
 2. select "Edit" from the tabs of actions, and probably check all assignments
 3. click "Edit"
 4. adjust the due dates. copy paste is your friend, but *SEE MY NOTES* below before over-writing my deliberately-set times-of-day.
@@ -85,7 +114,7 @@ Think about your modules and gradebook categories.  Decide on a naming scheme fo
 I have out-of-the-box supported two naming schemes for Modules: 
 
 * Weekly.  The names of the modules *start with* "Week 1", "Week 2", etc.
-
+* By chapter.  
 
 ### 3.B. Mentally decide on grade category naming
 
@@ -95,25 +124,22 @@ I have supported one scheme out of the box.
     * "🏋️ Training"
     * "🏔️ Challenge"
     * "⏩ Speedrun"
-    * "🎽 Team quiz"
+    * "🏟️ Team quiz"
 
 
-### 3.C. Edit the .json file that specifies these
+### 3.C. Edit the `name_map_*.json` file that specifies these
 
-I have provided two .json files with my naming choices, and the module naming schemes.   You'll use ONE of them:
+I have provided a few .json files with my naming choices, and the module naming schemes.   You'll use ONE of them:
 
 * `name_map_week_and_chapter.json` -- Every item will be put into a "Week X" module and a "Chapter Webwork" module.
 * `name_map_week_.json`  -- Every item will be put into a "Week X" module.
 * `name_map_chapter.json` -- Every item will be put into "Chapter Webwork" module.  
 
-🎯 Copy the ONE desired .json file to `$FOLDER`.  
+🎯 Copy the ONE desired `name_map.json` file to `$FOLDER`.  
 
 You may choose which modules the assignments go in (in Canvas) by editing the .json fields:
-* `"modules"` -- a list like `["module 1", "Module Two"]` A list of strings.  If these modules don't exist, they will be created.  They are case sensitive.  There's also a wildcard in effect.  Here are the rules:
-    * If there is exactly one module that starts with this (up to case), the content will go into that existing module
-    * If there are no modules matching using `startswith`, a module will be created
-    * If there are more than one module matching using `startswith`, it will go in the first such module.  The order should be as-ordered in Canvas.
-* `"assignment_group_name"` -- The string name of the assignment group in Canvas.  will be made if they don't exist
+* `"modules"` -- a list like `["module 1", "Module Two"]` A list of strings.  If these modules don't exist, they will be created.  They are case sensitive.  It does not do substring detection or anything -- these are exact matches.
+* `"assignment_group_name"` -- The string name of the assignment group in Canvas.  will be made if they don't exist.  Exact matches for existing.
 * `"name"` -- the string name of the content as exposed in Canvas.  
 
 ℹ️ There is no need to remove lines for assignments or content you're not using.  My code never loops over this file, just looks up into it.  The key is the name of the assignment in Webwork, with underscores mapped to spaces.  
@@ -126,15 +152,15 @@ You may choose which modules the assignments go in (in Canvas) by editing the .j
 
 ## 4. Choose configuration options for my tool 🐍
 
-I provide a configuration tool, in the form of a `config.json` file.  It's a json file.  Modify it, but do not invalidate it.
+I provide a configuration tool, in the form of a `config.json` file.  It's a json file; modify it, but do not invalidate it.
 
-* Do you want your Webwork assignments embedded into the Canvas pages?  It saves a load of a page, but costs a bunch of page real estate.  Students may escape out of the embedded environment, but you have to teach them how to do it.  By default, my tool will NOT embed the assignments, but attempt to load in a new page.
+* Do you want your Webwork assignments embedded into the Canvas pages?  It saves the students a load of a page, but costs a bunch of page real estate.  Students may escape out of the embedded environment, but you have to teach them how to do it.  By default, my tool will NOT embed the assignments, but attempt to load in a new page.
     * In `config.json,` change `"embed_webwork_in_canvas_page":false` to  `"embed_webwork_in_canvas_page":true`
 
 
 * Want to select between multiple name maps?  Switch `"name_map"` in `config.json`.
 
-There are more, but I'll have you set the last important one after you do some other setup.  Let's move to a readiness check.
+There are more settings in this file, but I'll have you set the last important one after you do some other setup.  Let's move to a readiness check.
 
 ----------------
 
@@ -143,12 +169,13 @@ There are more, but I'll have you set the last important one after you do some o
 
 ## Pause! ⚠️ Check for readiness
 
-🛑 Did you complete steps 1-3?  
-* Did you decide on a schedule?  My tool will set the due dates in Canvas for you, and manually setting due dates in Canvas is painful.  
+🛑 Did you complete steps 1-4?  
+* Did you select content by toggling visibility?
+* Did you adjust due dates in Webwork?  My tool will set the due dates in Canvas for you, and manually setting due dates in Canvas is painful.  
 * Did you decide on a module naming scheme, gradebook categories, and save them in the json file?  My tool will automatically create modules for you, add content to modules, and put assignments into their correct categories.
 * Did you adjust config settings?  
 
-🧐 You may also proceed as an experiment if you make a Sandbox course, and use that course for the steps.  In fact that's probably a good idea, the act of creating the assignments in your course ... there's no easy "undo" of the action, except to completely reset the Canvas course.  Only actually take my steps with your real course when you're really ready, especially if you've already put effort into your framework!
+🧐 May I suggest you experiment and use a Sandbox course for the following steps if you're doing this yourself?  The act of creating the assignments in your course ... there's no easy "undo" of that action, except to completely reset the Canvas course.  Only actually take my steps with your real course when you're really ready, especially if you've already put effort into your framework!
 
 
 ---
@@ -174,7 +201,7 @@ There are more, but I'll have you set the last important one after you do some o
 
 
 
-### 5.B. Save a student view of the list of assigned content
+### 5.B. Save a student view of the "Homework Sets" page
 
 #### 5.B.i. Make a fake student in Webwork
 
@@ -211,7 +238,7 @@ The fake user should now have all of your visible content assigned to them.
 * Look at the list.  Is it correct?
 
 
-#### 5.B.iii. Save the "Homework Sets" page from Webwork while 'acting as' the fake student
+#### 5.B.iii. Finally, save the "Homework Sets" page from Webwork while 'acting as' the fake student
 
 Are you still on the "Student Progress for fakename" page?  If not, 
 
@@ -228,7 +255,7 @@ Ok, now you're definitely on "Student Progress for fakename".  Click "Act as: fa
 
 
 
-
+---
 
 
 ## 6. Get course_id number for Canvas course
@@ -289,7 +316,7 @@ In a Python 3-enabled terminal / command prompt with `git`:
 
 
 
-
+---
 
 ## 8. Run!
 
@@ -308,30 +335,6 @@ Cautious option: change `dry_run` to `true` in file `config.json` if you want.
 * inspectme.json
 * automatically_generated_assignments/
 * `_logs/markdown2canvas_$datestamp.log`
-
-
-
-
-
-## Summary
-
-webwork state:
-* due dates and visibility set
-
-in one folder:
-* downloaded files `dates.html`, `homework_sets.html`
-* customized files `name_map.json`, `config.json`
-
-installed packages:
-* `markdown2canvas`, `bs4`, `canvasapi`
-
-made credentials text file:
-* `canvas_credentials.py`, with environment variable `CANVAS_CREDENTIAL_FILE` pointing to it, and containing `API_KEY = "my_key"`.
-
-run:
-* `python webwork2canvas.py`
-
-
 
 
 
