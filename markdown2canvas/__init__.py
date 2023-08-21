@@ -1,6 +1,6 @@
 import canvasapi
 import os.path as path
-
+import os
 import requests
 
 
@@ -11,7 +11,15 @@ import datetime
 today = datetime.datetime.today().strftime("%Y-%m-%d")
 
 log_level=logging.DEBUG
-log_filename = f'markdown2canvas_{today}.log'
+
+log_dir = path.join(path.normpath(os.getcwd() + os.sep + os.pardir), '_logs')
+
+if not path.exists(log_dir):
+    os.mkdir(log_dir)
+
+log_filename = path.join(log_dir, f'markdown2canvas_{today}.log')
+
+
 log_encoding = 'utf-8'
 
 root_logger = logging.getLogger()
@@ -213,13 +221,13 @@ def get_default_style_name():
             return None
 
     except Exception as e:
-        print(f'WARNING: failed to load defaults from `{defaults_name}`')
-        raise e
+        #print(f'WARNING: failed to load defaults from `{defaults_name}`')
+        return None
 
 
 
 def apply_style_markdown(sourcename, style_path, outname):
-    from os.path import join
+    from path import join
 
     # need to add header and footer.  assume they're called `header.md` and `footer.md`.  we're just going to concatenate them and dump to file.
 
@@ -243,7 +251,7 @@ def apply_style_markdown(sourcename, style_path, outname):
 
 
 def apply_style_html(translated_html_without_hf, style_path, outname):
-    from os.path import join
+    from path import join
 
     # need to add header and footer.  assume they're called `header.html` and `footer.html`.  we're just going to concatenate them and dump to file.
 
@@ -469,13 +477,24 @@ def get_assignment_group_id(assignment_group_name, course, create_if_necessary=F
 
     existing_groups = course.get_assignment_groups()
 
+    if not isinstance(assignment_group_name,str):
+        raise RuntimeError(f'assignment_group_name must be a string, but I got {assignment_group_name} of type {type(assignment_group_name)}')
+
+
     for g in existing_groups:
         if g.name == assignment_group_name:
             return g.id
 
+
+
     if create_if_necessary:
-        logging.info(f'making new assignment group because `{assignment_group_name}` did not already exist')
-        return course.create_assignment_group(something={'name':assignment_group_name})
+        msg = f'making new assignment group `{assignment_group_name}`'
+        logging.info(msg)
+
+        group = course.create_assignment_group(name=assignment_group_name)
+        group.edit(name=assignment_group_name) # this feels stupid.  didn't i just request its name be this?
+
+        return group.id
     else:
         raise DoesntExist(f'cannot get assignment group id because an assignment group of name {assignment_group_name} does not already exist, and `create_if_necessary` is set to False')
 
@@ -877,18 +896,18 @@ class Assignment(Document):
 
 
 
-    def ensure_in_assignment_group(self, course, create_if_necessary=False):
+    def ensure_in_assignment_groups(self, course, create_if_necessary=False):
 
         if self.assignment_group_name is None:
             logging.info(f'when putting assignment {self.name} into group, taking no action because no assignment group specified')
             return
 
-        assignment_group_id = get_assignment_group_id(self.assignment_group_name, course, create_if_necessary)
+        assignment_group_id = get_assignment_group_id(self.assignment_group_name, course, create_if_necessary) # todo: change this to try/except, instead of passign create_if_necessary to the get function.  getting gets.  it shouldn't create.
         self.canvas_obj.edit(assignment={'assignment_group_id':assignment_group_id})
         
 
 
-    def publish(self, course, overwrite=False):
+    def publish(self, course, overwrite=False, create_modules_if_necessary=False, create_assignment_group_if_necessary=False):
         """
         if `overwrite` is False, then if an assignment is found with the same name already, the function will decline to make any edits.
 
@@ -922,7 +941,7 @@ class Assignment(Document):
         assignment.edit(assignment=new_props)
 
         self.ensure_in_modules(course)
-        self.ensure_in_assignment_group(course)
+        self.ensure_in_assignment_groups(course,create_if_necessary=create_assignment_group_if_necessary)
 
         logging.info(f'done uploading {self.name} to Canvas')
 
@@ -1189,7 +1208,7 @@ class Link(CanvasObject):
         self.folder = folder
 
         import json, os
-        from os.path import join
+        from path import join
 
         self.metaname = path.join(folder,'meta.json')
         with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
@@ -1254,7 +1273,7 @@ class File(CanvasObject):
         super(File, self).__init__(folder)
 
         import json, os
-        from os.path import join
+        from path import join
 
         self.folder = folder
         
