@@ -205,7 +205,7 @@ class Webwork2Canvas(Tool):
 					assignments[ww_name]['published'] = True
 					assignments[ww_name]['submission_types'] = 'external_tool'
 					assignments[ww_name]['position'] = counter
-					assignments[ww_name]['external_tool_tag_attributes'] = {'url':assignments[ww_name]['link'],'new_tab':self.config['embed_webwork_in_canvas_page']}
+					assignments[ww_name]['external_tool_tag_attributes'] = {'url':assignments[ww_name]['link'],'new_tab':not self.config['embed_webwork_in_canvas_page']}
 					counter += 1
 				else:
 					# skip, cuz didn't want it based on the "homework_sets.html" page.
