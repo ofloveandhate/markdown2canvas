@@ -130,6 +130,21 @@ If you want to use images in your header/footer, put them in the markdown part (
 
 ## Assignments
 
+### Possible Upload Types
+
+In the `meta.json` file for an assignment, the submission type is encoded by a line that looks like the following. 
+
+```
+"submission_types":['online_text_entry', 'online_url', 'media_recording', 'online_upload']
+```
+
+These are four of the five upload types available with Canvas. The other is an annotation. You may omit this line or include any sublist of this list. If you choose to allow online upload, you may also specify the allowable file types by including an allowed extensions list in your `meta.json` file for the assignment.
+
+```
+"allowed_extensions": ["pdf","docx"]
+```
+
+
 
 ### Due dates
 
