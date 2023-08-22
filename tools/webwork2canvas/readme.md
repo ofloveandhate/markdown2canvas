@@ -191,7 +191,7 @@ There are more settings in this file, but I'll have you set the last important o
 ⚠️ Do not put spaces in the names of things on computers.  It's more difficult to code around.  I am not sure if my tool works correctly with a space in the path / name.
 
 
-### 5.A. Save the "Hmwk Sets Editor page" from Webwork
+### 5.A. Save the "Hmwk Sets Editor" page from Webwork
 
 * "Hmwk Sets Editor" from the left
 * In your browser, save page source as `dates.html` to `$FOLDER`.
