@@ -110,20 +110,30 @@ class Webwork2Canvas(Tool):
 			if len(cells)>0:
 
 
+
+
 				# this seems to drift per-semester.  if it breaks, use a jupyter notebook to figure it out.
 				q = cells[0]
 
 
 				# timed "tests" have a clock at their start which causes me to have to do this 🔩:
 				hw_name = q.find(text=True)
+
 				if 'with time limit' in hw_name:
-					hw_name = q.find_all('span')[1].find(text=True)
+					hw_name = q.find_all('span')[1].find(text=True) # this line worked for silviana
+
+				if hw_name == ' ':
+					hw_name = q.find_all('span')[0].find(string=True)
+
 
 				link = q.find_all('a', href=True)[0]['href'].split('?')[0]
+				if link.startswith('/webwork2/'):
+					link = 'https://webwork.uwec.edu' + link
 
 				entries[hw_name] = {'link':link,'ww_name':hw_name,'name':hw_name}
 				counter += 1
-		
+				
+
 
 		self.assignments = entries
 
@@ -187,15 +197,23 @@ class Webwork2Canvas(Tool):
 				# this seems to change every webwork version.  use a jupyter notebook to figure out what you want.
 				ww_name = r.find_all('td')[1].find_all('div')[0].find_all('span')[0].find(string=True).strip()
 				
+
 				if ww_name in assignments:
 					
+					ww_name = r.find_all('td')[1].find_all('div')[0].find_all('span')[0].find(string=True).strip()
 
-					date_open =  self._format_date_for_canvas(r.find_all('td')[-4].find_all('span')[1].find(string=True).strip())
-					date_due =   self._format_date_for_canvas(r.find_all('td')[-3].find_all('span')[1].find(string=True).strip())
-					date_close = self._format_date_for_canvas(r.find_all('td')[-2].find_all('span')[1].find(string=True).strip())
-					date_ans =   self._format_date_for_canvas(r.find_all('td')[-1].find_all('span')[1].find(string=True).strip())
+					date_open = self._format_date_for_canvas(r.find_all('td')[6].find_all('span')[0].find_all('span')[0].find(string=True).strip())
+					date_due = self._format_date_for_canvas(r.find_all('td')[7].find_all('span')[0].find_all('span')[0].find(string=True).strip())
+					date_close = self._format_date_for_canvas(r.find_all('td')[8].find_all('span')[0].find_all('span')[0].find(string=True).strip())
+					date_ans = self._format_date_for_canvas(r.find_all('td')[9].find_all('span')[0].find_all('span')[0].find(string=True).strip())
+
+
+					# date_open =  self._format_date_for_canvas(r.find_all('td')[-4].find_all('span')[1].find(string=True).strip())
+					# date_due =   self._format_date_for_canvas(r.find_all('td')[-3].find_all('span')[1].find(string=True).strip())
+					# date_close = self._format_date_for_canvas(r.find_all('td')[-2].find_all('span')[1].find(string=True).strip())
+					# date_ans =   self._format_date_for_canvas(r.find_all('td')[-1].find_all('span')[1].find(string=True).strip())
 				
-
+					# print(cells[0].find_all('td'), ww_name, date_open, '\n\n\n\n')
 					assignments[ww_name]['type'] = 'assignment'
 					assignments[ww_name]['unlock_at'] = date_open
 					assignments[ww_name]['lock_at'] = date_close
@@ -207,6 +225,8 @@ class Webwork2Canvas(Tool):
 					assignments[ww_name]['position'] = counter
 					assignments[ww_name]['external_tool_tag_attributes'] = {'url':assignments[ww_name]['link'],'new_tab':not self.config['embed_webwork_in_canvas_page']}
 					counter += 1
+
+
 				else:
 					# skip, cuz didn't want it based on the "homework_sets.html" page.
 					pass
@@ -223,8 +243,14 @@ class Webwork2Canvas(Tool):
 		assignments = self.assignments # unpack a reference
 		name_map = self.name_map
 
-
+		bad_assignments = []
 		for ww_name in assignments.keys():
+			if ww_name not in name_map:
+				print(f'{ww_name} not in name map.  removing.')
+				bad_assignments.append(ww_name)
+
+				continue
+
 			assignments[ww_name]['name'] = name_map[ww_name]['name']
 
 			if not isinstance(name_map[ww_name]['modules'], list):
@@ -232,6 +258,10 @@ class Webwork2Canvas(Tool):
 			assignments[ww_name]['modules'] = name_map[ww_name]['modules']
 			assignments[ww_name]['assignment_group_name'] = name_map[ww_name]['assignment_group_name']
 			
+
+		for a in bad_assignments:
+			del assignments[a]
+
 
 
 	def _require_file_exists(self, filename):
@@ -313,6 +343,7 @@ class Webwork2Canvas(Tool):
 			mc_ass = mc.Assignment(join('automatically_generated_assignments',ww_name))
 
 			if not self.config['dry_run']:
+
 				mc_ass.publish(course,overwrite=True,create_assignment_group_if_necessary=True)
 			else:
 				print('\tdry run, not actually publishing to canvas.')
