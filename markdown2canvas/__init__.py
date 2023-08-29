@@ -1208,7 +1208,7 @@ class Link(CanvasObject):
         self.folder = folder
 
         import json, os
-        from path import join
+        from os.path import join
 
         self.metaname = path.join(folder,'meta.json')
         with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
@@ -1273,7 +1273,7 @@ class File(CanvasObject):
         super(File, self).__init__(folder)
 
         import json, os
-        from path import join
+        from os.path import join
 
         self.folder = folder
         
