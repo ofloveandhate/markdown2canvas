@@ -227,7 +227,7 @@ def get_default_style_name():
 
 
 def apply_style_markdown(sourcename, style_path, outname):
-    from path import join
+    from os.path import join
 
     # need to add header and footer.  assume they're called `header.md` and `footer.md`.  we're just going to concatenate them and dump to file.
 
@@ -251,7 +251,7 @@ def apply_style_markdown(sourcename, style_path, outname):
 
 
 def apply_style_html(translated_html_without_hf, style_path, outname):
-    from path import join
+    from os.path import join
 
     # need to add header and footer.  assume they're called `header.html` and `footer.html`.  we're just going to concatenate them and dump to file.
 
