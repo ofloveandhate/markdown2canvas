@@ -184,6 +184,7 @@ def generate_course_link(type,name,all_of_type,courseid=None):
     if the_item is None:
         print(f"WARNING: No {type} named {name} exists.")
     elif type == 'file' and not courseid is None:
+        # Construct the url with reference to the coruse its coming from
         file_id = the_item.id
         full_url = the_item.url
         stopper = full_url.find("files")
@@ -191,7 +192,11 @@ def generate_course_link(type,name,all_of_type,courseid=None):
         html_url = full_url[:stopper] + "courses/" + str(courseid) + "/files/" + str(file_id)
 
         return html_url
-
+    elif type == 'file':
+        # Construct the url - removing the "download" portion
+        full_url = the_item.url
+        stopper = full_url.find("download")
+        return full_url[:stopper]
     else:
         return the_item.html_url
     
