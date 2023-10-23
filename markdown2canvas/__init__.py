@@ -172,7 +172,11 @@ def generate_course_link(type,name,all_of_type,courseid=None):
     elif type == 'assignment':
         the_item = next( (a for a in all_of_type if a.name == name) , None)
     elif type == 'file':
-        the_item = next( (a for a in all_of_type if a.filename == name) , None)
+        the_item = next( (a for a in all_of_type if a.display_name == name) , None)
+        if the_item is None: # Separate case to allow change of filenames on Canvas to names that did exist
+            the_item = next( (a for a in all_of_type if a.filename == name) , None)
+            # Canvas retains the name of the file uploaded and calls it `filename`. 
+            # To access the name of the document seen in the Course Files, we use `display_name`.
     else:
         the_item = None
 
