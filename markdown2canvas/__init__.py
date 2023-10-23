@@ -162,19 +162,32 @@ def make_canvas_api_obj(url=None):
 
 
 
-def generate_course_link(type,name,all_of_type):
+def generate_course_link(type,name,all_of_type,courseid=None):
     '''
     Given a type (assignment or page) and the name of said object, generate a link
     within course to that object.
     '''
     if type == 'page':
         the_item = next( (p for p in all_of_type if p.title == name) , None)
-    elif type in ['assignment','file']:
+    elif type == 'assignment':
         the_item = next( (a for a in all_of_type if a.name == name) , None)
+    elif type == 'file':
+        the_item = next( (a for a in all_of_type if a.filename == name) , None)
+    else:
+        the_item = None
 
         
     if the_item is None:
         print(f"WARNING: No {type} named {name} exists.")
+    elif type == 'file' and not courseid is None:
+        file_id = the_item.id
+        full_url = the_item.url
+        stopper = full_url.find("files")
+
+        html_url = full_url[:stopper] + "courses/" + str(courseid) + "/files/" + str(file_id)
+
+        return html_url
+
     else:
         return the_item.html_url
     
@@ -271,7 +284,10 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 
 def markdown2html(filename,course=None):
-
+    if course is None:
+        courseid = None
+    else:
+        courseid = course.id
     root = path.split(filename)[0]
 
     import emoji
@@ -311,7 +327,7 @@ def markdown2html(filename,course=None):
             elif course and split_at_colon[0] in ['assignment','page','file']:
                 type = split_at_colon[0]
                 name = split_at_colon[1].strip()
-                get_link = generate_course_link(type,name,course_page_and_assignments[type])
+                get_link = generate_course_link(type,name,course_page_and_assignments[type],courseid)
                 if get_link:
                     f["href"] = get_link
                     
