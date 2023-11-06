@@ -1298,7 +1298,11 @@ class File(CanvasObject):
     def _upload_(self, course):
         pass
 
+
     def publish(self, course, overwrite=False):
+        """
+        publishes a file to Canvas in a particular folder
+        """
         
         on_duplicate='overwrite'
         if (file_on_canvas:= self.is_already_uploaded(course)) and not overwrite:
