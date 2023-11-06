@@ -162,7 +162,7 @@ def make_canvas_api_obj(url=None):
 
 
 
-def generate_course_link(type,name,all_of_type):
+def generate_course_link(type,name,all_of_type,courseid=None):
     '''
     Given a type (assignment or page) and the name of said object, generate a link
     within course to that object.
@@ -171,9 +171,32 @@ def generate_course_link(type,name,all_of_type):
         the_item = next( (p for p in all_of_type if p.title == name) , None)
     elif type == 'assignment':
         the_item = next( (a for a in all_of_type if a.name == name) , None)
+    elif type == 'file':
+        the_item = next( (a for a in all_of_type if a.display_name == name) , None)
+        if the_item is None: # Separate case to allow change of filenames on Canvas to names that did exist
+            the_item = next( (a for a in all_of_type if a.filename == name) , None)
+            # Canvas retains the name of the file uploaded and calls it `filename`. 
+            # To access the name of the document seen in the Course Files, we use `display_name`.
+    else:
+        the_item = None
+
         
     if the_item is None:
         print(f"WARNING: No {type} named {name} exists.")
+    elif type == 'file' and not courseid is None:
+        # Construct the url with reference to the coruse its coming from
+        file_id = the_item.id
+        full_url = the_item.url
+        stopper = full_url.find("files")
+
+        html_url = full_url[:stopper] + "courses/" + str(courseid) + "/files/" + str(file_id)
+
+        return html_url
+    elif type == 'file':
+        # Construct the url - removing the "download" portion
+        full_url = the_item.url
+        stopper = full_url.find("download")
+        return full_url[:stopper]
     else:
         return the_item.html_url
     
@@ -270,7 +293,10 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 
 def markdown2html(filename,course=None):
-
+    if course is None:
+        courseid = None
+    else:
+        courseid = course.id
     root = path.split(filename)[0]
 
     import emoji
@@ -299,16 +325,18 @@ def markdown2html(filename,course=None):
         course_page_and_assignments['page'] = course.get_pages()
     if any(l['href'].startswith("assignment:") for l in all_links) and course:
         course_page_and_assignments['assignment'] = course.get_assignments()
+    if any(l['href'].startswith("file:") for l in all_links) and course:
+        course_page_and_assignments['file'] = course.get_files()
     for f in all_links:
             href = f["href"]
             root_href = path.join(root,href)
             split_at_colon = href.split(":",1)
             if path.exists(path.abspath(root_href)):
                 f["href"] = root_href
-            elif course and split_at_colon[0] in ['assignment','page']:
+            elif course and split_at_colon[0] in ['assignment','page','file']:
                 type = split_at_colon[0]
                 name = split_at_colon[1].strip()
-                get_link = generate_course_link(type,name,course_page_and_assignments[type])
+                get_link = generate_course_link(type,name,course_page_and_assignments[type],courseid)
                 if get_link:
                     f["href"] = get_link
                     
