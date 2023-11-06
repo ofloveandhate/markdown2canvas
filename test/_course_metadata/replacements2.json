@@ -1,0 +1,4 @@
+{
+	"a custom replacement with spaces": "target custom replacement without space",
+	"$NOSPACECUSTOM": "target custom replacement from nospace"
+}

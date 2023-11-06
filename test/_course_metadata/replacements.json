@@ -1,0 +1,6 @@
+{
+	"$TASKDIV": "",
+	"$REPLACETHISTEXT": "with this text",
+	"a source replacement with spaces": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ?si=BqTm4nbZOLTHaxnz\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>",
+	"another source replacement with spaces": "destination_without_spaces"
+}

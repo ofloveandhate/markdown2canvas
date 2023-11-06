@@ -1,0 +1,1 @@
+publishing this file should generate an error of some sort because the file specified in the meta.json file doesn't exist

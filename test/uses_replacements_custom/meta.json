@@ -1,0 +1,8 @@
+{
+	"type": "page",
+	"name": "Test replacements with custom replacements file",
+	"style":"_styles/generic",
+	"modules":["Replacement testing"],
+	"replacements": "_course_metadata/replacements2.json"
+}
+

@@ -187,11 +187,21 @@ def compute_relative_style_path(style_path):
 
 
 
-def preprocess_substitutions(contents, subfile=None):
+def preprocess_replacements(contents, replacements_filename):
     """
     attempts to read in a file containing substitutions to make, and then makes those substitutions
     """
-    raise NotImplementedError("dude, this functionality would be sweet.  do it.")
+
+    
+    with open(replacements_filename,'r',encoding='utf-8') as f:
+        import json
+        replacements = json.loads(f.read())
+
+    for source, target in replacements.items():
+        contents = contents.replace(source, target)
+
+    return contents
+
 
     
 
@@ -204,25 +214,33 @@ def preprocess_markdown_images(contents,style_path):
     return contents
 
 
-
-def get_default_style_name():
+def get_default_property(key, helpstr):
 
     defaults_name = compute_relative_style_path("_course_metadata/defaults.json")
 
     try:
-        logging.info(f'trying to use default style from {defaults_name}')
+        logging.info(f'trying to use defaults from {defaults_name}')
         with open(defaults_name,'r',encoding='utf-8') as f:
             import json
             defaults = json.loads(f.read())
 
-        if 'style' in defaults:
-            return defaults['style']
+        if key in defaults:
+            return defaults[key]
         else:
+            print(f'no default `{key}` specified in {defaults_name}.  add an entry with key `{key}`, being {helpstr}')
             return None
 
     except Exception as e:
-        #print(f'WARNING: failed to load defaults from `{defaults_name}`')
+        print(f'WARNING: failed to load defaults from `{defaults_name}`.  either you are not at the correct location to be doing this, or you need to create a json file at {defaults_name}.')
         return None
+
+
+def get_default_style_name():
+    return get_default_property(key='style', helpstr='a path to a file relative to the top course folder')
+
+def get_default_replacements_name():
+    return get_default_property(key='replacements', helpstr='a path to a json file containing key:value pairs of text-to-replace.  this path should be expressed relative to the top course folder')
+
 
 
 
@@ -269,7 +287,7 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 
 
-def markdown2html(filename,course=None):
+def markdown2html(filename, course, replacements_filename):
 
     root = path.split(filename)[0]
 
@@ -280,6 +298,8 @@ def markdown2html(filename,course=None):
 
     with open(filename,'r',encoding='utf-8') as file:
         markdown_source = file.read()
+
+    markdown_source = preprocess_replacements(markdown_source, replacements_filename) 
 
     emojified = emoji.emojize(markdown_source)
 
@@ -638,16 +658,21 @@ class Document(CanvasObject):
         else:
             stylename = get_default_style_name() # could be None if doesn't exist
 
+        if 'replacements' in self.metadata:
+            self.replacements_filename = self.metadata['replacements']
+        else:
+            self.replacements_filename = get_default_replacements_name() # could be None if doesn't exist
+
 
         if stylename:
             outname = join(self.folder,"styled_source.md")
             apply_style_markdown(self.sourcename, stylename, outname)
 
-            translated_html_without_hf = markdown2html(outname,course)
+            translated_html_without_hf = markdown2html(outname,course, self.replacements_filename)
 
             self.translated_html = apply_style_html(translated_html_without_hf, stylename, outname)
         else:
-            self.translated_html = markdown2html(self.sourcename,course)
+            self.translated_html = markdown2html(self.sourcename,course, self.replacements_filename)
 
 
         self.local_images = find_local_images(self.translated_html)
