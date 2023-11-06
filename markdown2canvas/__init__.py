@@ -313,8 +313,10 @@ def markdown2html(filename, course, replacements_filename):
     """
     This is the main routine in the library
     """
-    
-    courseid = course.id
+    if course is None:
+        courseid = None
+    else:
+        courseid = course.id
 
     root = path.split(filename)[0]
 
