@@ -8,6 +8,6 @@ sources = ['plain_text','has_local_images']
 
 for s in sources:
 	with open(f'{s}/result.html','w') as result:
-		result.write(markdown2canvas.markdown2html(f'{s}/source.md'))
+		result.write(markdown2canvas.markdown2html(f'{s}/source.md', course=None, replacements_filename=None))
 
 
