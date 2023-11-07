@@ -182,7 +182,7 @@ def generate_course_link(type,name,all_of_type,courseid=None):
 
         
     if the_item is None:
-        print(f"WARNING: No {type} named {name} exists.")
+        print(f"ℹ️ No content of type `{type}` named `{name}` exists in this Canvas course.  Either you have the name incorrect, the content is not yet uploaded, or you used incorrect type before the colon")
     elif type == 'file' and not courseid is None:
         # Construct the url with reference to the coruse its coming from
         file_id = the_item.id

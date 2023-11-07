@@ -132,7 +132,7 @@ To link to an existing Canvas file, use a link of the form
 DOCUMENTATION NEEDED HERE FOR FILES
 ```
 
-If the "existing" content doesn't yet exist when the content is published, a broken link will be made.  This is ok.  Think of the publishing process using Markdown2Canvas similar to the compilation of a TeX document.  It's done in multiple passes.  Once the page / assignment / file exists, the link will resolve correctly to it.  Publish all content about twice to get links to resolve.
+If the "existing" content doesn't yet exist when the content is published, a broken link will be made.  This is ok.  Think of the publishing process using Markdown2Canvas similar to the compilation of a TeX document, which is done in multiple passes.  Once the page / assignment / file exists, the link will resolve correctly to it.  Publish all content about twice to get links to resolve.
 
 ## Emoji conversion from shortcodes
 
