@@ -844,7 +844,7 @@ class Page(Document):
         super(Page,self)._set_from_metadata()
 
 
-    def publish(self,course, overwrite=False):
+    def publish(self, course, overwrite=False):
         """
         if `overwrite` is False, then if an assignment is found with the same name already, the function will decline to make any edits.
 
