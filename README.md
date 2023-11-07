@@ -145,10 +145,11 @@ These are four of the five upload types available with Canvas. The other is an a
 ```
 
 
+## Future work ⚠️ this is not yet implemented in `mc`
 
-### Due dates
 
-⚠️ this is not yet implemented in `mc`
+### Due dates ⚠️ this is not yet implemented in `mc`
+
 
 Due dates are encoded relative to the first day of class, by week number and day of week.  Week numbers start at 1.
 
