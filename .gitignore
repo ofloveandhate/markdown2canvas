@@ -7,6 +7,6 @@ build/
 *downloaded_content/
 *.log
 .DS_Store
-result.html
+*/*/result.html
 styled_source.md
 *.icloud
