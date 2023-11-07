@@ -215,7 +215,8 @@ def preprocess_replacements(contents, replacements_filename):
     attempts to read in a file containing substitutions to make, and then makes those substitutions
     """
 
-    
+    if replacements_filename is None:
+        return contents
     with open(replacements_filename,'r',encoding='utf-8') as f:
         import json
         replacements = json.loads(f.read())
