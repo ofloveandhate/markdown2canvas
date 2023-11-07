@@ -12,7 +12,7 @@ A secondary problem this library solves is that of images.  Images on Canvas are
 
 ---
 
-# Containerization of content to be published to Canvas
+# Core concept: Containerization of content to be published to Canvas
 
 Containerization is accomplished by making pages/assignments live in folders.  The name of the folder is arbitrary; the metadata for the page lives in a JSON file, while the page itself is simply a markdown file.  That is, the structure of a page/assignment to be published on Canvas, using this library, is
 
@@ -36,6 +36,8 @@ This library comes with several test pages/assignments:
   - `uses_droplets_via_style` -- a page using [the Droplets framework from UWEX](https://media.uwex.edu/app/droplets/index.html).  The code enabling Droplets comes from a header/footer contained in a style folder.  The main purpose of this test page is the header/footer style thing.
 - assignments:
 - `programming_assignment` -- an assignment that has a local image
+
+The above list is not exhaustive.
 
 ---
 
@@ -62,6 +64,7 @@ This library is under active development.  I suggest checking out the `test_*.py
 Assuming you did my setup step, defining the environment variable and creating that file.  Do that first.
 
 ### Download all pages, with a filter on the name of the pages
+
 ```
 import markdown2canvas as mc
 course_id = 127210000000003099 # silviana's sandbox for development
@@ -75,6 +78,7 @@ my_filter = lambda title: '📖' in title # pages about readings have an open bo
 mc.download_pages(destination, course, even_if_exists=True, name_filter=my_filter)
 ```
 
+---
 
 # Things you can do with this library
 
@@ -113,29 +117,37 @@ If a replacements file doesn't exist where you say it should, an exception will 
 
 ## Referencing existing Canvas assignments, pages, and files
 
-You must use a link of the form
+
+To link to an existing Canvas assignment, use a link of the form
 
 ```[Test Assignment](assignment:Test Assignment)```
 
-or
+To link to an existing Canvas page, use a link of the form
 
 ```<a href="page:Test Page">Link to page titled Test Page</a>```
 
-DOCUMENTATION NEEDED HERE FOR FILES
+To link to an existing Canvas file, use a link of the form
 
-## Emoji
+```
+DOCUMENTATION NEEDED HERE FOR FILES
+```
+
+If the "existing" content doesn't yet exist when the content is published, a broken link will be made.  This is ok.  Think of the publishing process using Markdown2Canvas similar to the compilation of a TeX document.  It's done in multiple passes.  Once the page / assignment / file exists, the link will resolve correctly to it.  Publish all content about twice to get links to resolve.
+
+## Emoji conversion from shortcodes
 
 This library supports the automatic conversion of shortcodes to emoji.  For example, `:open_book:` goes to 📖.  I use the [`emoji`](https://pypi.org/project/emoji/) library to do this.  [Shortcodes can be found here](https://carpedm20.github.io/emoji/).
 
 Right now, emoji shortcodes can only be used in content, not in names of things -- shortcodes in names will not be emojized.
 
-## Images and embedded content
+## Automatic uploading and warehousing of images and embedded content
 
 List your images relative the folder containing the `source.md` for the content.  
 
-## Headers and footers
+## "Styling" -- Automatic inclusion of uniform headers and footers
 
 This library attempts to provide a way to uniformly style pages across sections of content.  In particular, I have provided a mechanism to programmatically concatenate headers and footers onto markdown content before publishing.  Example application of this might be:
+
 * I have content in my course in four blocks, and want a different header for each block.  But, copypasta for that header content sucks (avoid repitition is a key tenet of programming).  So, I'd rather specify a "style" for the four blocks, and make the pages refer to the styles.  
 * I use Droplets from UWEX, and don't want to have to put that code in *every single page*.  I'd rather put it one place (or, at least, only a few places).  So the html code that brings in Droplets lives in a header/footer html code file.
 
@@ -164,6 +176,7 @@ They'll get concatenated around `source.md` in that order.  HTML around markdown
 If you want to use images in your header/footer, put them in the markdown part (even if they appear in html tags), and use the text `$PATHTOMD2CANVASSTYLEFILE` before typing the name of the file, so that its filepath gets listed correctly.  (This happens via a simple string replacement)
 
 
+
 ## Assignments
 
 ### Possible Upload Types
@@ -180,11 +193,15 @@ These are four of the five upload types available with Canvas. The other is an a
 "allowed_extensions": ["pdf","docx"]
 ```
 
+---
 
-## Future work ⚠️ this is not yet implemented in `mc`
+# Future work ⚠️ this is not yet implemented in `mc`
 
+## Containerization of quizzess ⚠️ this is not yet implemented in `mc`
 
-### Due dates ⚠️ this is not yet implemented in `mc`
+I want this so badly, but I'm not up to it yet.  I'd love a contribution!
+
+## Due dates ⚠️ this is not yet implemented in `mc`
 
 
 Due dates are encoded relative to the first day of class, by week number and day of week.  Week numbers start at 1.
