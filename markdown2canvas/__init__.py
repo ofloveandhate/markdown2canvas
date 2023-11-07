@@ -653,11 +653,7 @@ class CanvasObject(object):
 
     def __init__(self,canvas_obj=None):
 
-
         super(object, self).__init__()
-
-        # try to open, and see if the meta and source files exist.
-        # if not, raise
 
         self.canvas_obj = canvas_obj
 
@@ -691,77 +687,44 @@ class Document(CanvasObject):
 
         self.folder = folder
 
+        # try to open, and see if the meta and source files exist.
+        # if not, raise
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
+        with open(self.metaname,'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
-
 
         self.sourcename = path.join(folder,'source.md')
 
-        self.name = None
 
+        # variables populated from the metadata.  should these even exist?  IDK
+        self.name = None
+        self.stylename = None
+        self.replacements_filename = None
+
+        # populate the above variables from the meta.json file
         self._set_from_metadata()
 
-        if 'style' in self.metadata:
-            stylename = self.metadata['style']
-        else:
-            stylename = get_default_style_name() # could be None if doesn't exist
-
-        if 'replacements' in self.metadata:
-            self.replacements_filename = self.metadata['replacements']
-        else:
-            self.replacements_filename = get_default_replacements_name() # could be None if doesn't exist
+        self._make_sure_files_exist()
 
 
-        if stylename:
-            outname = join(self.folder,"styled_source.md")
-            apply_style_markdown(self.sourcename, stylename, outname)
-
-            translated_html_without_hf = markdown2html(outname,course, self.replacements_filename)
-
-            self.translated_html = apply_style_html(translated_html_without_hf, stylename, outname)
-        else:
-            self.translated_html = markdown2html(self.sourcename,course, self.replacements_filename)
+        # these internally-used variables are used to carry state between functions
+        self._local_images = None
+        self._local_files = None
+        self._translated_html = None
 
 
-        self.local_images = find_local_images(self.translated_html)
-        self.local_files = find_local_files(self.translated_html)
+    def _make_sure_files_exist(self):
+        if self.replacements_filename:
+            from pathlib import Path
 
-        # print(f'local images: {self.local_images}')
-
-
-
-
-
-
-
-
-
-
-
-
-    def publish_linked_content_and_adjust_html(self,course,overwrite=False):
-        # first, publish the local images.
-        for im in self.local_images.values():
-            im.publish(course,'images', overwrite=overwrite)
-
-        for file in self.local_files.values():
-            file.publish(course,'automatically_uploaded_files', overwrite=overwrite)
-
-
-        # then, deal with the urls
-        self.translated_html = adjust_html_for_images(self.translated_html, self.local_images, course.id)
-        self.translated_html = adjust_html_for_files(self.translated_html, self.local_files, course.id)
-
-
-        with open(f'{self.folder}/result.html','w',encoding='utf-8') as result:
-            result.write(self.translated_html)
-
-
-
-
+            if not Path(self.replacements_filename).exists():
+                raise FileNotFoundError(f'replacements file {self.replacements_filename} does not exist.  Please make it, correct the path from which you are running your code, or correct the erroneous name in meta.json or the defaults.json file')
 
     def _set_from_metadata(self):
+        """
+        this function is called during `__init__`.
+        """
+
         self.name = self.metadata['name']
 
         if 'modules' in self.metadata:
@@ -769,9 +732,85 @@ class Document(CanvasObject):
         else:
             self.modules = []
 
+        if 'style' in self.metadata:
+            self.stylename = self.metadata['style']
+        else:
+            self.stylename = get_default_style_name() # could be None if doesn't exist
+
+        if 'replacements' in self.metadata:
+            self.replacements_filename = self.metadata['replacements']
+        else:
+            self.replacements_filename = get_default_replacements_name() # could be None if doesn't exist
 
 
-    def _dict_of_props(self):
+
+
+    def translate_to_html(self,course):
+        """
+        populates the internal variables with the results of translating from markdown to html.
+
+        This step requires the `course` since this library allows for referencing of content already on canvas (or to be later published on Canvas)
+
+        The main result of translation is held in self._translated_html.  The local content (on YOUR computer, NOT Canvas) is parsed out and held in `self._local_images` and `self._local_files`.
+        
+        * This function does NOT make content appear on Canvas.  
+        * It DOES leave behind a temporary file: `{folder}/styled_source.md`.  Be sure to add `*/styled_source.md` to your .gitignore for your course!
+        """
+        from os.path import join
+
+        if self.stylename:
+            outname = join(self.folder,"styled_source.md")
+            apply_style_markdown(self.sourcename, self.stylename, outname)
+
+            translated_html_without_hf = markdown2html(outname,course, self.replacements_filename)
+
+            self._translated_html = apply_style_html(translated_html_without_hf, self.stylename, outname)
+        else:
+            self._translated_html = markdown2html(self.sourcename,course, self.replacements_filename)
+
+
+        self._local_images = find_local_images(self._translated_html)
+        self._local_files = find_local_files(self._translated_html)
+
+
+
+
+
+    def publish_linked_content_and_adjust_html(self,course,overwrite=False):
+        """
+        this function should be called *after* `translate_to_html`, since it requires the internal variables that other function populates
+
+        the result of this function is written to `folder/result.html`
+
+        * This function does NOT make content appear on Canvas.  
+        * It DOES leave behind a temporary file: `{folder}/result.html`.  Be sure to add `*/result.html` to your .gitignore for your course!
+        """
+
+        # first, publish the local images.
+        for im in self._local_images.values():
+            im.publish(course,'images', overwrite=overwrite)
+
+        for file in self._local_files.values():
+            file.publish(course,'automatically_uploaded_files', overwrite=overwrite)
+
+
+        # then, deal with the urls
+        self._translated_html = adjust_html_for_images(self._translated_html, self._local_images, course.id)
+        self._translated_html = adjust_html_for_files(self._translated_html, self._local_files, course.id)
+
+
+        with open(f'{self.folder}/result.html','w',encoding='utf-8') as result:
+            result.write(self._translated_html)
+
+
+
+
+
+
+
+
+
+    def _construct_dict_of_props(self):
         """
         construct a dictionary of properties, such that it can be used to `edit` a canvas object.
         """
@@ -780,6 +819,11 @@ class Document(CanvasObject):
 
 
     def ensure_in_modules(self, course):
+        """
+        makes sure this item is listed in the Module on Canvas.  If it's not, it's added to the bottom.  There's not currently any way to control order.
+
+        If the item doesn't already exist, this function will raise.  Be sure to actually publish the content first.
+        """
 
         if not self.canvas_obj:
             raise DoesntExist(f"trying to make sure an object is in its modules, but this item ({self.name}) doesn't exist on canvas yet.  publish it first.")
@@ -800,7 +844,7 @@ class Document(CanvasObject):
 
     def is_in_module(self, module_name, course):
         """
-        checks whether this content is an item in the listed module
+        checks whether this content is an item in the listed module, where `module_name` is a string.  It's case sensitive and exact.
 
         passthrough raise if the module doesn't exist
         """
@@ -836,8 +880,8 @@ class Page(Document):
 
     folder -- a string, the name of the folder we're going to read data from.
     """
-    def __init__(self, folder, course=None):
-        super(Page, self).__init__(folder, course)
+    def __init__(self, folder):
+        super(Page, self).__init__(folder)
 
 
     def _set_from_metadata(self):
@@ -866,9 +910,11 @@ class Page(Document):
 
         self.canvas_obj = page
 
+        self.translate_to_html(course)
+
         self.publish_linked_content_and_adjust_html(course, overwrite=overwrite)
 
-        d = self._dict_of_props()
+        d = self._construct_dict_of_props()
         page.edit(wiki_page=d) 
 
         self.ensure_in_modules(course)
@@ -877,11 +923,11 @@ class Page(Document):
 
 
 
-    def _dict_of_props(self):
+    def _construct_dict_of_props(self):
 
-        d = super(Page,self)._dict_of_props()
+        d = super(Page,self)._construct_dict_of_props()
 
-        d['body'] = self.translated_html
+        d['body'] = self._translated_html
         d['title'] = self.name
 
         return d
@@ -893,8 +939,8 @@ class Page(Document):
 
 class Assignment(Document):
     """docstring for Assignment"""
-    def __init__(self, folder,course=None):
-        super(Assignment, self).__init__(folder,course)
+    def __init__(self, folder):
+        super(Assignment, self).__init__(folder)
 
         # self._set_from_metadata() # <-- this is called from the base __init__
 
@@ -931,11 +977,11 @@ class Assignment(Document):
         self.grading_type = default_to_none('grading_type')
         self.assignment_group_name = default_to_none('assignment_group_name')
 
-    def _dict_of_props(self):
+    def _construct_dict_of_props(self):
 
-        d = super(Assignment,self)._dict_of_props()
+        d = super(Assignment,self)._construct_dict_of_props()
         d['name'] = self.name
-        d['description'] = self.translated_html
+        d['description'] = self._translated_html
 
         if not self.allowed_extensions is None:
             d['allowed_extensions'] = self.allowed_extensions
@@ -976,7 +1022,7 @@ class Assignment(Document):
             logging.info(f'when putting assignment {self.name} into group, taking no action because no assignment group specified')
             return
 
-        assignment_group_id = get_assignment_group_id(self.assignment_group_name, course, create_if_necessary) # todo: change this to try/except, instead of passign create_if_necessary to the get function.  getting gets.  it shouldn't create.
+        assignment_group_id = get_assignment_group_id(self.assignment_group_name, course, create_if_necessary) # todo: change this to try/except, instead of passing `create_if_necessary` to the get function.  getting gets.  it shouldn't create.
         self.canvas_obj.edit(assignment={'assignment_group_id':assignment_group_id})
         
 
@@ -1001,16 +1047,17 @@ class Assignment(Document):
 
         self.canvas_obj = assignment
 
+        self.translate_to_html(course)
 
         self.publish_linked_content_and_adjust_html(course, overwrite=overwrite)
         
         # now that we have the assignment, we'll update its content.
 
-        new_props=self._dict_of_props()
+        new_props=self._construct_dict_of_props()
 
         # for example,
         # ass[0].edit(assignment={'lock_at':datetime.datetime(2021, 8, 17, 4, 59, 59),'due_at':datetime.datetime(2021, 8, 17, 4, 59, 59)})
-        # we construct the dict of values in the _dict_of_props() function.
+        # we construct the dict of values in the _construct_dict_of_props() function.
 
         assignment.edit(assignment=new_props)
 
@@ -1285,7 +1332,7 @@ class Link(CanvasObject):
         from os.path import join
 
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
+        with open(self.metaname,'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
     
     def __str__(self):
@@ -1352,7 +1399,7 @@ class File(CanvasObject):
         self.folder = folder
         
         self.metaname = path.join(folder,'meta.json')
-        with open(path.join(folder,'meta.json'),'r',encoding='utf-8') as f:
+        with open(self.metaname,'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
         
         try:
@@ -1380,11 +1427,11 @@ class File(CanvasObject):
         
         on_duplicate='overwrite'
         if (file_on_canvas:= self.is_already_uploaded(course)) and not overwrite:
-            on_duplicate='rename'
+            # on_duplicate='rename'
             n = self.metadata['filename']
-            print(f'The file {n} but is already on Canvas, and is not being overwritten.')
-            content_id = file_on_canvas.id
+            # content_id = file_on_canvas.id
 
+            raise AlreadyExists(f'The file {n} is already on Canvas and `not overwrite`.')
         else:
             root = get_root_folder(course)
 
