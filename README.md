@@ -112,7 +112,7 @@ To override the default replacements, put a record in the `meta.json` file for t
 
 Examples of content using replacements can be found in the `test/` folder of this repository.
 
-If a replacements file doesn't exist where you say it should, an exception will be raised at construct time for the `CanvasObject` (`Page` or `Assignment`).  
+If a replacements file doesn't exist where you say it should, an exception will be raised at `publish` time for the `CanvasObject` (`Page` or `Assignment`).  (You can construct a thing with a bad replacements file and not know it until you try to publish!)
 
 
 ## Referencing existing Canvas assignments, pages, and files
@@ -192,6 +192,25 @@ These are four of the five upload types available with Canvas. The other is an a
 ```
 "allowed_extensions": ["pdf","docx"]
 ```
+
+
+## Links
+
+You can hold links in modules under version control, similar to `Page` and `Assignment` types.  One file is needed in the folder:
+
+1. `meta.json`  A valid json file containing something like:
+
+```
+{
+  "name":"🍓 an automatically uploaded link, to amethyst.youcanbook.me",
+  "type":"ExternalUrl",
+  "external_url":"https://amethyst.youcanbook.me",
+  "modules":["Automatically Added Test Module"],
+  "new_tab":1
+}
+```
+
+
 
 ---
 
