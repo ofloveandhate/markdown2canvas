@@ -55,11 +55,9 @@ You must also define an environment variable called `CANVAS_CREDENTIAL_FILE`, wh
 
 ---
 
-# Use
+# Some quick examples
 
-This library is under active development, and will see major use leading up to the Fall 2022 semester.  I suggest checking out the `test_*.py` files in the `test` folder for example code.
-
-## Some quick examples
+This library is under active development.  I suggest checking out the `test_*.py` files in the `test` folder for example code.
 
 Assuming you did my setup step, defining the environment variable and creating that file.  Do that first.
 
@@ -76,6 +74,41 @@ destination = 'downloaded_pages'
 my_filter = lambda title: '📖' in title # pages about readings have an open book in their names.
 mc.download_pages(destination, course, even_if_exists=True, name_filter=my_filter)
 ```
+
+
+# Things you can do with this library
+
+## Replacements during translation
+
+The purpose of this library is to increase modularity and flexibility, while reducing duplication in source code and allowing version control.  I implemented a simple text replacement feature as part of this, so that I can create uniform appearances in my content without duplicate code.  
+
+That is, you can specify a set of string replacements using a .json file, and during translation from markdown to html, before uploading, each substitution happens.  
+
+For example, you can create a `replacements.json` file in a folder at root level (relative to the folder for the course) called `_course_metadata`, and in this file put the content:
+
+```
+{
+  "$TASKDIV": "",
+  "REPLACE THIS TEXT": "with this text",
+  "$RICKROLL": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ?si=BqTm4nbZOLTHaxnz\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>",
+  "another source replacement with spaces": "destination_without_spaces"
+}
+``` 
+
+I'm using simple python `.replace` to do the replacements.  There are consequences:
+* It will replace strings exactly, there are no implemented efforts to allow patterns or functions.  
+* It's case sensitive, and includes exact spacing.  
+* The dollar signs above are NOT special.  They're just a nice way to indicate the text will be replaced.  
+
+⚠️ Furthermore, I'm not sure what order the replacements will be done in, so if the target of one replacement includes the source of another, I can't guarantee you at this time that it will actually happen in a deterministic order.  If you want this feature, please add it and submit a PR to this repo.
+
+You can specify a default set of replacements to happen for every file (except those with overridden replacements).  To do this, make a file `_course_metadata/defaults.json`, and create a record `"replacements": "relative/path/to/replacements_filename.json"`.  The name of the replacements file is arbitrary, and it's relative to root of the course folder.
+
+To override the default replacements, put a record in the `meta.json` file for the content (page / assignment) of the form `"replacements": "relative/path/to/replacements_filename.json"`.
+
+Examples of content using replacements can be found in the `test/` folder of this repository.
+
+If a replacements file doesn't exist where you say it should, an exception will be raised at construct time for the `CanvasObject` (`Page` or `Assignment`).  
 
 
 ## Referencing existing Canvas assignments, pages, and files
