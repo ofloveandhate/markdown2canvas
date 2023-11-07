@@ -311,7 +311,15 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 def markdown2html(filename, course, replacements_filename):
     """
-    This is the main routine in the library
+    This is the main routine in the library.
+
+    This function returns a string of html code.  
+
+    It does replacements, emojizes, converts markdown-->html via `markdown.markdown`, and does page, assignment, and file reference link adjustments.
+
+    If `course` is None, then you won't get some of the functionality.  In particular, you won't get link replacements for references to other content on Canvas.
+
+    If `replacements_filename` is None, then no replacements, duh.  Otherwise it should be a string or Path object to an existing json file containing key-value pairs of strings to replace with other strings.
     """
     if course is None:
         courseid = None
