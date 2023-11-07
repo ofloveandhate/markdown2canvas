@@ -95,7 +95,7 @@ Right now, emoji shortcodes can only be used in content, not in names of things 
 
 ## Images and embedded content
 
-List your images relative the the folder containing the `source.md` for the content.  
+List your images relative the folder containing the `source.md` for the content.  
 
 ## Headers and footers
 
