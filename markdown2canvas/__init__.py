@@ -667,6 +667,15 @@ class CanvasObject(object):
 class Document(CanvasObject):
     """
     A base class which handles common pieces of interface for things like Pages and Assignments
+
+    This type is abstract.  Assignments and Pages both derive from this.
+
+    At least two files are required in the folder for a Document:
+
+    1. `meta.json`
+    2. `source.md`
+
+    You may have additional files in the folder for a Document, such as images and files to include in the content on Canvas.  This library will automatically upload those for you!
     """
 
     def __init__(self,folder,course=None):
