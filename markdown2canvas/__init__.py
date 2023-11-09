@@ -206,7 +206,7 @@ def compute_relative_style_path(style_path):
     here = path.abspath('.')
     there = path.abspath(style_path)
 
-    return path.join(path.commonpath([here,there]), style_path)
+    return path.join(path.commonpath([here,there]), *tuple(style_path.split("/")))
 
 
 
