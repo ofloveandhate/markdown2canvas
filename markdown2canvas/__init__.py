@@ -167,7 +167,7 @@ def generate_course_link(type,name,all_of_type,courseid=None):
     Given a type (assignment or page) and the name of said object, generate a link
     within course to that object.
     '''
-    if type == 'page':
+    if type in ['page','quiz']:
         the_item = next( (p for p in all_of_type if p.title == name) , None)
     elif type == 'assignment':
         the_item = next( (a for a in all_of_type if a.name == name) , None)
@@ -357,6 +357,8 @@ def markdown2html(filename, course, replacements_filename):
         course_page_and_assignments['page'] = course.get_pages()
     if any(l['href'].startswith("assignment:") for l in all_links) and course:
         course_page_and_assignments['assignment'] = course.get_assignments()
+    if any(l['href'].startswith("quiz:") for l in all_links) and course:
+        course_page_and_assignments['quiz'] = course.get_quizzes()
     if any(l['href'].startswith("file:") for l in all_links) and course:
         course_page_and_assignments['file'] = course.get_files()
     for f in all_links:
@@ -365,7 +367,7 @@ def markdown2html(filename, course, replacements_filename):
             split_at_colon = href.split(":",1)
             if path.exists(path.abspath(root_href)):
                 f["href"] = root_href
-            elif course and split_at_colon[0] in ['assignment','page','file']:
+            elif course and split_at_colon[0] in ['assignment','page','quiz','file']:
                 type = split_at_colon[0]
                 name = split_at_colon[1].strip()
                 get_link = generate_course_link(type,name,course_page_and_assignments[type],courseid)
