@@ -1536,7 +1536,8 @@ def page2markdown(destination, page, even_if_exists=False):
     body = r.body # this is the content of the page, in html.
     title = r.title
 
-    destdir = path.join(destination,title)
+    dir_name = title.replace(":","").replace(" ","_")
+    destdir = path.join(destination,dir_name)
     if (not even_if_exists) and path.exists(destdir):
         raise AlreadyExists(f'trying to save page {title} to folder {destdir}, but that already exists.  If you want to force, use `even_if_exists=True`.')
 
