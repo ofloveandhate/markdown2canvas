@@ -734,6 +734,11 @@ class Document(CanvasObject):
         else:
             self.modules = []
 
+        if 'indent' in self.metadata:
+            self.indent = self.metadata['indent']
+        else:
+            self.indent = 0
+
         if 'style' in self.metadata:
             self.stylename = self.metadata['style']
         else:
@@ -841,7 +846,7 @@ class Document(CanvasObject):
                     content_id = self.canvas_obj.id
 
 
-                module.create_module_item(module_item={'type':self.metadata['type'], 'content_id':content_id})
+                module.create_module_item(module_item={'type':self.metadata['type'], 'content_id':content_id, 'indent':self.indent})
 
 
     def is_in_module(self, module_name, course):
@@ -1336,6 +1341,11 @@ class Link(CanvasObject):
         self.metaname = path.join(folder,'meta.json')
         with open(self.metaname,'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
+
+        if 'indent' in self.metadata:
+            self.indent = self.metadata['indent']
+        else:
+            self.indent = 0
     
     def __str__(self):
         result = f"Link({self.metadata['external_url']})"
@@ -1357,7 +1367,7 @@ class Link(CanvasObject):
 
             else:
                 mod = create_or_get_module(m, course)
-                mod.create_module_item(module_item={'type':'ExternalUrl','external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab'])})
+                mod.create_module_item(module_item={'type':'ExternalUrl','external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab']), 'indent':self.indent})
 
 
     def is_already_uploaded(self, course):
@@ -1408,6 +1418,12 @@ class File(CanvasObject):
             self.title = self.metadata['title']
         except:
             self.title = self.metadata['filename']
+
+            
+        if 'indent' in self.metadata:
+            self.indent = self.metadata['indent']
+        else:
+            self.indent = 0
 
     
     def __str__(self):
@@ -1469,7 +1485,7 @@ class File(CanvasObject):
                     break
 
             if not is_in:
-                module.create_module_item(module_item={'type':'File', 'content_id':content_id, 'title':self.title})
+                module.create_module_item(module_item={'type':'File', 'content_id':content_id, 'title':self.title, 'indent':self.indent})
             # if the title doesn't match, update it
             elif item.title != self.title:
                 item.edit(module_item={'type':'File', 'content_id':content_id, 'title':self.title},module=module)
