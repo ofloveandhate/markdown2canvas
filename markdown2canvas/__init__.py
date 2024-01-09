@@ -12,7 +12,7 @@ today = datetime.datetime.today().strftime("%Y-%m-%d")
 
 log_level=logging.DEBUG
 
-log_dir = path.join(path.normpath(os.getcwd() + os.sep + os.pardir), '_logs')
+log_dir = path.join(path.normpath(os.getcwd()), '_logs')
 
 if not path.exists(log_dir):
     os.mkdir(log_dir)
