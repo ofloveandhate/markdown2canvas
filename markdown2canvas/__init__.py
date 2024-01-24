@@ -1113,10 +1113,13 @@ class Image(CanvasObject):
 
         # this still needs to be adjusted to capture the Canvas image, in case it exists
         if overwrite:
+            logging.debug('uploading {} to {}'.format(self.givenpath, dest))
             success_code, json_response = course.upload(self.givenpath, parent_folder_path=dest,on_duplicate=on_duplicate)
+            logging.debug('success_code from uploading was {}'.format(success_code))
+            logging.debug('json response from uploading was {}'.format(json_response))
+
             if not success_code:
                 print(f'failed to upload...  {self.givenpath}')
-
 
             self.canvas_obj = course.get_file(json_response['id'])
             return self.canvas_obj
