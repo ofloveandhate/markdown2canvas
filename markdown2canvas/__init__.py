@@ -167,7 +167,7 @@ def generate_course_link(type,name,all_of_type,courseid=None):
     Given a type (assignment or page) and the name of said object, generate a link
     within course to that object.
     '''
-    if type == 'page':
+    if type in ['page','quiz']:
         the_item = next( (p for p in all_of_type if p.title == name) , None)
     elif type == 'assignment':
         the_item = next( (a for a in all_of_type if a.name == name) , None)
@@ -240,7 +240,7 @@ def preprocess_markdown_images(contents,style_path):
 
 def get_default_property(key, helpstr):
 
-    defaults_name = compute_relative_style_path("_course_metadata/defaults.json")
+    defaults_name = compute_relative_style_path(path.join("_course_metadata","defaults.json"))
 
     try:
         logging.info(f'trying to use defaults from {defaults_name}')
@@ -357,6 +357,8 @@ def markdown2html(filename, course, replacements_filename):
         course_page_and_assignments['page'] = course.get_pages()
     if any(l['href'].startswith("assignment:") for l in all_links) and course:
         course_page_and_assignments['assignment'] = course.get_assignments()
+    if any(l['href'].startswith("quiz:") for l in all_links) and course:
+        course_page_and_assignments['quiz'] = course.get_quizzes()
     if any(l['href'].startswith("file:") for l in all_links) and course:
         course_page_and_assignments['file'] = course.get_files()
     for f in all_links:
@@ -365,7 +367,7 @@ def markdown2html(filename, course, replacements_filename):
             split_at_colon = href.split(":",1)
             if path.exists(path.abspath(root_href)):
                 f["href"] = root_href
-            elif course and split_at_colon[0] in ['assignment','page','file']:
+            elif course and split_at_colon[0] in ['assignment','page','quiz','file']:
                 type = split_at_colon[0]
                 name = split_at_colon[1].strip()
                 get_link = generate_course_link(type,name,course_page_and_assignments[type],courseid)
@@ -732,6 +734,11 @@ class Document(CanvasObject):
         else:
             self.modules = []
 
+        if 'indent' in self.metadata:
+            self.indent = self.metadata['indent']
+        else:
+            self.indent = 0
+
         if 'style' in self.metadata:
             self.stylename = self.metadata['style']
         else:
@@ -798,8 +805,8 @@ class Document(CanvasObject):
         self._translated_html = adjust_html_for_images(self._translated_html, self._local_images, course.id)
         self._translated_html = adjust_html_for_files(self._translated_html, self._local_files, course.id)
 
-
-        with open(f'{self.folder}/result.html','w',encoding='utf-8') as result:
+        save_location = path.join(self.folder,'result.html')
+        with open(save_location,'w',encoding='utf-8') as result:
             result.write(self._translated_html)
 
 
@@ -839,7 +846,7 @@ class Document(CanvasObject):
                     content_id = self.canvas_obj.id
 
 
-                module.create_module_item(module_item={'type':self.metadata['type'], 'content_id':content_id})
+                module.create_module_item(module_item={'type':self.metadata['type'], 'content_id':content_id, 'indent':self.indent})
 
 
     def is_in_module(self, module_name, course):
@@ -1337,6 +1344,11 @@ class Link(CanvasObject):
         self.metaname = path.join(folder,'meta.json')
         with open(self.metaname,'r',encoding='utf-8') as f:
             self.metadata = json.load(f)
+
+        if 'indent' in self.metadata:
+            self.indent = self.metadata['indent']
+        else:
+            self.indent = 0
     
     def __str__(self):
         result = f"Link({self.metadata['external_url']})"
@@ -1358,7 +1370,7 @@ class Link(CanvasObject):
 
             else:
                 mod = create_or_get_module(m, course)
-                mod.create_module_item(module_item={'type':'ExternalUrl','external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab'])})
+                mod.create_module_item(module_item={'type':'ExternalUrl','external_url':self.metadata['external_url'],'title':self.metadata['name'], 'new_tab':bool(self.metadata['new_tab']), 'indent':self.indent})
 
 
     def is_already_uploaded(self, course):
@@ -1409,6 +1421,12 @@ class File(CanvasObject):
             self.title = self.metadata['title']
         except:
             self.title = self.metadata['filename']
+
+            
+        if 'indent' in self.metadata:
+            self.indent = self.metadata['indent']
+        else:
+            self.indent = 0
 
     
     def __str__(self):
@@ -1470,7 +1488,7 @@ class File(CanvasObject):
                     break
 
             if not is_in:
-                module.create_module_item(module_item={'type':'File', 'content_id':content_id, 'title':self.title})
+                module.create_module_item(module_item={'type':'File', 'content_id':content_id, 'title':self.title, 'indent':self.indent})
             # if the title doesn't match, update it
             elif item.title != self.title:
                 item.edit(module_item={'type':'File', 'content_id':content_id, 'title':self.title},module=module)
@@ -1537,7 +1555,8 @@ def page2markdown(destination, page, even_if_exists=False):
     body = r.body # this is the content of the page, in html.
     title = r.title
 
-    destdir = path.join(destination,title)
+    dir_name = title.replace(":","").replace(" ","_")
+    destdir = path.join(destination,dir_name)
     if (not even_if_exists) and path.exists(destdir):
         raise AlreadyExists(f'trying to save page {title} to folder {destdir}, but that already exists.  If you want to force, use `even_if_exists=True`.')
 
