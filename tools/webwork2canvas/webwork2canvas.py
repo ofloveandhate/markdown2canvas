@@ -11,57 +11,7 @@ import os.path as path
 
 
 
-
-
-
-
-
-
-
-# a base class
-class Tool(object):
-	"""docstring for Tool"""
-	def __init__(self, config_name = 'config.json'):
-		super(Tool, self).__init__()
-
-		self.config = None
-
-		self._read_config(config_name)
-		
-
-
-
-
-	def _read_config(self, config_name):
-
-		import json
-		with open(config_name,'r') as f:
-			config = json.load(f)
-		
-		config['course_id'] = int(config['course_id'])
-
-		self.config = config
-
-
-
-	def _require_have_config(self):
-		if self.config is None:
-			raise mc.SetupError("we don't have self.config yet, somehow.  this should be impossible by construction, as it is in the init method for the Tool base class")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class Webwork2Canvas(Tool):
+class Webwork2Canvas(mc.tool.Tool):
 	"""docstring for Webwork2Canvas"""
 	def __init__(self, config_name = 'config.json'):
 		super(Webwork2Canvas, self).__init__(config_name)
