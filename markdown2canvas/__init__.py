@@ -202,22 +202,38 @@ def generate_course_link(type,name,all_of_type,courseid=None):
     
 
 
-def compute_relative_style_path(style_path):
-    here = path.abspath('.')
-    there = path.abspath(style_path)
+def find_in_containing_directory_path(target):
+    import pathlib
 
-    return path.join(path.commonpath([here,there]), style_path)
+    target = pathlib.Path(target)
+
+    here = pathlib.Path('.').absolute()
+
+    testme = here / target
+
+    found = testme.exists()
+
+    while (not found) and here.parent!=here:
+        here = here.parent
+        testme = here / target
+        found = testme.exists()
+
+
+    if not found:
+        raise FileNotFoundError('unable to find {} in a containing folder of {}'.format(target, pathlib.Path('.').absolute()))
+
+    return here / target
 
 
 
-def preprocess_replacements(contents, replacements_filename):
+def preprocess_replacements(contents, replacements_path):
     """
     attempts to read in a file containing substitutions to make, and then makes those substitutions
     """
 
-    if replacements_filename is None:
+    if replacements_path is None:
         return contents
-    with open(replacements_filename,'r',encoding='utf-8') as f:
+    with open(replacements_path,'r',encoding='utf-8') as f:
         import json
         replacements = json.loads(f.read())
 
@@ -231,16 +247,16 @@ def preprocess_replacements(contents, replacements_filename):
 
 def preprocess_markdown_images(contents,style_path):
 
-    rel_style_path = compute_relative_style_path(style_path)
+    rel_style_path = find_in_containing_directory_path(style_path)
 
-    contents = contents.replace('$PATHTOMD2CANVASSTYLEFILE',rel_style_path)
+    contents = contents.replace('$PATHTOMD2CANVASSTYLEFILE',str(rel_style_path))
 
     return contents
 
 
 def get_default_property(key, helpstr):
 
-    defaults_name = compute_relative_style_path(path.join("_course_metadata","defaults.json"))
+    defaults_name = find_in_containing_directory_path(path.join("_course_metadata","defaults.json"))
 
     try:
         logging.info(f'trying to use defaults from {defaults_name}')
@@ -310,7 +326,7 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 
 
-def markdown2html(filename, course, replacements_filename):
+def markdown2html(filename, course, replacements_path):
     """
     This is the main routine in the library.
 
@@ -320,7 +336,7 @@ def markdown2html(filename, course, replacements_filename):
 
     If `course` is None, then you won't get some of the functionality.  In particular, you won't get link replacements for references to other content on Canvas.
 
-    If `replacements_filename` is None, then no replacements, duh.  Otherwise it should be a string or Path object to an existing json file containing key-value pairs of strings to replace with other strings.
+    If `replacements_path` is None, then no replacements, duh.  Otherwise it should be a string or Path object to an existing json file containing key-value pairs of strings to replace with other strings.
     """
     if course is None:
         courseid = None
@@ -337,7 +353,7 @@ def markdown2html(filename, course, replacements_filename):
     with open(filename,'r',encoding='utf-8') as file:
         markdown_source = file.read()
 
-    markdown_source = preprocess_replacements(markdown_source, replacements_filename) 
+    markdown_source = preprocess_replacements(markdown_source, replacements_path) 
 
     emojified = emoji.emojize(markdown_source)
 
@@ -700,13 +716,11 @@ class Document(CanvasObject):
 
         # variables populated from the metadata.  should these even exist?  IDK
         self.name = None
-        self.stylename = None
-        self.replacements_filename = None
+        self.style_path = None
+        self.replacements_path = None
 
         # populate the above variables from the meta.json file
         self._set_from_metadata()
-
-        self._make_sure_files_exist()
 
 
         # these internally-used variables are used to carry state between functions
@@ -714,13 +728,6 @@ class Document(CanvasObject):
         self._local_files = None
         self._translated_html = None
 
-
-    def _make_sure_files_exist(self):
-        if self.replacements_filename:
-            from pathlib import Path
-
-            if not Path(self.replacements_filename).exists():
-                raise FileNotFoundError(f'replacements file {self.replacements_filename} does not exist.  Please make it, correct the path from which you are running your code, or correct the erroneous name in meta.json or the defaults.json file')
 
     def _set_from_metadata(self):
         """
@@ -740,14 +747,18 @@ class Document(CanvasObject):
             self.indent = 0
 
         if 'style' in self.metadata:
-            self.stylename = self.metadata['style']
+            self.style_path = find_in_containing_directory_path(self.metadata['style'])
         else:
-            self.stylename = get_default_style_name() # could be None if doesn't exist
+            self.style_path = get_default_style_name() # could be None if doesn't exist
+            if self.style_path:
+                self.style_path = find_in_containing_directory_path(self.style_path)
 
         if 'replacements' in self.metadata:
-            self.replacements_filename = self.metadata['replacements']
+            self.replacements_path = find_in_containing_directory_path(self.metadata['replacements'])
         else:
-            self.replacements_filename = get_default_replacements_name() # could be None if doesn't exist
+            self.replacements_path = get_default_replacements_name() # could be None if doesn't exist
+            if self.replacements_path:
+                self.replacements_path = find_in_containing_directory_path(self.replacements_path)
 
 
 
@@ -765,15 +776,15 @@ class Document(CanvasObject):
         """
         from os.path import join
 
-        if self.stylename:
+        if self.style_path:
             outname = join(self.folder,"styled_source.md")
-            apply_style_markdown(self.sourcename, self.stylename, outname)
+            apply_style_markdown(self.sourcename, self.style_path, outname)
 
-            translated_html_without_hf = markdown2html(outname,course, self.replacements_filename)
+            translated_html_without_hf = markdown2html(outname,course, self.replacements_path)
 
-            self._translated_html = apply_style_html(translated_html_without_hf, self.stylename, outname)
+            self._translated_html = apply_style_html(translated_html_without_hf, self.style_path, outname)
         else:
-            self._translated_html = markdown2html(self.sourcename,course, self.replacements_filename)
+            self._translated_html = markdown2html(self.sourcename,course, self.replacements_path)
 
 
         self._local_images = find_local_images(self._translated_html)
@@ -1654,3 +1665,11 @@ def download_assignments(destination, course, even_if_exists=False, name_filter=
     for a in assignments:
         if name_filter(a.name):
             assignment2markdown(destination,a,even_if_exists)
+
+
+
+
+import markdown2canvas.tool
+
+
+
