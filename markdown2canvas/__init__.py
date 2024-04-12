@@ -995,6 +995,24 @@ class Assignment(Document):
         self.grading_type = default_to_none('grading_type')
         self.assignment_group_name = default_to_none('assignment_group_name')
 
+        self._validate_props()
+
+    def _validate_props(self):
+
+
+        if self.allowed_extensions is not None and self.submission_types is None:
+            print('warning: using allowed_extensions but submission_types is not specified in the meta.json file for this assignment.  you should probably use / include ["online_upload"].  valid submission_types can be found at https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.update')
+
+        if self.allowed_extensions is not None and not isinstance(self.allowed_extensions,list):
+            print('warning: allowed_extensions must be a list')
+
+        if self.submission_types is not None and not isinstance(self.submission_types,list):
+            print('warning: submission_types must be a list.   Valid submission_types can be found at https://canvas.instructure.com/doc/api/assignments.html#method.assignments_api.update')
+
+        if self.allowed_extensions is not None and isinstance(self.submission_types,list):
+            if 'online_upload' not in self.submission_types:
+                print('warning: using allowed_extensions, but "online_upload" is not in your list of submission_types.  you should probably add it.')
+
     def _construct_dict_of_props(self):
 
         d = super(Assignment,self)._construct_dict_of_props()
