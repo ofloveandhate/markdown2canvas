@@ -6,6 +6,7 @@ import canvasapi
 
 import unittest
 
+import pytest
 
 class PageTester(unittest.TestCase):
 	@classmethod
@@ -39,7 +40,10 @@ class PageTester(unittest.TestCase):
 
 
 	def test_ddd_something_bad_happens(self):
-		self.assertRaises(FileNotFoundError, mc.Page, ('uses_replacements_replacementsfile_doenst_exist'))
+		# constructing a page with a replacements file that doesn't exist should raise
+
+		with pytest.raises(FileNotFoundError) as e_info:
+			mc.Page('uses_replacements_replacementsfile_doenst_exist')
 		
 
 
