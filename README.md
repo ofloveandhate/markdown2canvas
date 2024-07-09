@@ -55,6 +55,71 @@ You must also define an environment variable called `CANVAS_CREDENTIAL_FILE`, wh
   - I cannot possibly tell you your url, but your local Canvas admin can.
 2. `API_KEY` -- a string, the key you can get from Canvas.  Here's [a link to a guide on how to generate yours](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-obtain-an-API-access-token-in-the-Canvas-Data-Portal/ta-p/157).  Do not share it with anyone -- having only this one piece of data, anyone can act as you.  Protect it at least as much as you would any other password or sensitive information.
 
+
+# Alternate-ish Installation for Windows Users
+
+These instructions are tested on Windows 11 on February 26, 2024.
+
+## Get Canvas Credentials and Make Canvas Credential File - this is the same step as above.
+
+Your first step will need to be to get a Canvas API Key. 
+
+1. On Canvas, navigate Accounts -> Settings 
+2. Scroll to the button labeled `+ New Acces Token`
+3. Add a description for yourself to know, later, what the access token is for and optionally add an expiration date. (I like to make a new one every semester, for safety.)
+4. Copy the text of the token (you won't get to see this again) to a file that we will name `canvas_credential_file.py`.  
+5. Create a variable in `canvas_credential_file.py` named `API_KEY`, whose value is the string that we just copied from canvas.
+
+   Additionally, add a second variable `API_URL` whose value is the string that is the general Canvas URL you use.  For UWEC, this is `'https://uweau.instructure.com/'`.
+
+   Ultimately, your `canvas_credential_file.py` will contain the lines:
+
+   ```
+   API_KEY = "stringofrandomcharacters"
+   API_URL = "https://uweau.instructure.com/"
+   ```
+
+## Initial Setup - Using VS Code
+
+1. Install python via the Microsoft Store
+2. Install VS code and GitBash - at UW Eau Claire this is done via the software center, you might use the Microsoft Store for this step as well.
+3. Clone the markdown2canvas repo from github 
+4. Open VS code, open GitBash terminal and run the command 
+
+   ```
+   pip install /path/to/markdown2canvas
+   ````
+   
+   Then also run the command
+
+   ```
+   pip install lxml beautifulsoup4
+   ```
+
+   Note that the default terminal that VSCode opens will be the Windows powershell, don't use that.
+
+## Generate necessary global variables
+
+1. Run the following command to make a file called `.bashrc` and save the location of your canvas credential file in your home directory.
+
+   ```
+   echo 'CANVAS_CREDENTIAL_FILE=h:\\path\\to\\canvas_credential_file.py' >> ~/.bashrc
+   ```
+
+   Note that you should be using `\\` here as directory separators because you are using Windows. If you use `/` you run the risk of the operating system not understanding the path. 
+
+2. Open a new git bash terminal and see if the following works:
+
+   ```
+   echo $CANVAS_CREDENTIAL_FILE
+   ```
+
+   if not, you might need to run the following command in your bash terminal:
+
+   ```
+   source ~/.bashrc
+   ```
+
 ---
 
 # Some quick examples
