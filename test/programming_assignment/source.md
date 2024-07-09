@@ -8,7 +8,7 @@ here's some emoji using shortcodes:
 * :performing_arts:
 * :rainbow:
 
-\( \sum_i^n f(x) \)
+\\( \sum_i^n f(x) \\)
 
 # tasks
 
