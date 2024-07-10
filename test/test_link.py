@@ -1,74 +1,77 @@
 
 import sys
-sys.path.insert(0,'../')
-import markdown2canvas as mc
-import canvasapi
+sys.path.insert(0,'../') # this is the path to the thing that's being tested
+import markdown2canvas as mc # this is the thing that's being tested
 
-import unittest
+import canvasapi # dependency
 
-
-
+import pytest
 
 
-class TestLink(unittest.TestCase):
-	@classmethod
-	def setUpClass(self):
-		import os
-		
-		from course_id import test_course_id
-		from canvas_url import canvas_url
-		self.canvas = mc.make_canvas_api_obj(url=canvas_url)
-		self.course = self.canvas.get_course(test_course_id) 
+@pytest.fixture(scope='class')
+def course():
+	import os
 
-		self.folder = 'a_link.link'
-		self.filename = os.path.split(self.folder)[1]
-
-		self.content = mc.Link(self.folder)
-
-	@classmethod
-	def tearDownClass(self):
-		self.canvas
-
-
-
-	def test_aaa_meta(self):
-		self.assertEqual(self.content.metadata['type'],'ExternalUrl')
-		self.assertEqual(self.content.metadata['external_url'],'https://amethyst.youcanbook.me')
+	from course_id import test_course_id
+	from canvas_url import canvas_url
+	canvas = mc.make_canvas_api_obj(url=canvas_url)
+	
+	yield canvas.get_course(test_course_id) 
 
 
 
 
-	def test_bbb_can_publish(self):
-		self.content.publish(self.course,overwrite=True)
-		assert self.content.is_already_uploaded(self.course)
-		for m in self.content.metadata['modules']:
-			assert self.content.is_in_module(self.course, m)
+@pytest.fixture(scope='class')
+def link(course):
+	folder = 'a_link.link'
+	yield mc.Link(folder)
 
 
-	def test_ccc_already_online_raises(self):
+
+
+
+class TestLink():
+
+
+	def test_meta(self,course,link):
+		link.metadata['type'] == 'ExternalUrl'
+		link.metadata['external_url'] == 'https://amethyst.youcanbook.me'
+
+
+
+	def test_can_publish(self,course,link):
+		link.publish(course,overwrite=True)
+		assert link.is_already_uploaded(course)
+		for m in link.metadata['modules']:
+			assert link.is_in_module(course, m)
+
+
+	def test_already_online_raises(self,course,link):
 		# publish once, forcefully.
-		self.content.publish(self.course,overwrite=True)
+		link.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with self.assertRaises(mc.AlreadyExists):
-			self.content.publish(self.course,overwrite=False) # default is False
+		with pytest.raises(mc.AlreadyExists):
+			link.publish(course,overwrite=False) # default is False
 
 
 
 
-	def test_ddd_new_module_works(self):
-		old_modules = self.content.metadata['modules']
+	def test_new_module_works(self,course,link):
+		old_modules = link.metadata['modules']
 		import random
 		
-		self.content.metadata['modules'] = [f'randomly created module {random.randint(100000000,200000000)}']
+		random_modules = [f'randomly created module {random.randint(100000000,200000000)}']
 
-		self.content.publish(self.course)
-		self.content.metadata['modules'] = old_modules
+		link.metadata['modules'] = random_modules
+
+		link.publish(course)
+
+		for m in random_modules:
+			assert link.is_in_module(course, m)
+
+		# reset to old
+		link.metadata['modules'] = old_modules
 
 
 
-
-
-if __name__ == '__main__':
-    pgnm = 'this_argument_is_ignored_but_necessary'
-    unittest.main(argv=[pgnm], exit=False)
