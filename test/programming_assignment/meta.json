@@ -2,6 +2,5 @@
 	"type": "assignment",
 	"points_possible": 100,
 	"allowed_extensions": ["pdf","docx","jpg"],
-	"name": "Test Programming Assignment",
-	"due":{"time":"22:00", "week":11, "day":"R"}
+	"name": "Test Programming Assignment"
 }
