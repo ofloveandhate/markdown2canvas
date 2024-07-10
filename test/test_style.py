@@ -20,8 +20,7 @@ def course():
 def page_uses_droplets_via_style(course):
 	import os
 	folder = 'uses_droplets_via_style'
-	filename = os.path.split(folder)[1]
-
+	
 	yield mc.Page(folder)
 
 

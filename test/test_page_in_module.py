@@ -2,7 +2,6 @@
 import sys
 sys.path.insert(0,'../')
 import markdown2canvas as mc
-import canvasapi
 
 import pytest
 
@@ -21,7 +20,6 @@ def course():
 def page_plain_text_in_a_module(course):
 	import os
 	folder = 'plain_text_in_a_module'
-	filename = os.path.split(folder)[1]
 
 	yield mc.Page(folder)
 

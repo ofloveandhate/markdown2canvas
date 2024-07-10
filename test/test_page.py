@@ -2,7 +2,6 @@
 import sys
 sys.path.insert(0,'../')
 import markdown2canvas as mc
-import canvasapi
 
 import pytest
 
@@ -20,7 +19,6 @@ def course():
 def page_has_local_images(course):
 	import os
 	folder = 'has_local_images'
-	filename = os.path.split(folder)[1]
 
 	yield mc.Page(folder)
 

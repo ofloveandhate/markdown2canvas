@@ -2,7 +2,6 @@
 import sys
 sys.path.insert(0,'../')
 import markdown2canvas as mc
-import canvasapi
 
 import pytest
 
@@ -20,7 +19,6 @@ def course():
 def content(course):
 	import os
 	folder = 'a_file.file'
-	filename = os.path.split(folder)[1]
 
 	yield mc.File(folder)
 

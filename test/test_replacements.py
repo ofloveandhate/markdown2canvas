@@ -1,7 +1,6 @@
 import sys
 sys.path.insert(0,'../')
 import markdown2canvas as mc
-import canvasapi
 
 import pytest
 
@@ -21,9 +20,7 @@ def course():
 def page_using_defaults(course):
 	import os
 	folder = 'uses_replacements_default'
-	filename = os.path.split(folder)[1]
 
-	##Not sure about filename - what was it being used for in "test_assignment"?
 	yield mc.Page(folder)
 
 
@@ -31,7 +28,6 @@ def page_using_defaults(course):
 def page_using_custom(course):
 	import os
 	folder = 'uses_replacements_custom'
-	filename = os.path.split(folder)[1]
 
 	yield mc.Page(folder)
 
