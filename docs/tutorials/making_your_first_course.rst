@@ -221,7 +221,7 @@ Here's a script I use in DS710:
 				print(f'[dry run] publishing {obj}')
 
 
-Let's also list the content as ready to publish
+Let's also list the content as ready to publish in `content_ready.txt`:
 
 .. code-block::
 	
@@ -235,7 +235,7 @@ Publish the content!!!!!
 
 Now, assuming you've completed the setup steps (Mac/Linux: saving your API key and URL in a .py file, and specifying the name of the file via an environment variable called `CANVAS_CREDENTIALS_FILE`), you should be able to publish the content to your course. 
 
-Be sure you copied in the Canvas course number to the `_tools/publish_ready_content.py` script!
+🎯 Be sure you copied in the Canvas course number to the `_tools/publish_ready_content.py` script!
 
 From course root level, run
 
