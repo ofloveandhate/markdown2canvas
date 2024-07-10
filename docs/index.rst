@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to markdown2canvas's documentation!
+`markdown2canvas`
 ===========================================
 
 This is the documentation for `markdown2canvas`, a Python library for containerizing and publishing Canvas content.
@@ -12,12 +12,46 @@ This is the documentation for `markdown2canvas`, a Python library for containeri
    :maxdepth: 2
    :caption: Contents:
 
+Tutorials
+================
+
+.. toctree::
+   :maxdepth: 1
+
+   tutorials/setup
+   tutorials/making_your_first_course
+   tutorials/writing_content
+   tutorials/styling_content
+   tutorials/text_replacements
+   tutorials/publishing_content
+   
+
+
+Notes
+========
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Some useful notes on aspects of using the library
+
+   on_meta_dot_json
+   making_links_to_existing_content
+
+
+
+Useful links
+==============
+
+* `Canvas API documentation at root level <https://canvasapi.readthedocs.io/en/stable/>`_
+* `Canvas API class documentation <https://canvasapi.readthedocs.io/en/stable/class-reference.html>`_  I use this when chasing down how to set additional properties for various content types.  
+
+
 
 Details 📝
 ================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 0
    :caption: Contents:
 
    markdown2canvas
