@@ -18,7 +18,8 @@ Tutorials
 .. toctree::
    :maxdepth: 1
 
-   tutorials/setup
+   tutorials/setup_mac_linux
+   tutorials/setup_windows
    tutorials/making_your_first_course
    tutorials/writing_content
    tutorials/styling_content
