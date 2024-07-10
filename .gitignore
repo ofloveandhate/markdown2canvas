@@ -10,3 +10,6 @@ build/
 */*/result.html
 styled_source.md
 *.icloud
+
+_build/
+make.bat
