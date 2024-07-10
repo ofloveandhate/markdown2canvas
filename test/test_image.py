@@ -1,56 +1,61 @@
 
-
 import sys
-sys.path.insert(0,'../')
-import markdown2canvas as mc
-import canvasapi
+sys.path.insert(0,'../') # this is the path to the thing that's being tested
+import markdown2canvas as mc # this is the thing that's being tested
 
-import unittest
+import canvasapi # dependency
+
+import pytest
 
 
-class UploadTester(unittest.TestCase):
-	@classmethod
-	def setUpClass(self):
-		import os
-		
-		from course_id import test_course_id
-		from canvas_url import canvas_url
-		self.canvas = mc.make_canvas_api_obj(url=canvas_url)
-		self.course = self.canvas.get_course(test_course_id) 
+@pytest.fixture(scope='class')
+def course():
+	import os
 
-		self.file_to_publish = 'has_local_images/hauser_menagerie.jpg'
-		self.filename = os.path.split(self.file_to_publish)[1]
-		self.image = mc.Image(self.file_to_publish,'A menagerie of surfaces from the Hauser gallery')
-		print(self.image.filename)
+	from course_id import test_course_id
+	from canvas_url import canvas_url
+	canvas = mc.make_canvas_api_obj(url=canvas_url)
+	
+	yield canvas.get_course(test_course_id) 
 
-	@classmethod
-	def tearDownClass(self):
-		self.canvas
 
-	def test_can_publish_image(self):
-		self.image.publish(self.course,'images',overwrite=True)
+import os
+file_to_publish = 'has_local_images/hauser_menagerie.jpg'
+filename = os.path.split(file_to_publish)[1]
 
-	def test_can_find_published_image(self):
-		self.image.publish(self.course,'images',overwrite=True)
-		self.assertTrue(mc.is_file_already_uploaded(self.file_to_publish,self.course))
 
-	def test_doesnt_find_deleted_image(self):
-		self.image.publish(self.course,'images',overwrite=True)
-		self.assertTrue(mc.is_file_already_uploaded(self.file_to_publish,self.course))
-		f = mc.find_file_in_course(self.file_to_publish,self.course)
+
+@pytest.fixture(scope='class')
+def image(course):
+	
+	yield mc.Image(file_to_publish,'A menagerie of surfaces from the Hauser gallery')
+
+
+class TestImage():
+
+
+
+	def test_can_publish_image(self, course, image):
+		image.publish(course,'images',overwrite=True)
+
+	def test_can_find_published_image(self, course, image):
+		image.publish(course,'images',overwrite=True)
+		assert mc.is_file_already_uploaded(file_to_publish,course)
+
+	def test_doesnt_find_deleted_image(self, course, image):
+		image.publish(course,'images',overwrite=True)
+		assert mc.is_file_already_uploaded(file_to_publish,course)
+		f = mc.find_file_in_course(file_to_publish,course)
 		f.delete()
-		self.assertTrue(not mc.is_file_already_uploaded(self.file_to_publish,self.course))
+		assert not mc.is_file_already_uploaded(file_to_publish,course)
 
-	def test_can_get_already_published_image(self):
+	def test_can_get_already_published_image(self, course, image):
 		# first, definitely publish
-		self.image.publish(self.course,'images',overwrite=True)
+		image.publish(course,'images',overwrite=True)
 
-		img_on_canvas = mc.find_file_in_course(self.file_to_publish,self.course)
+		img_on_canvas = mc.find_file_in_course(file_to_publish,course)
 
-		self.assertEqual(img_on_canvas.filename,self.filename)
+		assert img_on_canvas.filename == filename
 
-if __name__ == '__main__':
-    pgnm = 'this_argument_is_ignored_but_necessary'
-    unittest.main(argv=[pgnm], exit=False)
 
 
