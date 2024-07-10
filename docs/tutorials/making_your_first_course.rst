@@ -17,7 +17,7 @@ Create the course metadata
 	course_folder/_course_metadata/defaults.json      # must be named defaults.json
 	course_folder/_course_metadata/replacements.json  # <--- replacements.json is arbitrary.  change in `defaults.json`
 
-And that's all that's really required.  Here's some starter contents
+And that's all that's really required.  🎯 Here's some starter contents:
 
 
 `defaults.json`:
@@ -40,6 +40,26 @@ And that's all that's really required.  Here's some starter contents
 		"another source replacement with spaces": "destination_without_spaces"
 	}
 
+Ignore generated files (git)
+--------------------------------
+
+At this time, `markdown2canvas` uses in-place builds, sorry.  That is, it pollutes as it publishes, and makes two files in content folders: `styled_source.md` and `result.html`.  Best to make version control ignore them!  
+
+🎯 Add file `.gitignore` to root level. 
+
+`course_folder/.gitignore`:
+
+.. code-block:: 
+
+	*downloaded_content/
+	*.log
+	.DS_Store
+	result.html
+	styled_source.md
+	*.icloud
+
+
+
 
 Add a default style
 ----------------------
@@ -61,13 +81,13 @@ I urge you to use the styling system, in which case it probably looks like this:
 	course_folder/_styles/generic/footer.html
 
 
-Just make those four files blank for now.
+🎯 Just make those four files blank for now.
 
 Add some content!!!
 ------------------------
 
 
-One last thing, and that's to add some content.  Let's add a page and an assignment.
+One last thing, and that's to add some content.  🎯 Let's add a page and an assignment.
 
 
 .. code-block:: 
@@ -92,7 +112,7 @@ One last thing, and that's to add some content.  Let's add a page and an assignm
 `meta.json`
 ---------------
 
-The `meta.json` files vary per content type, and by your needs.  Let's make them for these two pieces of content:
+The `meta.json` files vary per content type, and by your needs.  🎯 Let's make them for these two pieces of content:
 
 
 `readings.page`:
@@ -123,7 +143,7 @@ The `meta.json` files vary per content type, and by your needs.  Let's make them
 
 Pages and Assignments must have a `source.md` file.  It's markdown, and can include html, too.  
 
-Write whatever markdown you want in the two `source.md` files.
+🎯 Write whatever markdown you want in the two `source.md` files.  I gave you some terrible starter, but at least the assignment source includes a demo of the text replacement system.
 
 
 `readings.page`:
@@ -150,7 +170,7 @@ Write whatever markdown you want in the two `source.md` files.
 Tools to publish content
 ---------------------------------
 
-I use a script to help me publish my content.  Let's add it:
+I use a script to help me publish my content.  🎯 Let's add it:
 
 
 .. code-block:: 
@@ -165,7 +185,7 @@ I use a script to help me publish my content.  Let's add it:
 	course_folder/_tools/content_all.txt            # a txt file with names of content folders
 
 
-Here's a script I use in DS710:
+Here's a script I use in DS710.  🎯 Copy-paste it.
 
 .. code-block:: python
 
@@ -221,14 +241,14 @@ Here's a script I use in DS710:
 				print(f'[dry run] publishing {obj}')
 
 
-Let's also list the content as ready to publish in `content_ready.txt`:
+🎯 Let's also list the content as ready to publish in `content_ready.txt`:
 
 .. code-block::
 	
 	Lesson1/readings.page
 	Lesson1/assignment1.assignment
 
-
+Note that you just list the folder, and `markdown2canvas` does all the work with `meta.json` and `source.md`.
 
 Publish the content!!!!!
 --------------------------
@@ -237,7 +257,7 @@ Now, assuming you've completed the setup steps (Mac/Linux: saving your API key a
 
 🎯 Be sure you copied in the Canvas course number to the `_tools/publish_ready_content.py` script!
 
-From course root level, run
+🎯 From course root level, run
 
 .. code-block:: 
 
