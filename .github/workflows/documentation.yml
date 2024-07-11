@@ -1,27 +1,28 @@
-name: documentation
+name: Sphinx build
 
-on: [push, pull_request, workflow_dispatch]
+on: push
 
 permissions:
   contents: write
 
 jobs:
-  docs:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-      - name: Install dependencies
-        run: |
-          pip install sphinx sphinx_rtd_theme myst_parser
-      - name: Sphinx build
-        run: |
-          sphinx-build docs _build
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        with:
-          publish_branch: gh-pages
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _build/
-          force_orphan: true
+    - uses: actions/checkout@v3
+
+    - name: Build HTML
+      uses: ammaraskar/sphinx-action@master
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: html-docs
+        path: docs/_build/html/
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/build/html
