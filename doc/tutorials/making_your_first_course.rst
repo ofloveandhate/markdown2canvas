@@ -4,11 +4,20 @@ Making and publishing your first course using `markdown2canvas`
 
 A course that uses `markdown2canvas` is just a folder on your computer, with a bit of extra structure.  (Ideally, you should turn it into a git repository and use version control.)
 
-The folder has some special structure.  I'll take you through it in stages.
+The folder has some special structure.  I'll take you through it in stages.  You can also copy the directory from the `examples/` folder in the repo if you don't want to go through it in steps.
 
+
+Create a course folder
+----------------------------
+
+Courses in markdown2canvas are contained in a folder.  The name of the folder is arbitrary.  🎯 Make a folder called `course_folder`.  Call it whatever you want, but below I'll call it `course_folder`.
 
 Create the course metadata
 ----------------------------
+
+🎯 Make a folder called `_course_metadata`.  The name of this folder matters.  (I use leading underscores to denote things never published or that aren't Canvas content.)
+
+🎯 Make two files therein, `defaults.json` and `replacements.json`.  Here's a picture of the directory structure after this step:
 
 .. code-block:: 
 
@@ -17,7 +26,7 @@ Create the course metadata
 	course_folder/_course_metadata/defaults.json      # must be named defaults.json
 	course_folder/_course_metadata/replacements.json  # <--- replacements.json is arbitrary.  change in `defaults.json`
 
-And that's all that's really required.  🎯 Here's some starter contents:
+🎯 Here's some starter contents for you to copy into those two files.
 
 
 `defaults.json`:
@@ -138,11 +147,27 @@ Pages and Assignments must have a `source.md` file.  It's markdown, and can incl
 Add a file for students to download
 -------------------------------------
 
-We're going to make a link to a file in the module for Lesson 1, and we also make a link to this file in the assignment we created.  
+We're going to make a link to a file in the module for Lesson 1, and we also make a link to this file in the assignment we created.  Here's the new structure after this step:
+
+.. code-block:: 
+
+	course_folder/
+	course_folder/_course_metadata/...                 
+
+	course_folder/_styles/generic/...
+
+	course_folder/Lesson1/readings.page/...
+	course_folder/Lesson1/assignment1.assignment/...
+
+	course_folder/Lesson1/ring.stl
+	course_folder/Lesson1/ring.file/
+	course_folder/Lesson1/ring.file/meta.json
+
+
 
 🎯 Make a file in `Lesson1/` called `ring.stl`.  The contents of this file are arbitrary.
 
-🎯 Make a new folder in `Lesson1`, and call it `ring.file`.  Make a file in there called `meta.json`.  
+🎯 Make a new folder in `Lesson1`, and call it `ring.file`.  Make a file in there called `meta.json`. Here are some contents for you to copy-paste. 
 
 `ring.file/meta.json`
 
