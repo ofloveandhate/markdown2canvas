@@ -1,0 +1,174 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Styling Pages and Assignments &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Text replacements to reduce workload and increase uniformity" href="text_replacements.html" />
+    <link rel="prev" title="Writing content using markdown2canvas" href="writing_content.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="text_replacements.html" title="Text replacements to reduce workload and increase uniformity"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="writing_content.html" title="Writing content using markdown2canvas"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Styling Pages and Assignments</a><ul>
+<li><a class="reference internal" href="#rationale-and-brief-explanation">Rationale and brief explanation</a></li>
+<li><a class="reference internal" href="#making-a-style">Making a style</a></li>
+<li><a class="reference internal" href="#default-style">Default style</a></li>
+<li><a class="reference internal" href="#custom-style">Custom style</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="writing_content.html"
+                        title="previous chapter">Writing content using <cite>markdown2canvas</cite></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="text_replacements.html"
+                        title="next chapter">Text replacements to reduce workload and increase uniformity</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/styling_content.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="styling-pages-and-assignments">
+<h1>Styling Pages and Assignments<a class="headerlink" href="#styling-pages-and-assignments" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rationale-and-brief-explanation">
+<h2>Rationale and brief explanation<a class="headerlink" href="#rationale-and-brief-explanation" title="Permalink to this headline">¶</a></h2>
+<p>I often want a “header” and “footer” across all of my content in a course.  Using vanilla Canvas, this is unwieldly, because if I want to change the header and footer, I have to do it in every piece of content – this is error prone, time consuming, and maddening.</p>
+<p>So, I wrote a styling system that provides two sets of headers and footers:</p>
+<ul class="simple">
+<li><p>HTML at the very top and bottom</p></li>
+<li><p>markdown inside that</p></li>
+</ul>
+<p>Essentially, the content gets stacked in this order:</p>
+<ol class="arabic simple">
+<li><p><cite>header.html</cite></p></li>
+<li><p><cite>header.md</cite></p></li>
+<li><p><cite>source.md</cite></p></li>
+<li><p><cite>footer.md</cite></p></li>
+<li><p><cite>footer.html</cite></p></li>
+</ol>
+</div>
+<div class="section" id="making-a-style">
+<h2>Making a style<a class="headerlink" href="#making-a-style" title="Permalink to this headline">¶</a></h2>
+<p>A style in <cite>markdown2canvas</cite> is a folder containing four files.  Their names are important:</p>
+<ul class="simple">
+<li><p><cite>header.html</cite></p></li>
+<li><p><cite>header.md</cite></p></li>
+<li><p><cite>footer.md</cite></p></li>
+<li><p><cite>footer.html</cite></p></li>
+</ul>
+<p>I hope they’re self-documenting in purpose and content.  Here’s what’s in the <cite>header.html</cite> file for my DS710 course:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://media.uwex.edu/app/droplets_v3/css/droplets.css&quot;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://media.uwex.edu/app/droplets_v3/script/droplets.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;test/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;uws-droplets-page&quot;</span><span class="p">&gt;</span>
+
+<span class="c">&lt;!-- Droplets elements and components --&gt;</span>
+</pre></div>
+</div>
+<p>The footer simply closes the <cite>div</cite> I opened in the header:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="default-style">
+<h2>Default style<a class="headerlink" href="#default-style" title="Permalink to this headline">¶</a></h2>
+<p>You can specify a default style to apply to all content for which the style is not directly specified in the <cite>meta.json</cite>.  It’s easy.</p>
+<p>Just make a key-value pair in <cite>_course_metadata/defaults.json</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;_styles/generic&quot;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>The key says the default style is… and the value is the path to the default style FOLDER relative to root of the course.</p>
+</div>
+<div class="section" id="custom-style">
+<h2>Custom style<a class="headerlink" href="#custom-style" title="Permalink to this headline">¶</a></h2>
+<p>Content can override which style is used, say in case you want all your assignments of a certain type to use one style, and the pages of another type to use their own.  It’s easy.</p>
+<p>In the <cite>meta.json</cite> for the content you want to use the non-default style, specify the key-value pair <cite>‘style’:’path/to/style’</cite>.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;style&quot;</span><span class="p">:</span><span class="s2">&quot;_styles/programming_assignments&quot;</span><span class="p">,</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="text_replacements.html" title="Text replacements to reduce workload and increase uniformity"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="writing_content.html" title="Writing content using markdown2canvas"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

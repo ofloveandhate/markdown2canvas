@@ -1,0 +1,154 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>How to set up Mac or Linux for using markdown2canvas &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How to set up Windows for using markdown2canvas" href="setup_windows.html" />
+    <link rel="prev" title="markdown2canvas" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="setup_windows.html" title="How to set up Windows for using markdown2canvas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="markdown2canvas"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to set up Mac or Linux for using <cite>markdown2canvas</cite></a><ul>
+<li><a class="reference internal" href="#installation-of-markdown2canvas">Installation of <cite>markdown2canvas</cite></a></li>
+<li><a class="reference internal" href="#canvas-credentials-do-not-skip-this">Canvas credentials, do not skip this</a></li>
+<li><a class="reference internal" href="#security-note">Security note</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter"><cite>markdown2canvas</cite></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="setup_windows.html"
+                        title="next chapter">How to set up Windows for using <cite>markdown2canvas</cite></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/setup_mac_linux.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-set-up-mac-or-linux-for-using-markdown2canvas">
+<h1>How to set up Mac or Linux for using <cite>markdown2canvas</cite><a class="headerlink" href="#how-to-set-up-mac-or-linux-for-using-markdown2canvas" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation-of-markdown2canvas">
+<h2>Installation of <cite>markdown2canvas</cite><a class="headerlink" href="#installation-of-markdown2canvas" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Clone the repo / pull from the repo</p></li>
+<li><p>Move to repo location in terminal</p></li>
+<li><p><cite>pip install .</cite>   If you already had it installed, then use <cite>pip install . –upgrade</cite> to make sure you get the newer version.</p></li>
+</ol>
+<p>It should automatically install <cite>canvasapi</cite>, too.</p>
+</div>
+<div class="section" id="canvas-credentials-do-not-skip-this">
+<h2>Canvas credentials, do not skip this<a class="headerlink" href="#canvas-credentials-do-not-skip-this" title="Permalink to this headline">¶</a></h2>
+<p>You must define an environment variable called <cite>CANVAS_CREDENTIAL_FILE</cite>, which is the location of a <cite>.py</cite> file containing two variables:</p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt><cite>API_URL</cite> – a string, the url of how to access your Canvas install.</dt><dd><ul class="simple">
+<li><p>At UW Eau Claire, it’s <cite>https://uweau.instructure.com/</cite>.</p></li>
+<li><p>I cannot possibly tell you your url, but your local Canvas admin can.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><cite>API_KEY</cite> – a string, the key you can get from Canvas.  Here’s [a link to a guide on how to generate yours](<a class="reference external" href="https://community.canvaslms.com/t5/Admin-Guide/How-do-I-obtain-an-API-access-token-in-the-Canvas-Data-Portal/ta-p/157">https://community.canvaslms.com/t5/Admin-Guide/How-do-I-obtain-an-API-access-token-in-the-Canvas-Data-Portal/ta-p/157</a>).  Do not share it with anyone – having only this one piece of data, anyone can act as you.  Protect it at least as much as you would any other password or sensitive information.</p></li>
+</ol>
+<p>Thus, you should have a Python script somewhere, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># canvas_credentials.py</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="s2">&quot;11830~blablablablablablablauykRLZXX&quot;</span>
+<span class="n">API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://uweau.instructure.com/&quot;</span> <span class="c1"># custom to UWEC. deal with it.</span>
+</pre></div>
+</div>
+<p>and probably in <cite>.zshrc</cite> or <cite>.bashrc</cite>, a line defining the path to the file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CANVAS_CREDENTIAL_FILE</span><span class="o">=</span><span class="s2">&quot;path/to/canvas_credentials.py&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="security-note">
+<h2>Security note<a class="headerlink" href="#security-note" title="Permalink to this headline">¶</a></h2>
+<p>This seems wildly unsecure, I know.  The API key makes the holder effectively that person on Canvas.  Guard the key.</p>
+<p>If it makes you very uncomfortable to store an API key unencrypted, please contribute to this library by solving this problem.  Pull requests welcomed.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="setup_windows.html" title="How to set up Windows for using markdown2canvas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="markdown2canvas"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

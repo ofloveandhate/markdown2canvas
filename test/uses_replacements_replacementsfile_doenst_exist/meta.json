@@ -1,8 +1,0 @@
-{
-	"type": "page",
-	"name": "Test replacements using default replacements file",
-	"style":"_styles/generic",
-	"modules":["Replacement testing"],
-	"replacements": "this_file_doesnt_exist.json"
-}
-

@@ -1,0 +1,387 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Making and publishing your first course using markdown2canvas &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Writing content using markdown2canvas" href="writing_content.html" />
+    <link rel="prev" title="How to set up Windows for using markdown2canvas" href="setup_windows.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="writing_content.html" title="Writing content using markdown2canvas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="setup_windows.html" title="How to set up Windows for using markdown2canvas"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Making and publishing your first course using <cite>markdown2canvas</cite></a><ul>
+<li><a class="reference internal" href="#create-a-course-folder">Create a course folder</a></li>
+<li><a class="reference internal" href="#create-the-course-metadata">Create the course metadata</a></li>
+<li><a class="reference internal" href="#ignore-generated-files-git">Ignore generated files (git)</a></li>
+<li><a class="reference internal" href="#add-a-default-style">Add a default style</a></li>
+<li><a class="reference internal" href="#add-a-page-and-an-assignment">Add a page and an assignment</a><ul>
+<li><a class="reference internal" href="#meta-json"><cite>meta.json</cite></a></li>
+<li><a class="reference internal" href="#source-md"><cite>source.md</cite></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#add-a-file-for-students-to-download">Add a file for students to download</a></li>
+<li><a class="reference internal" href="#tools-to-publish-content">Tools to publish content</a></li>
+<li><a class="reference internal" href="#publish-the-content">Publish the content!!!!!</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="setup_windows.html"
+                        title="previous chapter">How to set up Windows for using <cite>markdown2canvas</cite></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="writing_content.html"
+                        title="next chapter">Writing content using <cite>markdown2canvas</cite></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/making_your_first_course.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="making-and-publishing-your-first-course-using-markdown2canvas">
+<h1>Making and publishing your first course using <cite>markdown2canvas</cite><a class="headerlink" href="#making-and-publishing-your-first-course-using-markdown2canvas" title="Permalink to this headline">¶</a></h1>
+<p>A course that uses <cite>markdown2canvas</cite> is just a folder on your computer, with a bit of extra structure.  (Ideally, you should turn it into a git repository and use version control.)</p>
+<p>The folder has some special structure.  I’ll take you through it in stages.  You can also copy the directory from the <cite>examples/</cite> folder in the repo if you don’t want to go through it in steps.</p>
+<div class="section" id="create-a-course-folder">
+<h2>Create a course folder<a class="headerlink" href="#create-a-course-folder" title="Permalink to this headline">¶</a></h2>
+<p>Courses in markdown2canvas are contained in a folder.  The name of the folder is arbitrary.  🎯 Make a folder called <cite>course_folder</cite>.  Call it whatever you want, but below I’ll call it <cite>course_folder</cite>.</p>
+</div>
+<div class="section" id="create-the-course-metadata">
+<h2>Create the course metadata<a class="headerlink" href="#create-the-course-metadata" title="Permalink to this headline">¶</a></h2>
+<p>🎯 Make a folder called <cite>_course_metadata</cite>.  The name of this folder matters.  (I use leading underscores to denote things never published or that aren’t Canvas content.)</p>
+<p>🎯 Make two files therein, <cite>defaults.json</cite> and <cite>replacements.json</cite>.  Here’s a picture of the directory structure after this step:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">course_folder</span><span class="o">/</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/</span>                   <span class="c1"># must be named _course_metadata</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/</span><span class="n">defaults</span><span class="o">.</span><span class="n">json</span>      <span class="c1"># must be named defaults.json</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/</span><span class="n">replacements</span><span class="o">.</span><span class="n">json</span>  <span class="c1"># &lt;--- replacements.json is arbitrary.  change in `defaults.json`</span>
+</pre></div>
+</div>
+<p>🎯 Here’s some starter contents for you to copy into those two files.</p>
+<p><cite>defaults.json</cite>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+	<span class="nt">&quot;style&quot;</span><span class="p">:</span> <span class="s2">&quot;_styles/generic&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;replacements&quot;</span><span class="p">:</span> <span class="s2">&quot;_course_metadata/replacements.json&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><cite>replacements.json</cite>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+	<span class="nt">&quot;$REPLACETHISTEXT&quot;</span><span class="p">:</span> <span class="s2">&quot;with this text&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;a source replacement with spaces&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;iframe width=\&quot;560\&quot; height=\&quot;315\&quot; src=\&quot;https://www.youtube.com/embed/dQw4w9WgXcQ?si=BqTm4nbZOLTHaxnz\&quot; title=\&quot;YouTube video player\&quot; frameborder=\&quot;0\&quot; allow=\&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\&quot; allowfullscreen&gt;&lt;/iframe&gt;&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;another source replacement with spaces&quot;</span><span class="p">:</span> <span class="s2">&quot;destination_without_spaces&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ignore-generated-files-git">
+<h2>Ignore generated files (git)<a class="headerlink" href="#ignore-generated-files-git" title="Permalink to this headline">¶</a></h2>
+<p>At this time, <cite>markdown2canvas</cite> uses in-place builds, sorry.  That is, it pollutes as it publishes, and makes two files in content folders: <cite>styled_source.md</cite> and <cite>result.html</cite>.  Best to make version control ignore them!</p>
+<p>🎯 Add file <cite>.gitignore</cite> to root level.</p>
+<p><cite>course_folder/.gitignore</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">*</span><span class="n">downloaded_content</span><span class="o">/</span>
+<span class="o">*.</span><span class="n">log</span>
+<span class="o">.</span><span class="n">DS_Store</span>
+<span class="n">result</span><span class="o">.</span><span class="n">html</span>
+<span class="n">styled_source</span><span class="o">.</span><span class="n">md</span>
+<span class="o">*.</span><span class="n">icloud</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-a-default-style">
+<h2>Add a default style<a class="headerlink" href="#add-a-default-style" title="Permalink to this headline">¶</a></h2>
+<p>I urge you to use the styling system, in which case it probably looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">course_folder</span><span class="o">/</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/</span><span class="n">defaults</span><span class="o">.</span><span class="n">json</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/</span><span class="n">replacements</span><span class="o">.</span><span class="n">json</span>
+
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/</span>              <span class="c1"># generic is arbitrary.  change in `defaults.json`</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/</span><span class="n">header</span><span class="o">.</span><span class="n">html</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/</span><span class="n">header</span><span class="o">.</span><span class="n">md</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/</span><span class="n">footer</span><span class="o">.</span><span class="n">md</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/</span><span class="n">footer</span><span class="o">.</span><span class="n">html</span>
+</pre></div>
+</div>
+<p>🎯 Just make those four files blank for now.</p>
+</div>
+<div class="section" id="add-a-page-and-an-assignment">
+<h2>Add a page and an assignment<a class="headerlink" href="#add-a-page-and-an-assignment" title="Permalink to this headline">¶</a></h2>
+<p>Let’s add some content.  🎯 Add a page and an assignment.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">course_folder</span><span class="o">/</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/...</span>
+
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/...</span>
+
+<span class="c1"># the below paths are arbitrarily named</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">readings</span><span class="o">.</span><span class="n">page</span><span class="o">/</span>            <span class="c1"># a folder.  i use suffixes to indicate type, but markdown2canvas is ignorant of them</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">readings</span><span class="o">.</span><span class="n">page</span><span class="o">/</span><span class="n">meta</span><span class="o">.</span><span class="n">json</span>   <span class="c1"># necessary for all containerized content</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">readings</span><span class="o">.</span><span class="n">page</span><span class="o">/</span><span class="n">source</span><span class="o">.</span><span class="n">md</span>   <span class="c1"># necessary for pages and assignments</span>
+
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">assignment1</span><span class="o">.</span><span class="n">assignment</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">assignment1</span><span class="o">.</span><span class="n">assignment</span><span class="o">/</span><span class="n">meta</span><span class="o">.</span><span class="n">json</span>   <span class="c1"># necessary for all containerized content</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">assignment1</span><span class="o">.</span><span class="n">assignment</span><span class="o">/</span><span class="n">source</span><span class="o">.</span><span class="n">md</span>   <span class="c1"># necessary for pages and assignments</span>
+</pre></div>
+</div>
+<div class="section" id="meta-json">
+<h3><cite>meta.json</cite><a class="headerlink" href="#meta-json" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>meta.json</cite> files vary per content type, and by your needs.  🎯 Let’s make them for these two pieces of content:</p>
+<p><cite>readings.page</cite>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;page&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Readings for Lesson 1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;modules&quot;</span><span class="p">:[</span><span class="s2">&quot;Lesson 1&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><cite>assignment1.assignment</cite>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+	<span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;assignment&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;points_possible&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+	<span class="nt">&quot;allowed_extensions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span><span class="s2">&quot;docx&quot;</span><span class="p">,</span><span class="s2">&quot;jpg&quot;</span><span class="p">],</span>
+	<span class="nt">&quot;submission_types&quot;</span><span class="p">:[</span><span class="s2">&quot;online_upload&quot;</span><span class="p">],</span>
+	<span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Assignment 1&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;modules&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Lesson 1&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="source-md">
+<h3><cite>source.md</cite><a class="headerlink" href="#source-md" title="Permalink to this headline">¶</a></h3>
+<p>Pages and Assignments must have a <cite>source.md</cite> file.  It’s markdown, and can include html, too.</p>
+<p>🎯 Write whatever markdown you want in the two <cite>source.md</cite> files.  I gave you some terrible starter, but at least the assignment source includes a demo of the text replacement system.</p>
+<p><cite>readings.page</cite>:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>This is a page of readings for Lesson 1.
+
+## Topic 1
+
+some text here.
+
+:open_book: &lt;--- an emoji shortcode
+
+## Topic 2
+
+arsoitn
+
+* A markdown list
+* second item
+
+a markdown [link](wikipedia.org)
+</pre></div>
+</div>
+<p><cite>assignment1.assignment</cite>:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>This is the first assignment in the course.
+
+
+## This assignment&#39;s description includes some fancy features of `markdown2canvas`
+
+[link to readings for this Lesson](page:Readings for Lesson 1)  &lt;---- a link to another page.  Will be populated only if the page is already published.  I generally publish my whole course twice at the beginning of a term, just like compiling LaTeX to get references and page numbers right.
+
+[An embedded file link](file:ring.stl)
+
+A text replacement will happen $REPLACETHISTEXT.  Note that the dollar sign is NOT special -- it&#39;s only special because I used it in a key of the `replacements.json` file.
+
+This text here will get replaced: a source replacement with spaces
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="add-a-file-for-students-to-download">
+<h2>Add a file for students to download<a class="headerlink" href="#add-a-file-for-students-to-download" title="Permalink to this headline">¶</a></h2>
+<p>We’re going to make a link to a file in the module for Lesson 1, and we also make a link to this file in the assignment we created.  Here’s the new structure after this step:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">course_folder</span><span class="o">/</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/...</span>
+
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/...</span>
+
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">readings</span><span class="o">.</span><span class="n">page</span><span class="o">/...</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">assignment1</span><span class="o">.</span><span class="n">assignment</span><span class="o">/...</span>
+
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">ring</span><span class="o">.</span><span class="n">stl</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">ring</span><span class="o">.</span><span class="n">file</span><span class="o">/</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/</span><span class="n">ring</span><span class="o">.</span><span class="n">file</span><span class="o">/</span><span class="n">meta</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>🎯 Make a file in <cite>Lesson1/</cite> called <cite>ring.stl</cite>.  The contents of this file are arbitrary.</p>
+<p>🎯 Make a new folder in <cite>Lesson1</cite>, and call it <cite>ring.file</cite>.  Make a file in there called <cite>meta.json</cite>. Here are some contents for you to copy-paste.</p>
+<p><cite>ring.file/meta.json</cite></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+	<span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;file&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;a torus: ring.stl&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;filename&quot;</span><span class="p">:</span><span class="s2">&quot;../ring.stl&quot;</span><span class="p">,</span>
+	<span class="nt">&quot;modules&quot;</span><span class="p">:[</span><span class="s2">&quot;Lesson 1&quot;</span><span class="p">,</span><span class="s2">&quot;Course data files&quot;</span><span class="p">],</span>
+	<span class="nt">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;automatically_uploaded_files/a_subfolder&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="tools-to-publish-content">
+<h2>Tools to publish content<a class="headerlink" href="#tools-to-publish-content" title="Permalink to this headline">¶</a></h2>
+<p>I use a script to help me publish my content.  🎯 Let’s add it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">course_folder</span><span class="o">/</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_course_metadata</span><span class="o">/...</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_styles</span><span class="o">/</span><span class="n">generic</span><span class="o">/...</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">Lesson1</span><span class="o">/...</span>
+
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_tools</span><span class="o">/</span><span class="n">publish_ready_content</span><span class="o">.</span><span class="n">py</span>   <span class="c1"># loops over `content_ready` and publishes to course</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_tools</span><span class="o">/</span><span class="n">content_ready</span>          <span class="c1"># names of content folders ready to publish</span>
+<span class="n">course_folder</span><span class="o">/</span><span class="n">_tools</span><span class="o">/</span><span class="n">content_all</span>            <span class="c1"># a txt file with names of content folders</span>
+</pre></div>
+</div>
+<p>Here’s a script I use in DS710.  🎯 Copy-paste it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/python3</span>
+
+<span class="c1"># a script for publishing content that&#39;s ready to go!</span>
+<span class="c1"># this script should be executed from root level in this repo.</span>
+
+<span class="n">dry_run</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">import</span> <span class="nn">markdown2canvas</span> <span class="k">as</span> <span class="nn">mc</span>
+
+<span class="c1"># we will skip blank lines and lines that start with # or %</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;_tools/content_ready&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+	<span class="n">ready_files</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">ready_files</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ready_files</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">))]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ready_files</span><span class="p">)</span>
+
+<span class="c1"># gets the canvas_url</span>
+<span class="n">canvas_url</span> <span class="o">=</span> <span class="s2">&quot;https://uweau.instructure.com/&quot;</span> <span class="c1"># 🎯 REPLACE WITH YOUR URL</span>
+
+<span class="c1"># a list of course_ids, in case have multiple courses published to. </span>
+<span class="n">course_ids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">705022</span><span class="p">]</span> <span class="c1"># 🎯 REPLACE WITH YOUR NUMBER!!!!!!!!!!!!!!!!!</span>
+
+<span class="n">canvas</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="n">make_canvas_api_obj</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">canvas_url</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">course_id</span> <span class="ow">in</span> <span class="n">course_ids</span><span class="p">:</span>
+	<span class="n">course</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">get_course</span><span class="p">(</span><span class="n">course_id</span><span class="p">)</span> 
+
+	<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;publishing to </span><span class="si">{course.name}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+	<span class="c1"># a helper function to make the correct object from the extension of the content folder</span>
+	<span class="k">def</span> <span class="nf">make_mc_obj</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">mc</span><span class="o">.</span><span class="n">Page</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;assignment&#39;</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">mc</span><span class="o">.</span><span class="n">Assignment</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;link&#39;</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">mc</span><span class="o">.</span><span class="n">Link</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">mc</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+	<span class="c1"># loop over the files</span>
+	<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">ready_files</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="n">obj</span> <span class="o">=</span> <span class="n">make_mc_obj</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">dry_run</span><span class="p">:</span>
+			<span class="n">obj</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">course</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[dry run] publishing </span><span class="si">{obj}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>🎯 Let’s also list the content as ready to publish in <cite>content_ready</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># content for Lesson 1</span>
+
+<span class="n">Lesson1</span><span class="o">/</span><span class="n">readings</span><span class="o">.</span><span class="n">page</span>
+
+<span class="c1"># publish this before the assignment so that it gets linked when the assignment is published.</span>
+<span class="n">Lesson1</span><span class="o">/</span><span class="n">ring</span><span class="o">.</span><span class="n">file</span> 
+
+<span class="n">Lesson1</span><span class="o">/</span><span class="n">assignment1</span><span class="o">.</span><span class="n">assignment</span>
+</pre></div>
+</div>
+<p>Note that you just list the folder, and <cite>markdown2canvas</cite> does all the work with <cite>meta.json</cite> and <cite>source.md</cite>.</p>
+</div>
+<div class="section" id="publish-the-content">
+<h2>Publish the content!!!!!<a class="headerlink" href="#publish-the-content" title="Permalink to this headline">¶</a></h2>
+<p>Now, assuming you’ve completed the setup steps (Mac/Linux: saving your API key and URL in a .py file, and specifying the name of the file via an environment variable called <cite>CANVAS_CREDENTIALS_FILE</cite>), you should be able to publish the content to your course.</p>
+<p>🎯 Be sure you copied in your Canvas course number to the <cite>_tools/publish_ready_content.py</cite> script!</p>
+<p>🎯 From course root level, run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">_tools</span><span class="o">/</span><span class="n">publish_ready_content</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>and your content should publish to Canvas.  Easy peasy!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="writing_content.html" title="Writing content using markdown2canvas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="setup_windows.html" title="How to set up Windows for using markdown2canvas"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

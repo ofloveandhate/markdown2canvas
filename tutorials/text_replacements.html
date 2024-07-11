@@ -1,0 +1,138 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Text replacements to reduce workload and increase uniformity &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Publishing content from your computer to Canvas using markdown2canvas" href="publishing_content.html" />
+    <link rel="prev" title="Styling Pages and Assignments" href="styling_content.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="styling_content.html" title="Styling Pages and Assignments"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Text replacements to reduce workload and increase uniformity</a><ul>
+<li><a class="reference internal" href="#rationale">Rationale</a></li>
+<li><a class="reference internal" href="#setup">Setup</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#custom-text-replacements-per-content">Custom text replacements per-content</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="styling_content.html"
+                        title="previous chapter">Styling Pages and Assignments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="publishing_content.html"
+                        title="next chapter">Publishing content from your computer to Canvas using <cite>markdown2canvas</cite></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/text_replacements.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="text-replacements-to-reduce-workload-and-increase-uniformity">
+<h1>Text replacements to reduce workload and increase uniformity<a class="headerlink" href="#text-replacements-to-reduce-workload-and-increase-uniformity" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rationale">
+<h2>Rationale<a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h2>
+<p>I often find myself writing the same text over and over, especially when making my content look nice.  For example:</p>
+<ul class="simple">
+<li><p>Dividers between headings</p></li>
+<li><p>The opening html above some text to make that text into a nice bubble or a button using <a class="reference external" href="https://media.uwex.edu/app/droplets_v3/">Droplets</a>, and then the closing.</p></li>
+</ul>
+<p>Basically, I want to write that longer more technical text once, and then just specify where it should be inserted.  I’m describing a super rudimentary macro system.  I implemented one in <cite>markdown2canvas</cite> so that my dividers and styles could be easily changed across an entire course simply by changing the definition of the replacement.</p>
+</div>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<p>At root level in the folder for the course, in a subfolder called <cite>_course_metadata</cite>, make a file called <cite>replacements.json</cite>.  Note that the name of this is arbitrary, and you can specify the name of the default replacements file in <cite>_course_metadata/defaults.json</cite>.  Now, without having to specify it in the <cite>meta.json</cite> for content, you’ll gain access to those replacements.</p>
+<p>Note that <cite>_course_metadata/replacements.json</cite> is just a regular old JSON file.  Keys are what gets removed, and values are what goes in the key’s place.  If your replacements use double quotes, you’ll have to escape them.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="custom-text-replacements-per-content">
+<h2>Custom text replacements per-content<a class="headerlink" href="#custom-text-replacements-per-content" title="Permalink to this headline">¶</a></h2>
+<p>Content can override which replacements file is used, say in case you want all your assignments of a certain type to use one style, and the pages of another type to use their own.  It’s easy.</p>
+<p>In the <cite>meta.json</cite> for the content you want to use the non-default replacements file, specify the key-value pair <cite>‘replacements’:’path/to/custom_replacements.json’</cite></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="styling_content.html" title="Styling Pages and Assignments"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

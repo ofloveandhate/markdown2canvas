@@ -1,0 +1,158 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>🔗 Making links to existing content &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Wish list" href="wishlist.html" />
+    <link rel="prev" title="On the meta.json file" href="on_meta_dot_json.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="wishlist.html" title="Wish list"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="on_meta_dot_json.html" title="On the meta.json file"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">🔗 Making links to existing content</a><ul>
+<li><a class="reference internal" href="#link-to-an-assignment">Link to an assignment</a></li>
+<li><a class="reference internal" href="#link-to-a-page">Link to a page</a></li>
+<li><a class="reference internal" href="#link-to-an-uploaded-file">Link to an uploaded file</a></li>
+<li><a class="reference internal" href="#notes">Notes</a><ul>
+<li><a class="reference internal" href="#what-if-the-content-doesn-t-yet-exist">What if the content doesn’t (yet) exist?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="on_meta_dot_json.html"
+                        title="previous chapter">On the <cite>meta.json</cite> file</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wishlist.html"
+                        title="next chapter">Wish list</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/making_links_to_existing_content.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="making-links-to-existing-content">
+<h1>🔗 Making links to existing content<a class="headerlink" href="#making-links-to-existing-content" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>You can use either markdown style links, or html style links.</p></li>
+<li><p>Specify the type of content to which you are linking by preceding the name of the content with that type.</p></li>
+<li></li>
+</ul>
+<div class="section" id="link-to-an-assignment">
+<h2>Link to an assignment<a class="headerlink" href="#link-to-an-assignment" title="Permalink to this headline">¶</a></h2>
+<p>To link to an existing Canvas assignment, use a link of the form</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;assignment:Test Assignment&quot;</span><span class="o">&gt;</span><span class="n">link</span> <span class="n">to</span> <span class="n">Test</span> <span class="n">Assignment</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="n">Test</span> <span class="n">Assignment</span><span class="p">](</span><span class="n">assignment</span><span class="p">:</span><span class="n">Test</span> <span class="n">Assignment</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The name must match exactly, including case.  This is the name on Canvas, not the name of the containerized content on your local computer.  That is, the thing after <cite>assignment:</cite> is the <cite>name</cite> field from <cite>meta.json</cite>.</p>
+</div>
+<div class="section" id="link-to-a-page">
+<h2>Link to a page<a class="headerlink" href="#link-to-a-page" title="Permalink to this headline">¶</a></h2>
+<p>To link to an existing Canvas page, use a link of the form</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;page:Test Page&quot;</span><span class="o">&gt;</span><span class="n">Link</span> <span class="n">to</span> <span class="n">page</span> <span class="n">titled</span> <span class="n">Test</span> <span class="n">Page</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="n">Link</span> <span class="n">to</span> <span class="n">page</span> <span class="n">titled</span> <span class="n">Test</span> <span class="n">Page</span><span class="p">](</span><span class="n">page</span><span class="p">:</span><span class="n">Test</span> <span class="n">Page</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The name must match exactly, including case.  This is the name on Canvas, not the name of the containerized content on your local computer.  That is, the thing after <cite>page:</cite> is the <cite>name</cite> field from <cite>meta.json</cite>.</p>
+</div>
+<div class="section" id="link-to-an-uploaded-file">
+<h2>Link to an uploaded file<a class="headerlink" href="#link-to-an-uploaded-file" title="Permalink to this headline">¶</a></h2>
+<p>To link to an existing Canvas file, use a link of the form</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s2">&quot;file:DavidenkoDiffEqn.pdf&quot;</span><span class="o">&gt;</span><span class="n">Link</span> <span class="n">to</span> <span class="n">file</span> <span class="n">called</span> <span class="n">DavidenkoDiffEqn</span><span class="o">.</span><span class="n">pdf</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+<span class="p">[</span><span class="n">Link</span> <span class="n">to</span> <span class="n">file</span> <span class="n">called</span> <span class="n">DavidenkoDiffEqn</span><span class="o">.</span><span class="n">pdf</span><span class="p">](</span><span class="n">file</span><span class="p">:</span><span class="n">DavidenkoDiffEqn</span><span class="o">.</span><span class="n">pdf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The name must match exactly, including case.  This is the name of the file on Canvas.  There is currently no way to refer to multiple files of the same name in different folders on Canvas.  If you want this, make an issue, or implement it yourself and make a PR.</p>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="what-if-the-content-doesn-t-yet-exist">
+<h3>What if the content doesn’t (yet) exist?<a class="headerlink" href="#what-if-the-content-doesn-t-yet-exist" title="Permalink to this headline">¶</a></h3>
+<p>If the “existing” content doesn’t yet exist when the content is published, a broken link will be made, and a warning issued to the terminal.  This is ok.  Think of the publishing process using Markdown2Canvas similar to the compilation of a TeX document, which is done in multiple passes.  Once the page / assignment / file exists, the link will resolve correctly to it.  Publish all content about twice to get links to resolve.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="wishlist.html" title="Wish list"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="on_meta_dot_json.html" title="On the meta.json file"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

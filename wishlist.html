@@ -1,0 +1,140 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wish list &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="markdown2canvas – detailed documentation" href="markdown2canvas.html" />
+    <link rel="prev" title="🔗 Making links to existing content" href="making_links_to_existing_content.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="markdown2canvas.html" title="markdown2canvas – detailed documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="making_links_to_existing_content.html" title="🔗 Making links to existing content"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Wish list</a><ul>
+<li><a class="reference internal" href="#containerization-of-quizzess">Containerization of quizzess ⚠️</a></li>
+<li><a class="reference internal" href="#due-dates">Due dates ⚠️</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="making_links_to_existing_content.html"
+                        title="previous chapter">🔗 Making links to existing content</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="markdown2canvas.html"
+                        title="next chapter">markdown2canvas – detailed documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/wishlist.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="wish-list">
+<h1>Wish list<a class="headerlink" href="#wish-list" title="Permalink to this headline">¶</a></h1>
+<p>⚠️ this is not yet implemented in <cite>mc</cite></p>
+<div class="section" id="containerization-of-quizzess">
+<h2>Containerization of quizzess ⚠️<a class="headerlink" href="#containerization-of-quizzess" title="Permalink to this headline">¶</a></h2>
+<p>I want this so badly, but I’m not up to it yet.  I’d love a contribution!</p>
+</div>
+<div class="section" id="due-dates">
+<h2>Due dates ⚠️<a class="headerlink" href="#due-dates" title="Permalink to this headline">¶</a></h2>
+<p>Due dates would be encoded relative to the first day of class, by week number and day of week.  Week numbers start at 1.</p>
+<div class="line-block">
+<div class="line">Day code | Day of week |</div>
+<div class="line">— | — |</div>
+<div class="line">M | Monday |</div>
+<div class="line">T | Tuesday |</div>
+<div class="line">W | Wednesday |</div>
+<div class="line">R | Thursday |</div>
+<div class="line">F | Friday |</div>
+<div class="line">Sa | Saturday |</div>
+<div class="line">Su | Sunday |</div>
+</div>
+<p>In the <cite>meta.json</cite> file for an assignment, the due date would be encoded like this example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">&quot;due&quot;:{&quot;time&quot;:&quot;10pm&quot;,</span> <span class="pre">&quot;week&quot;:11,</span> <span class="pre">&quot;day&quot;:&quot;R&quot;}</span>
+<span class="pre">`</span></code></p>
+<p>A default time for all assignents can be set in <cite>_course_metadata/defaults.json</cite> with entry <cite>“due_time”:”10pm”</cite>, for example.  If this record is not present, and no due time is set for an individual assignment, then the Canvas default time for the course will be used.  On UWEC’s system, this can be changed in the course settings. The default value is 11:59pm.</p>
+<p>The first day of class is set …  HOW??</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="markdown2canvas.html" title="markdown2canvas – detailed documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="making_links_to_existing_content.html" title="🔗 Making links to existing content"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

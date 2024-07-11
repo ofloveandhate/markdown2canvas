@@ -1,0 +1,170 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>How to set up Windows for using markdown2canvas &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Making and publishing your first course using markdown2canvas" href="making_your_first_course.html" />
+    <link rel="prev" title="How to set up Mac or Linux for using markdown2canvas" href="setup_mac_linux.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="making_your_first_course.html" title="Making and publishing your first course using markdown2canvas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="setup_mac_linux.html" title="How to set up Mac or Linux for using markdown2canvas"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to set up Windows for using <cite>markdown2canvas</cite></a><ul>
+<li><a class="reference internal" href="#get-canvas-credentials-and-make-canvas-credential-file">Get Canvas Credentials and Make Canvas Credential File</a></li>
+<li><a class="reference internal" href="#initial-setup-using-vs-code">Initial Setup - Using VS Code</a></li>
+<li><a class="reference internal" href="#generate-necessary-global-variables">Generate necessary global variables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="setup_mac_linux.html"
+                        title="previous chapter">How to set up Mac or Linux for using <cite>markdown2canvas</cite></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="making_your_first_course.html"
+                        title="next chapter">Making and publishing your first course using <cite>markdown2canvas</cite></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/setup_windows.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-set-up-windows-for-using-markdown2canvas">
+<h1>How to set up Windows for using <cite>markdown2canvas</cite><a class="headerlink" href="#how-to-set-up-windows-for-using-markdown2canvas" title="Permalink to this headline">¶</a></h1>
+<p>These instructions are tested on Windows 11 on February 26, 2024.</p>
+<div class="section" id="get-canvas-credentials-and-make-canvas-credential-file">
+<h2>Get Canvas Credentials and Make Canvas Credential File<a class="headerlink" href="#get-canvas-credentials-and-make-canvas-credential-file" title="Permalink to this headline">¶</a></h2>
+<p>Your first step will need to be to get a Canvas API Key.</p>
+<ol class="arabic simple">
+<li><p>On Canvas, navigate Accounts -&gt; Settings</p></li>
+<li><p>Scroll to the button labeled <cite>+ New Acces Token</cite></p></li>
+<li><p>Add a description for yourself to know, later, what the access token is for and optionally add an expiration date. (I like to make a new one every semester, for safety.)</p></li>
+<li><p>Copy the text of the token (you won’t get to see this again) to a file that we will name <cite>canvas_credential_file.py</cite>.</p></li>
+<li><p>Create a variable in <cite>canvas_credential_file.py</cite> named <cite>API_KEY</cite>, whose value is the string that we just copied from canvas.</p></li>
+</ol>
+<p>Additionally, add a second variable <cite>API_URL</cite> whose value is the string that is the general Canvas URL you use.  For UWEC, this is <cite>‘https://uweau.instructure.com/’</cite>.</p>
+<p>Ultimately, your <cite>canvas_credential_file.py</cite> will contain the lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">API_KEY</span> <span class="o">=</span> <span class="s2">&quot;stringofrandomcharacters&quot;</span>
+<span class="n">API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://uweau.instructure.com/&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="initial-setup-using-vs-code">
+<h2>Initial Setup - Using VS Code<a class="headerlink" href="#initial-setup-using-vs-code" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Install python via the Microsoft Store</p></li>
+<li><p>Install VS code and GitBash - at UW Eau Claire this is done via the software center, you might use the Microsoft Store for this step as well.</p></li>
+<li><p>Clone the markdown2canvas repo from github</p></li>
+<li><p>Open VS code, open GitBash terminal and run the command</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">markdown2canvas</span>
+</pre></div>
+</div>
+<p>Then also run the command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lxml</span> <span class="n">beautifulsoup4</span>
+</pre></div>
+</div>
+<p>Note that the default terminal that VSCode opens will be the Windows powershell, don’t use that.</p>
+</div>
+<div class="section" id="generate-necessary-global-variables">
+<h2>Generate necessary global variables<a class="headerlink" href="#generate-necessary-global-variables" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Run the following command to make a file called <cite>.bashrc</cite> and save the location of your canvas credential file in your home directory.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">echo</span> <span class="s1">&#39;CANVAS_CREDENTIAL_FILE=h:</span><span class="se">\\</span><span class="s1">path</span><span class="se">\\</span><span class="s1">to</span><span class="se">\\</span><span class="s1">canvas_credential_file.py&#39;</span> <span class="o">&gt;&gt;</span> <span class="o">~/.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
+<p>Note that you should be using <cite>\</cite> here as directory separators because you are using Windows. If you use <cite>/</cite> you run the risk of the operating system not understanding the path.</p>
+<ol class="arabic simple" start="2">
+<li><p>Open a new git bash terminal and see if the following works:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>echo $CANVAS_CREDENTIAL_FILE
+</pre></div>
+</div>
+<p>If not, you might need to run the following command in your bash terminal:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">~/.</span><span class="n">bashrc</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="making_your_first_course.html" title="Making and publishing your first course using markdown2canvas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="setup_mac_linux.html" title="How to set up Mac or Linux for using markdown2canvas"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>
