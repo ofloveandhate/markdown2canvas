@@ -2,5 +2,7 @@
 	"type": "assignment",
 	"points_possible": 100,
 	"allowed_extensions": ["pdf","docx","jpg"],
-	"name": "Test Programming Assignment"
+	"submission_types":["online_upload"],
+	"name": "Assignment 1",
+	"modules": ["Lesson 1"]
 }

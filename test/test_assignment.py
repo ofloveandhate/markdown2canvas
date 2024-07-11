@@ -1,68 +1,78 @@
 
 import sys
-sys.path.insert(0,'../')
-import markdown2canvas as mc
-import canvasapi
+sys.path.insert(0,'../') # this is the path to the thing that's being tested
+import markdown2canvas as mc # this is the thing that's being tested
 
-import unittest
+import canvasapi # dependency
+
+import pytest
 
 
-class AssignmentTester(unittest.TestCase):
-	@classmethod
-	def setUpClass(self):
-		import os
+@pytest.fixture(scope='class')
+def course():
+	import os
 
-		from course_id import test_course_id
-		from canvas_url import canvas_url
-		self.canvas = mc.make_canvas_api_obj(url=canvas_url)
-		self.course = self.canvas.get_course(test_course_id) 
-
-		self.folder = 'programming_assignment'
-		self.filename = os.path.split(self.folder)[1]
-
-		self.assignment = mc.Assignment(self.folder)
-
-	@classmethod
-	def tearDownClass(self):
-		self.canvas
+	from course_id import test_course_id
+	from canvas_url import canvas_url
+	canvas = mc.make_canvas_api_obj(url=canvas_url)
+	
+	yield canvas.get_course(test_course_id) 
 
 
 
-	def test_aaa_meta(self):
-		self.assertEqual(self.assignment.name,'Test Programming Assignment')
-		self.assertEqual(self.assignment.points_possible,100)
+@pytest.fixture(scope='class')
+def assignment(course):
+	import os
+	folder = 'programming_assignment'
+	filename = os.path.split(folder)[1]
 
-	def test_bbb_can_publish(self):
-		self.assignment.publish(self.course,overwrite=True)
-
-	def test_yyy_can_find_published(self):
-		self.assignment.publish(self.course,overwrite=True)
-		self.assertTrue(mc.is_assignment_already_uploaded(self.assignment.name,self.course))
+	yield mc.Assignment(folder)
 
 
-	def test_ccc_published_has_properties(self):
-		self.assignment.publish(self.course,overwrite=True)
-		on_canvas = mc.find_assignment_in_course(self.assignment.name,self.course)
-		self.assertEqual(on_canvas.points_possible, self.assignment.points_possible)
 
-	def test_zzz_already_online_raises(self):
+
+
+
+class TestAssignment():
+
+
+
+	def test_meta(self, assignment):
+		assert assignment.name == 'Test Programming Assignment'
+		assert assignment.points_possible == 100
+
+	def test_can_publish(self, course, assignment):
+		assignment.publish(course,overwrite=True)
+
+	def test_can_find_published(self, course, assignment):
+		assignment.publish(course,overwrite=True)
+		assert mc.is_assignment_already_uploaded(assignment.name,course)
+
+
+	def test_published_has_properties(self, course, assignment):
+		assignment.publish(course,overwrite=True)
+		on_canvas = mc.find_assignment_in_course(assignment.name,course)
+		assert on_canvas.points_possible ==  assignment.points_possible
+
+		assert 'jpg' in on_canvas.allowed_extensions
+		assert 'docx' in on_canvas.allowed_extensions
+		assert 'pdf' in on_canvas.allowed_extensions
+		assert len(on_canvas.allowed_extensions) == 3
+
+	def test_already_online_raises(self, course, assignment):
 		# publish once, forcefully.
-		self.assignment.publish(self.course,overwrite=True)
+		assignment.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with self.assertRaises(mc.AlreadyExists):
-			self.assignment.publish(self.course,overwrite=False) # default is False
+		with pytest.raises(mc.AlreadyExists):
+			assignment.publish(course,overwrite=False) # default is False
 
-	def test_ttt_doesnt_find_deleted(self):
-		name = self.assignment.name
+	def test_doesnt_find_deleted(self, course, assignment):
+		name = assignment.name
 
-		self.assignment.publish(self.course,overwrite=True)
-		self.assertTrue(mc.is_assignment_already_uploaded(name,self.course))
-		f = mc.find_assignment_in_course(name,self.course)
+		assignment.publish(course,overwrite=True)
+		assert mc.is_assignment_already_uploaded(name,course)
+		f = mc.find_assignment_in_course(name,course)
 		f.delete()
-		# print([i.name for i in self.course.get_assignments()])
-		self.assertTrue(not mc.is_assignment_already_uploaded(name,self.course))
-
-if __name__ == '__main__':
-    pgnm = 'this_argument_is_ignored_but_necessary'
-    unittest.main(argv=[pgnm], exit=False)
+		# print([i.name for i in course.get_assignments()])
+		assert not mc.is_assignment_already_uploaded(name,course)

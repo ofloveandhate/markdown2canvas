@@ -1,0 +1,7 @@
+{
+	"type":"file",
+	"title":"a torus: ring.stl",
+	"filename":"../ring.stl",
+	"modules":["Lesson 1","Course data files"],
+	"destination": "automatically_uploaded_files/a_subfolder"
+}

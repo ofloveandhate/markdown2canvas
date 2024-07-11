@@ -2,98 +2,88 @@
 import sys
 sys.path.insert(0,'../')
 import markdown2canvas as mc
-import canvasapi
 
-import unittest
-
-
-class PageInModuleTester(unittest.TestCase):
-	@classmethod
-	def setUpClass(self):
-		import os
-
-		from course_id import test_course_id
-		from canvas_url import canvas_url
-		self.canvas = mc.make_canvas_api_obj(url=canvas_url)
-		self.course = self.canvas.get_course(test_course_id) 
-
-		self.folder = 'plain_text_in_a_module'
-		self.filename = os.path.split(self.folder)[1]
+import pytest
 
 
-		self.page = mc.Page(self.folder)
+@pytest.fixture(scope='class')
+def course():
+	import os
 
-		self.destination_modules = self.page.metadata['modules']
+	from course_id import test_course_id
+	from canvas_url import canvas_url
+	canvas = mc.make_canvas_api_obj(url=canvas_url)
+	
+	yield canvas.get_course(test_course_id) 
 
-		self._delete_test_modules()
+@pytest.fixture(scope='class')
+def page_plain_text_in_a_module(course):
+	import os
+	folder = 'plain_text_in_a_module'
+
+	yield mc.Page(folder)
+
+@pytest.fixture(scope='class')
+def destination_modules(page_plain_text_in_a_module):
+
+	page = page_plain_text_in_a_module
+
+	yield page.metadata['modules']
 
 
-	@classmethod
-	def _delete_test_modules(self):
-		for m in self.destination_modules:
-			mc.delete_module(m, self.course, even_if_exists=True)
+#self._delete_test_modules()
 
-
-	@classmethod
-	def tearDownClass(self):
-		pass
-
-
-
-	def test_aaa_meta(self):
-		self.assertEqual(self.page.name,'Test Plain Text in a Module')
+def _delete_test_modules(self):
+	for m in self.destination_modules:
+		mc.delete_module(m, self.course, even_if_exists=True)
 
 
 
-
-	def test_bbb_can_publish(self):
-		self.page.publish(self.course,overwrite=True)
+class TestPageinModule():
 
 
+	def test_meta(self, page_plain_text_in_a_module):
+		assert page_plain_text_in_a_module.name == 'Test Plain Text in a Module'
 
-	def test_bbc_already_online_raises(self):
+
+	def test_can_publish(self, course, page_plain_text_in_a_module):
+		page_plain_text_in_a_module.publish(course,overwrite=True)
+
+	def test_already_online_raises(self, course, page_plain_text_in_a_module):
 		# publish once, forcefully.
-		self.page.publish(self.course,overwrite=True)
+		page_plain_text_in_a_module.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with self.assertRaises(mc.AlreadyExists):
-			self.page.publish(self.course,overwrite=False) # default is False
+		with pytest.raises(mc.AlreadyExists):
+			page_plain_text_in_a_module.publish(course,overwrite=False) # default is False
 
 
-	def test_ccc_can_make_modules(self):
-
-		for m in self.destination_modules:
-			mc.create_or_get_module(m,self.course)
-
+	def test_can_make_modules(self, course, destination_modules):
+		for m in destination_modules:
+			mc.create_or_get_module(m,course)
 
 
+	def test_can_delete_modules(self, course, destination_modules):
 
+		for m in destination_modules:
+			mc.create_or_get_module(m,course)
 
-
-	def test_ccd_can_delete_modules(self):
-
-		for m in self.destination_modules:
-			mc.create_or_get_module(m,self.course)
-
-		for m in self.destination_modules:
-			mc.delete_module(m, self.course, even_if_exists=False)
+		for m in destination_modules:
+			mc.delete_module(m, course, even_if_exists=False)
 
 
 
+	def test_page_in_module_after_publishing(self, course, page_plain_text_in_a_module, destination_modules):
+
+		page_plain_text_in_a_module.publish(course,overwrite=True)
+		assert mc.is_page_already_uploaded(page_plain_text_in_a_module.name,course)
 
 
-	def test_ddd_page_in_module_after_publishing(self):
+		page_plain_text_in_a_module.ensure_in_modules(course)
 
-		
-		self.page.publish(self.course,overwrite=True)
-		self.assertTrue(mc.is_page_already_uploaded(self.page.name,self.course))
-
-
-		self.page.ensure_in_modules(self.course)
-
-		for m in self.destination_modules:
-			print(m)
-			self.assertTrue(self.page.is_in_module( m, self.course))
+		for m in destination_modules:
+			#print(m)
+			assert page_plain_text_in_a_module.is_in_module(m, course)
 			
 
 
@@ -113,9 +103,3 @@ class PageInModuleTester(unittest.TestCase):
 	# 	self.page.publish(self.course,overwrite=True)
 	# 	self.assertTrue(mc.is_page_already_uploaded(self.page.name,self.course))
 
-
-
-
-if __name__ == '__main__':
-    pgnm = 'this_argument_is_ignored_but_necessary'
-    unittest.main(argv=[pgnm], exit=False)
