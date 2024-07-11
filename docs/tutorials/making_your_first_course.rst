@@ -22,23 +22,16 @@ And that's all that's really required.  🎯 Here's some starter contents:
 
 `defaults.json`:
 
-.. code-block:: json
 
-	{
-		"style": "_styles/generic",
-		"replacements": "_course_metadata/replacements.json"
-	}
+.. literalinclude:: ../../example/starter_course/_course_metadata/defaults.json
+   :language: json
 
 
 `replacements.json`:
 
-.. code-block:: json
+.. literalinclude:: ../../example/starter_course/_course_metadata/replacements.json
+   :language: json
 
-	{
-		"$REPLACETHISTEXT": "with this text",
-		"a source replacement with spaces": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ?si=BqTm4nbZOLTHaxnz\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen></iframe>",
-		"another source replacement with spaces": "destination_without_spaces"
-	}
 
 Ignore generated files (git)
 --------------------------------
@@ -49,14 +42,7 @@ At this time, `markdown2canvas` uses in-place builds, sorry.  That is, it pollut
 
 `course_folder/.gitignore`:
 
-.. code-block:: 
-
-	*downloaded_content/
-	*.log
-	.DS_Store
-	result.html
-	styled_source.md
-	*.icloud
+.. literalinclude:: ../../example/starter_course/.gitignore
 
 
 
@@ -83,11 +69,11 @@ I urge you to use the styling system, in which case it probably looks like this:
 
 🎯 Just make those four files blank for now.
 
-Add some content!!!
-------------------------
+Add a page and an assignment
+--------------------------------
 
 
-One last thing, and that's to add some content.  🎯 Let's add a page and an assignment.
+Let's add some content.  🎯 Add a page and an assignment.
 
 
 .. code-block:: 
@@ -110,36 +96,26 @@ One last thing, and that's to add some content.  🎯 Let's add a page and an as
 
 
 `meta.json`
----------------
+*************
 
 The `meta.json` files vary per content type, and by your needs.  🎯 Let's make them for these two pieces of content:
 
 
 `readings.page`:
 
-.. code-block:: json
-
-	{
-		"type": "page",
-		"name": "Readings for Lesson 1",
-		"modules":["Lesson 1"],
-	}
+.. literalinclude:: ../../example/starter_course/Lesson1/readings.page/meta.json
+   :language: json
 
 
 `assignment1.assignment`:
 
-.. code-block:: json
+.. literalinclude:: ../../example/starter_course/Lesson1/assignment1.assignment/meta.json
+   :language: json
 
-	{
-		"type": "assignment",
-		"points_possible": 100,
-		"allowed_extensions": ["pdf","docx","jpg"],
-		"name": "Assignment 1"
-	}
 
 
 `source.md`
-----------------
+*************
 
 Pages and Assignments must have a `source.md` file.  It's markdown, and can include html, too.  
 
@@ -148,24 +124,30 @@ Pages and Assignments must have a `source.md` file.  It's markdown, and can incl
 
 `readings.page`:
 
-.. code-block:: 
-
-	* A markdown list
-	* second item
-
-	a markdown [link](wikipedia.org)
+.. literalinclude:: ../../example/starter_course/Lesson1/readings.page/source.md
+   :language: markdown
 
 
 `assignment1.assignment`:
 
-.. code-block:: 
-
-	A text replacement will happen $REPLACETHISTEXT.  Note that the dollar sign is NOT special -- it's only special because I used it in a key of the `replacements.json` file.
-
-	This text here will get replaced: a source replacement with spaces
+.. literalinclude:: ../../example/starter_course/Lesson1/assignment1.assignment/source.md
+   :language: markdown
 
 
 
+Add a file for students to download
+-------------------------------------
+
+We're going to make a link to a file in the module for Lesson 1, and we also make a link to this file in the assignment we created.  
+
+🎯 Make a file in `Lesson1/` called `ring.stl`.  The contents of this file are arbitrary.
+
+🎯 Make a new folder in `Lesson1`, and call it `ring.file`.  Make a file in there called `meta.json`.  
+
+`ring.file/meta.json`
+
+.. literalinclude:: ../../example/starter_course/Lesson1/ring.file/meta.json
+   :language: json
 
 Tools to publish content
 ---------------------------------
@@ -180,73 +162,23 @@ I use a script to help me publish my content.  🎯 Let's add it:
 	course_folder/_styles/generic/...
 	course_folder/Lesson1/...
 
-	course_folder/_tools/publish_ready_content.py   # loops over `content_ready.txt` and publishes to course
-	course_folder/_tools/content_ready.txt          # names of content folders ready to publish
-	course_folder/_tools/content_all.txt            # a txt file with names of content folders
+	course_folder/_tools/publish_ready_content.py   # loops over `content_ready` and publishes to course
+	course_folder/_tools/content_ready          # names of content folders ready to publish
+	course_folder/_tools/content_all            # a txt file with names of content folders
 
 
 Here's a script I use in DS710.  🎯 Copy-paste it.
 
-.. code-block:: python
 
-	#!/bin/python3
-
-	# a script for publishing content that's ready to go!
-	# this script should be executed from root level in this repo.
-
-	dry_run = False
-
-	import markdown2canvas as mc
-
-	# we will skip blank lines and lines that start with %
-	with open('_tools/ready_content','r') as f:
-		ready_files = f.read().split('\n')
-
-	ready_files = [f'{f}'.strip() for f in ready_files if f and not (f.startswith('#') or f.startswith('%'))]
-
-	print(ready_files)
-
-	# gets the canvas_url
-	canvas_url = "https://uweau.instructure.com/" # 🎯 REPLACE WITH YOUR URL
-
-	# a list of course_ids, in case have multiple courses published to. 
-	course_ids = [632513] # 🎯 REPLACE WITH YOUR NUMBER!!!!!!!!!!!!!!!!!
-
-	canvas = mc.make_canvas_api_obj(url=canvas_url)
-
-	for course_id in course_ids:
-		course = canvas.get_course(course_id) 
-
-		print(f'publishing to {course.name}')
-
-		# a helper function to make the correct object from the extension of the content folder
-		def make_mc_obj(f):
-			if f.endswith('page'):
-				return mc.Page(f)
-			if f.endswith('assignment'):
-				return mc.Assignment(f)
-			if f.endswith('link'):
-				return mc.Link(f)
-			if f.endswith('file'):
-				return mc.File(f)
-
-		# loop over the files
-		for f in ready_files:
-			print(f)
-			obj = make_mc_obj(f)
-
-			if not dry_run:
-				obj.publish(course, overwrite=True)
-			else:
-				print(f'[dry run] publishing {obj}')
+.. literalinclude:: ../../example/starter_course/_tools/publish_ready_content.py
+   :language: python
 
 
-🎯 Let's also list the content as ready to publish in `content_ready.txt`:
 
-.. code-block::
-	
-	Lesson1/readings.page
-	Lesson1/assignment1.assignment
+🎯 Let's also list the content as ready to publish in `content_ready`:
+
+.. literalinclude:: ../../example/starter_course/_tools/content_ready
+
 
 Note that you just list the folder, and `markdown2canvas` does all the work with `meta.json` and `source.md`.
 
@@ -255,7 +187,7 @@ Publish the content!!!!!
 
 Now, assuming you've completed the setup steps (Mac/Linux: saving your API key and URL in a .py file, and specifying the name of the file via an environment variable called `CANVAS_CREDENTIALS_FILE`), you should be able to publish the content to your course. 
 
-🎯 Be sure you copied in the Canvas course number to the `_tools/publish_ready_content.py` script!
+🎯 Be sure you copied in your Canvas course number to the `_tools/publish_ready_content.py` script!
 
 🎯 From course root level, run
 
