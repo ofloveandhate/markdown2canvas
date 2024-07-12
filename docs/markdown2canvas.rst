@@ -8,5 +8,18 @@ This is the detailed list of all functions and types available in the library.
 Python libraries used: `canvasapi`
 
 
-.. automodule:: markdown2canvas
-   :members:
+
+.. toctree::
+   :maxdepth: 2
+
+   classes
+   exceptions
+   free_functions
+
+
+
+
+
+
+
+

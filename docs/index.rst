@@ -53,8 +53,7 @@ Details 📝
 ================
 
 .. toctree::
-   :maxdepth: 0
-   :caption: Contents:
+   :maxdepth: 1
 
    markdown2canvas
 
