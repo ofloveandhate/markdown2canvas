@@ -7,7 +7,7 @@ import requests
 
 import logging
 
-logging.basicConfig(encoding='utf-8')
+# logging.basicConfig(encoding='utf-8')
 
 import datetime
 today = datetime.datetime.today().strftime("%Y-%m-%d")
