@@ -54,7 +54,7 @@ class TestPageinModule():
 		page_plain_text_in_a_module.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with pytest.raises(mc.AlreadyExists):
+		with pytest.raises(mc.exception.AlreadyExists):
 			page_plain_text_in_a_module.publish(course,overwrite=False) # default is False
 
 

@@ -1,60 +1,59 @@
-import canvasapi
-import os.path as path
-import os
-import requests
+"""
+`markdown2canvas`, a library for containerizing and publishing Canvas content.
+
+Containerization of content is via filesystem folders with a `meta.json` file specifying type of content.  Some content types like Assignment and Page use `source.md`, while others like File and Image are just a `meta.json` plus the files.
+
+Publishing content is via the `.publish` member function for the canvas object, like 
+
+```
+my_assignment.publish(course) 
+```
+
+Documentation may be found at the GitHub pages for this library.  Use it.
 
 
+A more complete example might be
 
-import logging
+```
+import markdown2canvas as mc
+canvas_url = "https://uweau.instructure.com/" # 🎯 REPLACE WITH YOUR URL
 
-# logging.basicConfig(encoding='utf-8')
+# get the course. 
+course_id = 705022 # 🎯 REPLACE WITH YOUR NUMBER!!!!!!!!!!!!!!!!!
+course = canvas.get_course(course_id) 
 
-import datetime
-today = datetime.datetime.today().strftime("%Y-%m-%d")
+# make the API object.  this is from the `canvasapi` library, NOT something in `markdown2canvas`.
+canvas = mc.make_canvas_api_obj(url=canvas_url)
 
-log_level=logging.DEBUG
+my_assignment = mc.Assignent('path_to_assignment")
 
-log_dir = path.join(path.normpath(os.getcwd()), '_logs')
+# finally, publish
+my_assignment.publish(course) 
+```
+"""
 
-if not path.exists(log_dir):
-    os.mkdir(log_dir)
+# the root-level file for `markdown2canvas` 
 
-log_filename = path.join(log_dir, f'markdown2canvas_{today}.log')
-
-
-log_encoding = 'utf-8'
-
-root_logger = logging.getLogger()
-root_logger.setLevel(log_level)
-handler = logging.FileHandler(log_filename, 'a', log_encoding)
-root_logger.addHandler(handler)
-
-logging.debug(f'starting logging at {datetime.datetime.now()}')
+__version__ = '0.'
+__author__ = 'silviana amethyst, Mckenzie West, Allison Beemer'
 
 
-logging.debug(f'reducing logging level of `requests` to WARNING')
-logging.getLogger('canvasapi.requester').setLevel(logging.WARNING)
-logging.getLogger('requests').setLevel(logging.WARNING)
+import markdown2canvas.logging
 
+import markdown2canvas.exception
 
+from markdown2canvas.setup_functions import *
 
+import markdown2canvas.translation_functions
 
-
-from markdown2canvas.exception import AlreadyExists, SetupError, DoesntExist
-
-
-from markdown2canvas.free_functions import *
-
+from markdown2canvas.course_interaction_functions import *
 
 ################## classes
 
-from markdown2canvas.base_classes import CanvasObject, Document
-from markdown2canvas.classes import Page, Assignment, Image, BareFile, Link, File
+from markdown2canvas.canvas_objects import CanvasObject, Document, Page, Assignment, Image, File, BareFile, Link
 
 
-
-
-
+import markdown2canvas.canvas2markdown
 
 import markdown2canvas.tool
 

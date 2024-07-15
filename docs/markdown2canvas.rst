@@ -12,7 +12,7 @@ Python libraries used: `canvasapi`
 .. toctree::
    :maxdepth: 2
 
-   classes
+   canvas_objects
    exceptions
    free_functions
 

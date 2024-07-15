@@ -1,136 +1,27 @@
+"""
+Functions for translating markdown to html, 
+putting headers/footers around content, 
+and manipulating links to link to or embed images and files on Canvas.
+"""
+
+__all__ = [
+    'generate_course_link',
+    'find_in_containing_directory_path',
+    'preprocess_replacements',
+    'preprocess_markdown_images',
+    'get_default_property',
+    'get_default_style_name',
+    'get_default_replacements_name',
+    'apply_style_markdown',
+    'apply_style_html',
+    'markdown2html',
+    'adjust_html_for_images',
+    'adjust_html_for_files'
+]
+
+
 import os.path as path
 import os
-
-import logging
-logger = logging.getLogger(__name__)
-
-import canvasapi
-
-def is_file_already_uploaded(filename,course):
-    """
-    returns a boolean, true if there's a file of `filename` already in `course`.
-
-    This function wants the full path to the file.
-    """
-    return ( not find_file_in_course(filename,course) is None )
-
-
-
-
-def find_file_in_course(filename,course):
-    """
-    Checks to see of the file at `filename` is already in the "files" part of `course`.
-
-    It tests filename and size as reported on disk.  If it finds a match, then it's up.
-
-    This function wants the full path to the file.
-    """
-    import os
-
-    base = path.split(filename)[1]
-
-    files = course.get_files()
-    for f in files:
-        if f.filename==base and f.size == path.getsize(filename):
-            return f
-
-    return None
-
-
-
-
-
-def is_page_already_uploaded(name,course):
-    """
-    returns a boolean indicating whether a page of the given `name` is already in the `course`.
-    """
-    return ( not find_page_in_course(name,course) is None )
-
-
-def find_page_in_course(name,course):
-    """
-    Checks to see if there's already a page named `name` as part of `course`.
-
-    tests merely based on the name.  assumes assignments are uniquely named.
-    """
-    import os
-    pages = course.get_pages()
-    for p in pages:
-        if p.title == name:
-            return p
-
-    return None
-
-
-
-def is_assignment_already_uploaded(name,course):
-    """
-    returns a boolean indicating whether an assignment of the given `name` is already in the `course`.
-    """
-    return ( not find_assignment_in_course(name,course) is None )
-
-
-def find_assignment_in_course(name,course):
-    """
-    Checks to see if there's already an assignment named `name` as part of `course`.
-
-    tests merely based on the name.  assumes assingments are uniquely named.
-    """
-    import os
-    assignments = course.get_assignments()
-    for a in assignments:
-
-        if a.name == name:
-            return a
-
-    return None
-
-
-
-
-def get_canvas_key_url():
-    """
-    reads a file using an environment variable, namely the file specified in `CANVAS_CREDENTIAL_FILE`.
-
-    We need the
-
-    * API_KEY
-    * API_URL
-
-    variables from that file.
-    """
-    from os import environ
-
-    cred_loc = environ.get('CANVAS_CREDENTIAL_FILE')
-    if cred_loc is None:
-        raise SetupError('`get_canvas_key_url()` needs an environment variable `CANVAS_CREDENTIAL_FILE`, containing the full path of the file containing your Canvas API_KEY, *including the file name*')
-
-    # yes, this is scary.  it was also low-hanging fruit, and doing it another way was going to be too much work
-    with open(path.join(cred_loc),encoding='utf-8') as cred_file:
-        exec(cred_file.read(),locals())
-
-    if isinstance(locals()['API_KEY'], str):
-        logger.info(f'using canvas with API_KEY as defined in {cred_loc}')
-    else:
-        raise SetupError(f'failing to use canvas.  Make sure that file {cred_loc} contains a line of code defining a string variable `API_KEY="keyhere"`')
-
-    return locals()['API_KEY'],locals()['API_URL']
-
-
-def make_canvas_api_obj(url=None):
-    """
-    - reads the key from a python file, path to which must be in environment variable CANVAS_CREDENTIAL_FILE.
-    - optionally, pass in a url to use, in case you don't want the default one you put in your CANVAS_CREDENTIAL_FILE.
-    """
-
-    key, default_url = get_canvas_key_url()
-
-    if not url:
-        url = default_url
-
-    return canvasapi.Canvas(url, key)
-
-
 
 def generate_course_link(type,name,all_of_type,courseid=None):
     '''
@@ -367,26 +258,6 @@ def markdown2html(filename, course, replacements_path):
 
 
 
-def find_local_images(html):
-    """
-    constructs a map of local url's : Images
-    """
-    from bs4 import BeautifulSoup
-
-    soup = BeautifulSoup(html,features="lxml")
-
-    local_images = {}
-
-    all_imgs = soup.findAll("img")
-
-    if all_imgs:
-        for img in all_imgs:
-            src = img["src"]
-            if src[:7] not in ['https:/','http://']:
-                local_images[src] = Image(path.abspath(src))
-
-    return local_images
-
 
 
 
@@ -424,26 +295,6 @@ def adjust_html_for_images(html, published_images, courseid):
 
 
 
-def find_local_files(html):
-    """
-    constructs a list of BareFiles, so that they can later be replaced with a url to a canvas thing
-    """
-    from bs4 import BeautifulSoup
-
-    soup = BeautifulSoup(html,features="lxml")
-
-    local_files = {}
-
-    all_links = soup.findAll("a")
-
-    if all_links:
-        for file in all_links:
-            href = file["href"]
-            if path.exists(path.abspath(href)):
-                local_files[href] = BareFile(path.abspath(href))
-
-    return local_files
-
 
 
 def adjust_html_for_files(html, published_files, courseid):
@@ -475,123 +326,7 @@ def adjust_html_for_files(html, published_files, courseid):
 
 
 
-def get_root_folder(course):
-    for f in course.get_folders():
-        if f.full_name == 'course files':
-            return f
 
 
 
 
-
-
-
-
-
-def get_assignment_group_id(assignment_group_name, course, create_if_necessary=False):
-
-    existing_groups = course.get_assignment_groups()
-
-    if not isinstance(assignment_group_name,str):
-        raise RuntimeError(f'assignment_group_name must be a string, but I got {assignment_group_name} of type {type(assignment_group_name)}')
-
-
-    for g in existing_groups:
-        if g.name == assignment_group_name:
-            return g.id
-
-
-
-    if create_if_necessary:
-        msg = f'making new assignment group `{assignment_group_name}`'
-        logger.info(msg)
-
-        group = course.create_assignment_group(name=assignment_group_name)
-        group.edit(name=assignment_group_name) # this feels stupid.  didn't i just request its name be this?
-
-        return group.id
-    else:
-        raise DoesntExist(f'cannot get assignment group id because an assignment group of name {assignment_group_name} does not already exist, and `create_if_necessary` is set to False')
-
-    
-
-
-
-def create_or_get_assignment(name, course, even_if_exists = False):
-
-    if is_assignment_already_uploaded(name,course):
-        if even_if_exists:
-            return find_assignment_in_course(name,course)
-        else:
-            raise AlreadyExists(f"assignment {name} already exists")
-    else:
-        # make new assignment of name in course.
-        return course.create_assignment(assignment={'name':name})
-
-
-
-def create_or_get_page(name, course, even_if_exists):
-    if is_page_already_uploaded(name,course):
-
-        if even_if_exists:
-            return find_page_in_course(name,course)
-        else:
-            raise AlreadyExists(f"page {name} already exists")
-    else:
-        # make new assignment of name in course.
-        result = course.create_page(wiki_page={'body':"empty page",'title':name})
-        return result
-
-
-
-
-def create_or_get_module(module_name, course):
-
-    try:
-        return get_module(module_name, course)
-    except DoesntExist as e:
-        return course.create_module(module={'name':module_name})
-
-
-
-
-def get_module(module_name, course):
-    """
-    returns 
-    * Module if such a module exists, 
-    * raises if not
-    """
-    modules = course.get_modules()
-
-    for m in modules:
-        if m.name == module_name:
-            return m
-
-    raise DoesntExist(f"tried to get module {module_name}, but it doesn't exist in the course")
-
-
-def get_subfolder_named(folder, subfolder_name):
-
-    assert '/' not in subfolder_name, "this is likely broken if subfolder has a / in its name, / gets converted to something else by Canvas.  don't use / in subfolder names, that's not allowed"
-
-    current_subfolders = folder.get_folders()
-    for f in current_subfolders:
-        if f.name == subfolder_name:
-            return f
-
-    raise DoesntExist(f'a subfolder of {folder.name} named {subfolder_name} does not currently exist')
-
-    
-def delete_module(module_name, course, even_if_exists):
-
-    if even_if_exists:
-        try:
-            m = get_module(module_name, course)
-            m.delete()
-        except DoesntExist as e:
-            return
-
-    else:
-        # this path is expected to raise if the module doesn't exist
-        m = get_module(module_name, course)
-        m.delete()

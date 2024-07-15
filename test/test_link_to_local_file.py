@@ -49,7 +49,7 @@ class TestPageWithLocalFile():
 		page.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with pytest.raises(mc.AlreadyExists):
+		with pytest.raises(mc.exception.AlreadyExists):
 			page.publish(course,overwrite=False) # default is False
 
 
