@@ -38,7 +38,7 @@ class TestPage():
 		page_has_local_images.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with pytest.raises(mc.AlreadyExists):
+		with pytest.raises(mc.exception.AlreadyExists):
 			page_has_local_images.publish(course,overwrite=False) # default is False
 
 	def test_doesnt_find_deleted(self, course, page_has_local_images):

@@ -42,7 +42,7 @@ class TestFile():
 		content.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with pytest.raises(mc.AlreadyExists):
+		with pytest.raises(mc.exception.AlreadyExists):
 			content.publish(course,overwrite=False) # default is False
 
 

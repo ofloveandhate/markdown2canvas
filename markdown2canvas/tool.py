@@ -1,4 +1,8 @@
-import markdown2canvas as mc
+"""
+Provides a base class from which to derive when writing tools that will interact with `markdown2canvas` or `canvasapi`.
+"""
+
+__all__ = ['Tool']
 
 
 class Tool(object):
@@ -59,7 +63,9 @@ class Tool(object):
 
 
 	def _read_config(self, config_name):
-
+		"""
+		reads `config_name` (config.json by default), and unpacks `course_id`.  Stores the de-serialized json file in self.config.
+		"""
 		import json
 		with open(config_name,'r') as f:
 			config = json.load(f)

@@ -1,5 +1,5 @@
-Concrete Classes
--------------------
+Concrete Classes for Canvas Objects
+--------------------------------------
 
 
 
@@ -12,6 +12,14 @@ Concrete Classes
    :members:
    :undoc-members:
 
+.. autoclass:: markdown2canvas.Image
+   :members:
+   :undoc-members:
+
+
+.. autoclass:: markdown2canvas.Link
+   :members:
+   :undoc-members:
 
 
 .. autoclass:: markdown2canvas.File
@@ -32,11 +40,11 @@ Concrete Classes
 Base Classes
 --------------
 
-.. autoclass:: markdown2canvas.CanvasObject
+.. autoclass:: markdown2canvas.canvas_objects.CanvasObject
    :members:
    :undoc-members:
 
 
-.. autoclass:: markdown2canvas.Document
+.. autoclass:: markdown2canvas.canvas_objects.Document
    :members:
    :undoc-members:
