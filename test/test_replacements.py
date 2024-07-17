@@ -52,10 +52,6 @@ def uses_defaults_source():
 	with open('uses_replacements_default/source.md', "r", encoding="utf-8") as f:
 		yield f.read()
 
-# @pytest.fixture(scope='class')
-# def html_using_defaults():
-# 	with open('uses_replacements_default/result.html', "r", encoding="utf-8") as f:
-# 		yield f.read()
 
 @pytest.fixture(scope='class')
 def html_using_defaults(course):
@@ -73,11 +69,6 @@ def replacements_custom():
 def uses_custom_source():
 	with open('uses_replacements_custom/source.md', "r", encoding="utf-8") as f:
 		yield f.read()
-
-# @pytest.fixture(scope='class')
-# def html_using_custom():
-# 	with open('uses_replacements_custom/result.html', "r", encoding="utf-8") as f:
-# 		yield f.read()
 
 @pytest.fixture(scope='class')
 def html_using_custom(course):
