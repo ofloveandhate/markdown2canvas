@@ -24,6 +24,7 @@ Tutorials
    tutorials/writing_content
    tutorials/styling_content
    tutorials/text_replacements
+   tutorials/uploading_files
    tutorials/publishing_content
    
 
