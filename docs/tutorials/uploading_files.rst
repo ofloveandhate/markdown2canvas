@@ -4,7 +4,7 @@ How to upload a file
 
 
 The `meta.json` file
-===========
+====================
 
 Filenames and titles of files are distinct on canvas: 
 the latter is what you will see when the file is placed in a module, while the former is what is shown in the file structure.
@@ -17,7 +17,7 @@ The `destination` key specifies where in the file structure you would like the f
 
 
 Example
-===========
+=======
 
 
 
