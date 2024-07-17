@@ -2,6 +2,6 @@
 	"type":"file",
 	"title":"automatically uploaded file: ds150_course_logo.pdf",
 	"filename":"ds150_course_logo.pdf",
-	"modules":["Automatically Added Test Module", "Another automatically added test module"],
+	"modules":["Automatically Added Test Module", "Another automatically added test module", "module created by file upload"],
 	"destination": "automatically_uploaded_files/a_subfolder"
 }
