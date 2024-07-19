@@ -88,7 +88,7 @@ class TestPage():
 
 
 	def test_get_default_replacements_name(self):
-		path = mc.get_default_replacements_name()
+		path = mc.translation_functions.get_default_replacements_name()
 		assert path == '_course_metadata/replacements.json'
 
 				
