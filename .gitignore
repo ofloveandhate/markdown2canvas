@@ -9,7 +9,9 @@ build/
 .DS_Store
 */*/result.html
 styled_source.md
+extra_styled_source.md
 *.icloud
 
 _build/
 make.bat
+
