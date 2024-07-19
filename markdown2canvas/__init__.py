@@ -36,21 +36,22 @@ my_assignment.publish(course)
 
 __version__ = '0.'
 __author__ = 'silviana amethyst, Mckenzie West, Allison Beemer'
-
+__all__ = ['logging','exception','translation_functions','canvas2markdown','tool']
 
 import markdown2canvas.logging
 
 import markdown2canvas.exception
 
-from markdown2canvas.setup_functions import *
+from .setup_functions import *
+
 
 import markdown2canvas.translation_functions
 
-from markdown2canvas.course_interaction_functions import *
+from .course_interaction_functions import *
 
 ################## classes
 
-from markdown2canvas.canvas_objects import CanvasObject, Document, Page, Assignment, Image, File, BareFile, Link
+from .canvas_objects import CanvasObject, Document, Page, Assignment, Image, File, BareFile, Link
 
 
 import markdown2canvas.canvas2markdown
