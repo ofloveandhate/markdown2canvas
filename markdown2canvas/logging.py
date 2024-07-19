@@ -1,5 +1,18 @@
 '''
-Logging utilities.  Uses the built-in `logging` library.  This part could probably be improved to allow the user to set their own levels or turn on/off logging more easily.
+Logging utilities.  Uses the built-in `logging` library.  
+
+The default_* variables in here are just what the values start at.  Setting the values of these variables does nothing.  
+You have to do something like `mc.logging.logger.setLevel(bla)` to actually get action.
+
+This part of the library could probably be improved to allow the user to 
+
+* set their own levels
+* turn on/off logging more easily
+* control the output directory
+
+etc.  Good luck.  I believe in you.
+
+~silviana
 '''
 
 __all__ = [
