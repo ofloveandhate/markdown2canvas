@@ -23,6 +23,9 @@ __all__ = [
 import os.path as path
 import os
 
+import logging
+logger = logging.getLogger(__name__)
+
 def generate_course_link(type,name,all_of_type,courseid=None):
     '''
     Given a type (assignment or page) and the name of said object, generate a link
@@ -147,7 +150,7 @@ def get_default_replacements_name():
 
 def apply_style_markdown(sourcename, style_path, outname):
     from os.path import join
-
+    logger.debug(f'Applying markdown header and footer from `{style_path}`.')
     # need to add header and footer.  assume they're called `header.md` and `footer.md`.  we're just going to concatenate them and dump to file.
 
     with open(sourcename,'r',encoding='utf-8') as f:
@@ -165,13 +168,15 @@ def apply_style_markdown(sourcename, style_path, outname):
 
     with open(outname,'w',encoding='utf-8') as f:
         f.write(contents)
+    
+    return contents
 
 
 
 
 def apply_style_html(translated_html_without_hf, style_path, outname):
     from os.path import join
-
+    logger.debug(f'Applying html header and footer from `{style_path}`.')
     # need to add header and footer.  assume they're called `header.html` and `footer.html`.  we're just going to concatenate them and dump to file.
 
     with open(join(style_path,'header.html'),'r',encoding='utf-8') as f:
@@ -180,8 +185,12 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
     with open(join(style_path,'footer.html'),'r',encoding='utf-8') as f:
         footer = f.read()
 
+    contents = f'{header}\n{translated_html_without_hf}\n{footer}'
+    
+    with open(outname,'w',encoding='utf-8') as f:
+        f.write(contents)
 
-    return f'{header}\n{translated_html_without_hf}\n{footer}'
+    return contents
 
 
 
@@ -199,6 +208,8 @@ def markdown2html(filename, course, replacements_path):
 
     If `replacements_path` is None, then no replacements, duh.  Otherwise it should be a string or Path object to an existing json file containing key-value pairs of strings to replace with other strings.
     """
+    logger.debug(f'Translating `{filename}` from markdown to html using replacements from `{replacements_path}`.')
+
     if course is None:
         courseid = None
     else:

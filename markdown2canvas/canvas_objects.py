@@ -189,11 +189,18 @@ class Document(CanvasObject):
 
         if self.style_path:
             outname = join(self.folder,"styled_source.md")
-            apply_style_markdown(self.sourcename, self.style_path, outname)
+            with_header_md = apply_style_markdown(self.sourcename, self.style_path, outname)
 
-            translated_html_without_hf = markdown2html(outname,course, self.replacements_path)
+            outname = join(self.folder,"extra_styled_source.md")
+            apply_style_html(with_header_md, self.style_path, outname)
 
-            self._translated_html = apply_style_html(translated_html_without_hf, self.style_path, outname)
+            self._translated_html = markdown2html(outname, course, self.replacements_path)
+
+    
+
+            # translated_html_without_hf = markdown2html(outname,course, self.replacements_path)
+
+            # self._translated_html = apply_style_html(translated_html_without_hf, self.style_path, outname)
         else:
             self._translated_html = markdown2html(self.sourcename,course, self.replacements_path)
 
