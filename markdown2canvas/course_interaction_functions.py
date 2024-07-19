@@ -260,12 +260,12 @@ def get_subfolder_named(folder, subfolder_name):
     raise DoesntExist(f'a subfolder of {folder.name} named {subfolder_name} does not currently exist')
 
     
-def delete_module(module_name, course, even_if_exists):
+def delete_module(module_name, course, even_if_doesnt_exist):
     '''
     Deletes a module by name-as-string.  
     '''
     
-    if even_if_exists:
+    if even_if_doesnt_exist:
         try:
             m = get_module(module_name, course)
             m.delete()
