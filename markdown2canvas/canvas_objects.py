@@ -34,7 +34,9 @@ from markdown2canvas.exception import AlreadyExists, SetupError, DoesntExist
 
 def find_local_images(html):
     """
-    constructs a map of local url's : Images
+    returns a dictionary of local url's to markdown2canvas.Images
+
+    works by assuming that local url's don't start with http or https, as those should be online.
     """
     from bs4 import BeautifulSoup
 
@@ -56,7 +58,7 @@ def find_local_images(html):
 
 def find_local_files(html):
     """
-    constructs a list of BareFiles, so that they can later be replaced with a url to a canvas thing
+    constructs a dictionary of markdown2canvas.BareFiles, so that they can later be replaced with a url to a canvas thing after upload
     """
     from bs4 import BeautifulSoup
 
@@ -241,7 +243,7 @@ class Document(CanvasObject):
 
     def _construct_dict_of_props(self):
         """
-        construct a dictionary of properties, such that it can be used to `edit` a canvas object.
+        construct an empty dictionary of properties, such that it can be used to `edit` a canvas object.
         """
         d = {}
         return d
@@ -249,9 +251,9 @@ class Document(CanvasObject):
 
     def ensure_in_modules(self, course):
         """
-        makes sure this item is listed in the Module on Canvas.  If it's not, it's added to the bottom.  There's not currently any way to control order.
+        makes sure this item is listed in the Modules listed (by name) in self.modules, on Canvas.  If it's not, it's added to the bottom.  There's not currently any way to control order.
 
-        If the item doesn't already exist, this function will raise.  Be sure to actually publish the content first.
+        If the item doesn't already exist, this function will raise `DoesntExist`.  Be sure to actually publish the content first.
         """
 
         if not self.canvas_obj:
