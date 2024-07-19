@@ -33,13 +33,15 @@ def page_uses_droplets_via_style_custom():
 
 
 @pytest.fixture(scope='class')
-def page_contents_generic(course):
+def page_contents_generic(course, page_uses_droplets_via_style_generic):
+	page_uses_droplets_via_style_generic.publish(course,overwrite=True)
 	a = course.get_pages(search_term = 'Test Uses Droplets via Style')[1]
 	rev = a.show_latest_revision()
 	yield rev.body
 
 @pytest.fixture(scope='class')
-def page_contents_custom(course):
+def page_contents_custom(course,page_uses_droplets_via_style_custom):
+	page_uses_droplets_via_style_custom.publish(course,overwrite=True)
 	a = course.get_pages(search_term = 'Test Uses Droplets via Style Custom')[0]
 	rev = a.show_latest_revision()
 	yield rev.body
