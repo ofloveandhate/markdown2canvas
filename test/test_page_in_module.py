@@ -31,11 +31,9 @@ def destination_modules(page_plain_text_in_a_module):
 	yield page.metadata['modules']
 
 
-#self._delete_test_modules()
-
-def _delete_test_modules(self):
-	for m in self.destination_modules:
-		mc.delete_module(m, self.course, even_if_exists=True)
+def _delete_test_modules(course, destination_modules):
+	for m in destination_modules:
+		mc.delete_module(m, course, even_if_doesnt_exist=True)
 
 
 
@@ -64,12 +62,12 @@ class TestPageinModule():
 
 
 	def test_can_delete_modules(self, course, destination_modules):
-
+		_delete_test_modules(course, destination_modules)
 		for m in destination_modules:
 			mc.create_or_get_module(m,course)
 
 		for m in destination_modules:
-			mc.delete_module(m, course, even_if_exists=False)
+			mc.delete_module(m, course, even_if_doesnt_exist=False)
 
 
 

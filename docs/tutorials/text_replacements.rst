@@ -25,6 +25,8 @@ Note that `_course_metadata/replacements.json` is just a regular old JSON file. 
 Usage
 --------
 
+Keep in mind that the order of replacement is unspecified. Thus, it is important to choose keys that will not appear within values, and will not appear within source documents where replacement is undesired.
+
 
 Custom text replacements per-content
 --------------------------------------

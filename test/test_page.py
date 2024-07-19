@@ -43,9 +43,7 @@ class TestPage():
 
 	def test_doesnt_find_deleted(self, course, page_has_local_images):
 		name = page_has_local_images.name
-
 		page_has_local_images.publish(course,overwrite=True)
-		assert mc.is_page_already_uploaded(name,course)
 		f = mc.find_page_in_course(name,course)
 		f.delete()
 		assert not mc.is_page_already_uploaded(name,course)
@@ -53,4 +51,9 @@ class TestPage():
 	def test_can_find_published(self, course, page_has_local_images):
 		page_has_local_images.publish(course,overwrite=True)
 		assert mc.is_page_already_uploaded(page_has_local_images.name,course)
+
+	def test_content(self, course):
+		content = course.get_pages(search_term='Test Has Local Images')[0].show_latest_revision().body
+		assert 'testing source including images' in content 
+		assert 'alt="A menagerie of Herwig Hauser surfaces"' in content 
 
