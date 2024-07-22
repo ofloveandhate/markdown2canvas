@@ -68,16 +68,16 @@ class TestStyle():
 		name = page_uses_droplets_via_style_generic.name
 
 		page_uses_droplets_via_style_generic.publish(course,overwrite=True)
-		assert mc.is_page_already_uploaded(name,course)
-		f = mc.find_page_in_course(name,course)
+		assert mc.course_interaction_functions.is_page_already_uploaded(name,course)
+		f = mc.course_interaction_functions.find_page_in_course(name,course)
 		f.delete()
 		# print([i.name for i in course.get_pages()])
-		assert not mc.is_page_already_uploaded(name,course)
+		assert not mc.course_interaction_functions.is_page_already_uploaded(name,course)
 
 
 	def test_can_find_published(self, course, page_uses_droplets_via_style_generic):
 		page_uses_droplets_via_style_generic.publish(course,overwrite=True)
-		assert mc.is_page_already_uploaded(page_uses_droplets_via_style_generic.name,course)
+		assert mc.course_interaction_functions.is_page_already_uploaded(page_uses_droplets_via_style_generic.name,course)
 
 
 	def test_default_style_implemented(course, page_contents_generic):
@@ -88,6 +88,7 @@ class TestStyle():
 	def test_custom_style_implemented(course, page_contents_custom):
 		assert 'Header image credit: Jeremy Visser, CC BY-SA 4.0' in page_contents_custom
 		assert 'This is a photo of Mount Ruapehu and Mount Ngauruhoe looking west from the Desert Road in Tongariro National Park (New Zealand) in January 2015.' in page_contents_custom
+		assert ('![This is a photo' not in page_contents_custom) and "The header image was not translated to html."
 
 	def test_incorrect_style_used(course, page_contents_generic, page_contents_custom):
 		assert 'Header image credit: Medoffer, CC BY-SA 4.0' not in page_contents_custom
