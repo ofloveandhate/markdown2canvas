@@ -47,7 +47,7 @@ You may wish to use your own set of extensions.  Easy!  Just specify the list in
 Where to find more extensions
 ----------------------------------
 
-I have found `the official `markdown` Extensions documentation <https://python-markdown.github.io/extensions/>` to be very helpful.
+I have found `the official markdown Extensions documentation <https://python-markdown.github.io/extensions/>`_ to be very helpful.
 
 Cruise the list, find one that you need, and try it out by:
 
