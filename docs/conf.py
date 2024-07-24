@@ -14,7 +14,7 @@ author = 'silviana amethyst, Mckenzie West, Allison Beemer'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',
+    'sphinx.ext.autodoc','sphinx.ext.autosectionlabel'
 ]
 
 templates_path = ['_templates']
@@ -41,3 +41,7 @@ sys.path.insert(0, _PACKAGE_DIR)
 # test the path; not strictly needed
 import markdown2canvas
 
+
+rst_prolog = """
+.. |markdowndefaults| replace:: :attr:`markdown2canvas.translation_functions.default_markdown_extensions`
+"""
