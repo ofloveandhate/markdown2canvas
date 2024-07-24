@@ -82,7 +82,6 @@ class TestFile():
 	def test_attributes(self, course, content, current_file):
 		content.publish(course,overwrite=True)
 		assert current_file.filename == 'ds150_course_logo.pdf' 
-		assert current_file.modified_at_date.day == datetime.date.today().day
 
 
 

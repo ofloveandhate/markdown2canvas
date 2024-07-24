@@ -45,15 +45,17 @@ class TestImage():
 	def test_doesnt_find_deleted_image(self, course, image):
 		image.publish(course,'images',overwrite=True)
 		assert mc.course_interaction_functions.is_file_already_uploaded(file_to_publish,course)
-		f = mc.find_file_in_course(file_to_publish,course)
+
+		f = mc.course_interaction_functions.find_file_in_course(file_to_publish,course)
 		f.delete()
+		
 		assert not mc.course_interaction_functions.is_file_already_uploaded(file_to_publish,course)
 
 	def test_can_get_already_published_image(self, course, image):
 		# first, definitely publish
 		image.publish(course,'images',overwrite=True)
 
-		img_on_canvas = mc.find_file_in_course(file_to_publish,course)
+		img_on_canvas = mc.course_interaction_functions.find_file_in_course(file_to_publish,course)
 
 		assert img_on_canvas.filename == filename
 
