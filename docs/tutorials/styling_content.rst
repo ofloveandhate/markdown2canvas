@@ -39,9 +39,13 @@ I hope they're self-documenting in purpose and content.  Here's what's in the `h
    <script href="https://media.uwex.edu/app/droplets_v3/script/droplets.js" type="test/javascript"></script>
 
 
-   <div id="uws-droplets-page">
+   <div id="uws-droplets-page" markdown="1">
 
    <!-- Droplets elements and components -->
+
+
+Note the markdown="1" included in the <div> above. Any time you include a <div>, make sure that this appears. 
+Otherwise, markdown will not render.
 
 The footer simply closes the `div` I opened in the header:
 
