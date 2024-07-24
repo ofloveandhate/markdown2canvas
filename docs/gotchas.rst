@@ -1,5 +1,5 @@
-Gotchas
-==========
+💥 Gotchas
+===========
 
 
 There are some idiosyncrasies in `markdown2canvas`.  This page is me doing my best to share them with you.

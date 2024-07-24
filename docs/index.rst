@@ -12,7 +12,7 @@ This is the documentation for `markdown2canvas`, a Python library for containeri
    :maxdepth: 2
    :caption: Contents:
 
-Tutorials
+Tutorials 👩‍🏫
 ================
 
 .. toctree::
@@ -30,13 +30,11 @@ Tutorials
    
 
 
-.. _Top_Notes:
-
-Notes
-========
+Usage notes
+=================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Some useful notes on aspects of using the library
 
    gotchas
@@ -44,18 +42,30 @@ Notes
    on_meta_dot_json
    markdown_1
    making_links_to_existing_content
-   wishlist
-   unit_tests
-   history
 
 
 
-Useful links
-==============
+
+
+
+Useful links 🔗
+================
 
 * `Canvas API documentation at root level <https://canvasapi.readthedocs.io/en/stable/>`_
 * `Canvas API class documentation <https://canvasapi.readthedocs.io/en/stable/class-reference.html>`_  I use this when chasing down how to set additional properties for various content types.  
 
+
+
+Implementation notes
+=======================
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Notes about library implementation
+
+   wishlist
+   unit_tests
+   history
 
 
 Details 📝

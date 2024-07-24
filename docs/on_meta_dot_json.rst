@@ -6,10 +6,6 @@ The `meta.json` file must be present in every containerized content folder.
 
 
 
-Valid properties
------------------
-
-
 meta.json for ALL content types
 *********************************
 
@@ -130,7 +126,7 @@ Optional:
 
 
 What happens if I specify a property / key that's not used or is invalid?
------------------------------------------------------------------------------
+*****************************************************************************
 
 * Extra keys are ignored with no message.  
 * Missing required keys hopefully WILL generate a problem!!! 
