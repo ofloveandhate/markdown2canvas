@@ -131,6 +131,7 @@ class Document(CanvasObject):
         self.name = None
         self.style_path = None
         self.replacements_path = None
+        self.markdown_extensions = None
 
         # populate the above variables from the meta.json file
         self._set_from_metadata()
@@ -173,8 +174,7 @@ class Document(CanvasObject):
             if self.replacements_path:
                 self.replacements_path = find_in_containing_directory_path(self.replacements_path)
 
-
-
+        self.markdown_extensions = get_default_markdown_extensions()
 
     def translate_to_html(self,course):
         """
@@ -196,7 +196,7 @@ class Document(CanvasObject):
             outname = join(self.folder,"extra_styled_source.md")
             apply_style_html(with_header_md, self.style_path, outname)
 
-            self._translated_html = markdown2html(outname, course, self.replacements_path)
+            self._translated_html = markdown2html(outname, course, self.replacements_path, self.markdown_extensions)
 
     
 
@@ -204,7 +204,7 @@ class Document(CanvasObject):
 
             # self._translated_html = apply_style_html(translated_html_without_hf, self.style_path, outname)
         else:
-            self._translated_html = markdown2html(self.sourcename,course, self.replacements_path)
+            self._translated_html = markdown2html(self.sourcename,course, self.replacements_path, self.markdown_extensions)
 
 
         self._local_images = find_local_images(self._translated_html)

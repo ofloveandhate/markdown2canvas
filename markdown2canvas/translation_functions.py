@@ -12,6 +12,8 @@ __all__ = [
     'get_default_property',
     'get_default_style_name',
     'get_default_replacements_name',
+    'default_markdown_extensions',
+    'get_default_markdown_extensions',
     'apply_style_markdown',
     'apply_style_html',
     'markdown2html',
@@ -118,34 +120,42 @@ def preprocess_markdown_images(contents,style_path):
     return contents
 
 
-def get_default_property(key, helpstr):
-
+def get_default_property(key, helpstr, default_value = None):
+    
     defaults_name = find_in_containing_directory_path(path.join("_course_metadata","defaults.json"))
-
+    
     try:
         logger.info(f'trying to use defaults from {defaults_name}')
         with open(defaults_name,'r',encoding='utf-8') as f:
             import json
             defaults = json.loads(f.read())
-
-        if key in defaults:
-            return defaults[key]
-        else:
-            print(f'no default `{key}` specified in {defaults_name}.  add an entry with key `{key}`, being {helpstr}')
-            return None
-
     except Exception as e:
-        print(f'WARNING: failed to load defaults from `{defaults_name}`.  either you are not at the correct location to be doing this, or you need to create a json file at {defaults_name}.')
-        return None
+        print(f'⚠️ failed to load defaults from `{defaults_name}`.  either you are not at the correct location to be doing this, or you need to create a json file at {defaults_name}.  returning a default value {default_value}')
+        return default_value
+
+    if key in defaults:
+        return defaults[key]
+    else:
+        print(f'no default `{key}` specified in {defaults_name}.  add an entry with key `{key}`, being {helpstr}.  returning a default value of {default_value}')
+        return default_value
+
+
 
 
 def get_default_style_name():
-    return get_default_property(key='style', helpstr='a path to a file relative to the top course folder')
+    return get_default_property(key='style', 
+                                helpstr='a path to a file relative to the top course folder')
 
 def get_default_replacements_name():
-    return get_default_property(key='replacements', helpstr='a path to a json file containing key:value pairs of text-to-replace.  this path should be expressed relative to the top course folder')
+    return get_default_property(key='replacements', 
+                                helpstr='a path to a json file containing key:value pairs of text-to-replace.  this path should be expressed relative to the top course folder')
 
 
+default_markdown_extensions = ['codehilite','fenced_code','md_in_html','tables','nl2br']
+def get_default_markdown_extensions():
+    return get_default_property(key='markdown_extensions', 
+                                helpstr='a list of strings being extensions to the `markdown` library used to translate from markdown to html before uploading to canvas.',
+                                default_value = default_markdown_extensions)
 
 
 def apply_style_markdown(sourcename, style_path, outname):
@@ -196,7 +206,7 @@ def apply_style_html(translated_html_without_hf, style_path, outname):
 
 
 
-def markdown2html(filename, course, replacements_path):
+def markdown2html(filename, course, replacements_path, markdown_extensions):
     """
     This is the main routine in the library.
 
@@ -207,6 +217,17 @@ def markdown2html(filename, course, replacements_path):
     If `course` is None, then you won't get some of the functionality.  In particular, you won't get link replacements for references to other content on Canvas.
 
     If `replacements_path` is None, then no replacements, duh.  Otherwise it should be a string or Path object to an existing json file containing key-value pairs of strings to replace with other strings.
+
+    `markdown_extensions` is a list of strings (or functions) specifying extensions to the `markdown` library to use during 
+    translation from markdown to HTML.  
+    The list I've been using for DS710/DS150 has been 
+    ['codehilite','fenced_code','md_in_html','tables','nl2br'].  
+    You can find more on available extensions, and writing your own, at https://python-markdown.github.io/extensions/
+
+    You can provide your own list of extensions in the `_course_metadata/defaults.json` file 
+    via the `markdown_extensions` key-value pair.  
+    If no such key/value pair exists in `defaults.json`, then the following default will be provided for you: 
+    `['codehilite','fenced_code','md_in_html','tables','nl2br']`
     """
     logger.debug(f'Translating `{filename}` from markdown to html using replacements from `{replacements_path}`.')
 
@@ -230,7 +251,7 @@ def markdown2html(filename, course, replacements_path):
     emojified = emoji.emojize(markdown_source)
 
 
-    html = markdown.markdown(emojified, extensions=['codehilite','fenced_code','md_in_html','tables','nl2br']) # see https://python-markdown.github.io/extensions/
+    html = markdown.markdown(emojified, extensions=markdown_extensions) # see https://python-markdown.github.io/extensions/
     soup = BeautifulSoup(html,features="lxml")
 
     all_imgs = soup.findAll("img")
