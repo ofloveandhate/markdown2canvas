@@ -12,18 +12,7 @@ Background
 
 Before I tell you how to use your own custom set of extensions to `markdown`, here's a brief rundown of how `markdown2canvas` works when you publish a page or assignment to Canvas:
 
-#. :doc:`The style is applied <styling_content>`.
-
-    #. The markdown header and footer from the used style are assembled around your `source.md`.
-    #. The html header and footer from the used style are assembled around that.
-
-#. :doc:`Replacements are done <text_replacements>`.
-#. Emoji shortcodes are emojified
-#. The markdown is translated to HTML.  THIS IS THE STEP YOU CAN CUSTOMIZE. 
-#. :doc:`Links to existing content are implemented <../making_links_to_existing_content>`, further modifying the HTML.
-#. Local files and images which are linked-to in the source are uploaded (if necessary), and the HTML is adjusted to use the Canvas links to that content.
-#. Content properties are set from `meta.json`.
-#. The content is placed in modules as described in `meta.json`.
+.. include:: ../snippets/publication_process_document.rst
 
 This tutorial is about customizing the first translation to HTML, by using `markdown` extensions.
 
