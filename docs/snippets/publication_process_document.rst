@@ -1,9 +1,9 @@
-#. :doc:`The style is applied <styling_content>`.
+#. :doc:`The style is applied <../tutorials/styling_content>`.
 
     #. The markdown header and footer from the used style are assembled around your `source.md`.
     #. The html header and footer from the used style are assembled around that.
 
-#. :doc:`Replacements are done <text_replacements>`.
+#. :doc:`Replacements are done <../tutorials/text_replacements>`.
 #. :doc:`Emoji shortcodes are emojified <../emoji>`
 #. The markdown is translated to HTML.  
 #. :doc:`Links to existing content are implemented <../making_links_to_existing_content>`, further modifying the HTML.

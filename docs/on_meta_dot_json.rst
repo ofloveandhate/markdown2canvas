@@ -9,8 +9,8 @@ The `meta.json` file should be present in every containerized content folder.
 Valid properties
 -----------------
 
-Assignments
-*****************
+meta.json for Assignments
+****************************
 
 In the `meta.json` file for an assignment, the submission type is encoded by a line that looks like the following. 
 
@@ -24,16 +24,16 @@ These are four of the five upload types available with Canvas. The other is an a
 	"allowed_extensions": ["pdf","docx"]
 
 
-Pages
-******
+meta.json for Pages
+***********************
 
 
-Links
-*******
+meta.json for Links
+************************
 
 
-Files
-*******
+meta.json for Files
+************************
 
 
 

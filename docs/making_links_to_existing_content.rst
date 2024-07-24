@@ -1,9 +1,15 @@
 🔗 Making links to existing content
 ===================================
 
-* You can use either markdown style links, or html style links.  
-* Specify the type of content to which you are linking by preceding the name of the content with that type.
-* 
+
+Notes for links to all content types
+----------------------------------------
+
+* You can use either markdown style links, or html style links.  Below, I'll give examples using both syntaxes.
+* Specify the type of content to which you are linking by preceding the name of the content with that type.  
+
+    * For example, `assignment:Test Assignment` will make a link to the assignment with name `Test Assignment`.
+
 
 Link to an assignment
 -----------------------
@@ -14,7 +20,8 @@ To link to an existing Canvas assignment, use a link of the form
 .. code-block:: 
 	
 	<a href="assignment:Test Assignment">link to Test Assignment</a>
-	[Test Assignment](assignment:Test Assignment)
+
+	[link to Test Assignment](assignment:Test Assignment)
 
 The name must match exactly, including case.  This is the name on Canvas, not the name of the containerized content on your local computer.  That is, the thing after `assignment:` is the `name` field from `meta.json`.
 
@@ -26,6 +33,7 @@ To link to an existing Canvas page, use a link of the form
 .. code-block:: 
 
 	<a href="page:Test Page">Link to page titled Test Page</a>
+
 	[Link to page titled Test Page](page:Test Page)
 
 The name must match exactly, including case.  This is the name on Canvas, not the name of the containerized content on your local computer.  That is, the thing after `page:` is the `name` field from `meta.json`.
@@ -38,15 +46,15 @@ To link to an existing Canvas file, use a link of the form
 .. code-block:: 
 
 	<a href="file:DavidenkoDiffEqn.pdf">Link to file called DavidenkoDiffEqn.pdf</a>
+
 	[Link to file called DavidenkoDiffEqn.pdf](file:DavidenkoDiffEqn.pdf)
 
 The name must match exactly, including case.  This is the name of the file on Canvas.  There is currently no way to refer to multiple files of the same name in different folders on Canvas.  If you want this, make an issue, or implement it yourself and make a PR.
 
 
-.. _Links_Notes:
 
-Notes
-------
+Notes about making links
+--------------------------
 
 What if the content doesn't (yet) exist?
 ******************************************
