@@ -151,7 +151,8 @@ def get_default_replacements_name():
                                 helpstr='a path to a json file containing key:value pairs of text-to-replace.  this path should be expressed relative to the top course folder')
 
 
-default_markdown_extensions = ['codehilite','fenced_code','md_in_html','tables','nl2br']
+default_markdown_extensions = ['codehilite','fenced_code','md_in_html','tables','nl2br'] #: The default `markdown` extensions to use when translating from markdown to html during publishing
+
 def get_default_markdown_extensions():
     return get_default_property(key='markdown_extensions', 
                                 helpstr='a list of strings being extensions to the `markdown` library used to translate from markdown to html before uploading to canvas.',

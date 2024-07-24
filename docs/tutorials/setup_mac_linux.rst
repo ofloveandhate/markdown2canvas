@@ -19,10 +19,10 @@ Canvas credentials, do not skip this
 You must define an environment variable called `CANVAS_CREDENTIAL_FILE`, which is the location of a `.py` file containing two variables:
 
 #. `API_URL` -- a string, the url of how to access your Canvas install.  
-	* At UW Eau Claire, it's `https://uweau.instructure.com/`.  
+	* At UW Eau Claire, it's `uweau.instructure.com <https://uweau.instructure.com>`_.  
 	* I cannot possibly tell you your url, but your local Canvas admin can.
 
-#. `API_KEY` -- a string, the key you can get from Canvas.  Here's [a link to a guide on how to generate yours](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-obtain-an-API-access-token-in-the-Canvas-Data-Portal/ta-p/157).  Do not share it with anyone -- having only this one piece of data, anyone can act as you.  Protect it at least as much as you would any other password or sensitive information.
+#. `API_KEY` -- a string, the key you can get from Canvas.  Here's `a link to a guide on how to generate yours <https://community.canvaslms.com/t5/Admin-Guide/How-do-I-obtain-an-API-access-token-in-the-Canvas-Data-Portal/ta-p/157>`_.  Do not share it with anyone -- having only this one piece of data, anyone can act as you.  Protect it at least as much as you would any other password or sensitive information.
 
 Thus, you should have a Python script somewhere, like this:
 

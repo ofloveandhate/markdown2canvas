@@ -1,3 +1,4 @@
+
 Styling Pages and Assignments
 ===============================
 
@@ -44,8 +45,8 @@ I hope they're self-documenting in purpose and content.  Here's what's in the `h
    <!-- Droplets elements and components -->
 
 
-Note the markdown="1" included in the <div> above. Any time you include a <div>, make sure that this appears. 
-Otherwise, markdown will not render.
+Note the `markdown="1"` included in the `<div>` above. Any time you include a `<div>`, make sure that this appears. 
+Otherwise, markdown inside that `div` will not get translated to HTML, and thus will look incorrect.  Unless, of course, you want raw markdown in your content, I could see some use-cases!
 
 The footer simply closes the `div` I opened in the header:
 

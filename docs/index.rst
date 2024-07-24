@@ -26,8 +26,11 @@ Tutorials
    tutorials/text_replacements
    tutorials/uploading_files
    tutorials/publishing_content
+   tutorials/markdown_python_extensions
    
 
+
+.. _Top_Notes:
 
 Notes
 ========
@@ -36,11 +39,15 @@ Notes
    :maxdepth: 1
    :caption: Some useful notes on aspects of using the library
 
+   gotchas
+   emoji
    on_meta_dot_json
    markdown_1
    making_links_to_existing_content
    wishlist
    unit_tests
+   history
+
 
 
 Useful links

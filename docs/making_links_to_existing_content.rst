@@ -43,6 +43,7 @@ To link to an existing Canvas file, use a link of the form
 The name must match exactly, including case.  This is the name of the file on Canvas.  There is currently no way to refer to multiple files of the same name in different folders on Canvas.  If you want this, make an issue, or implement it yourself and make a PR.
 
 
+.. _Links_Notes:
 
 Notes
 ------
