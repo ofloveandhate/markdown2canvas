@@ -17,8 +17,8 @@
     <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="🔗 Making links to existing content" href="making_links_to_existing_content.html" />
-    <link rel="prev" title="Publishing content from your computer to Canvas using markdown2canvas" href="tutorials/publishing_content.html" />
+    <link rel="next" title="Making sure markdown renders when there is a &lt;div&gt;" href="markdown_1.html" />
+    <link rel="prev" title="🙂 Emojification" href="emoji.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -31,10 +31,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="making_links_to_existing_content.html" title="🔗 Making links to existing content"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="markdown_1.html" title="Making sure markdown renders when there is a &lt;div&gt;"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tutorials/publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+          <a href="emoji.html" title="🙂 Emojification"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
       </ul>
@@ -44,24 +47,30 @@
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">On the <cite>meta.json</cite> file</a><ul>
-<li><a class="reference internal" href="#valid-properties">Valid properties</a><ul>
-<li><a class="reference internal" href="#assignments">Assignments</a></li>
-<li><a class="reference internal" href="#pages">Pages</a></li>
-<li><a class="reference internal" href="#links">Links</a></li>
-<li><a class="reference internal" href="#files">Files</a></li>
+<li><a class="reference internal" href="#meta-json-for-all-content-types">meta.json for ALL content types</a></li>
+<li><a class="reference internal" href="#meta-json-for-document-types">meta.json for Document types</a></li>
+<li><a class="reference internal" href="#meta-json-for-assignments">meta.json for Assignments</a><ul>
+<li><a class="reference internal" href="#submission-type">Submission type</a></li>
+<li><a class="reference internal" href="#if-online-upload-allowed-extensions">If <cite>online_upload</cite>, allowed extensions</a></li>
+<li><a class="reference internal" href="#assignment-group-name">Assignment group name</a></li>
+<li><a class="reference internal" href="#due-dates">Due dates</a></li>
+<li><a class="reference internal" href="#more-direct-canvas-properties">More direct Canvas properties</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#meta-json-for-pages">meta.json for Pages</a></li>
+<li><a class="reference internal" href="#meta-json-for-links">meta.json for Links</a></li>
+<li><a class="reference internal" href="#meta-json-for-files">meta.json for Files</a></li>
 <li><a class="reference internal" href="#what-happens-if-i-specify-a-property-key-that-s-not-used-or-is-invalid">What happens if I specify a property / key that’s not used or is invalid?</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorials/publishing_content.html"
-                        title="previous chapter">Publishing content from your computer to Canvas using <cite>markdown2canvas</cite></a></p>
+  <p class="topless"><a href="emoji.html"
+                        title="previous chapter">🙂 Emojification</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="making_links_to_existing_content.html"
-                        title="next chapter">🔗 Making links to existing content</a></p>
+  <p class="topless"><a href="markdown_1.html"
+                        title="next chapter">Making sure markdown renders when there is a &lt;div&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -89,24 +98,104 @@
             
   <div class="section" id="on-the-meta-json-file">
 <h1>On the <cite>meta.json</cite> file<a class="headerlink" href="#on-the-meta-json-file" title="Permalink to this headline">¶</a></h1>
-<p>The <cite>meta.json</cite> file should be present in every containerized content folder.</p>
-<div class="section" id="valid-properties">
-<h2>Valid properties<a class="headerlink" href="#valid-properties" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="assignments">
-<h3>Assignments<a class="headerlink" href="#assignments" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>meta.json</cite> file must be present in every containerized content folder.</p>
+<div class="section" id="meta-json-for-all-content-types">
+<h2>meta.json for ALL content types<a class="headerlink" href="#meta-json-for-all-content-types" title="Permalink to this headline">¶</a></h2>
+<p>Required:</p>
+<ul class="simple">
+<li><p><cite>name</cite> – the name of the thing as it will appear in Canvas.</p></li>
+</ul>
+<p>Optional.  If not used, will not be done.</p>
+<ul class="simple">
+<li><p><cite>modules</cite> – a list of strings, the names of the modules to put the content in.</p></li>
+<li><p><cite>indent</cite> – the depth of indentation within the module</p></li>
+</ul>
 </div>
-<div class="section" id="pages">
-<h3>Pages<a class="headerlink" href="#pages" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="meta-json-for-document-types">
+<h2>meta.json for Document types<a class="headerlink" href="#meta-json-for-document-types" title="Permalink to this headline">¶</a></h2>
+<p>Both <cite>Assignment</cite> and <cite>Page</cite> are documents, in that they have a body.</p>
+<p>These are optional.  If you provide a default in <cite>_course_metadata/defaults.json</cite>, then those will be used unless overridden per-object.</p>
+<ul class="simple">
+<li><p><cite>style</cite>  – filepath relative to course root.  The name of the folder containing the headers/footers.</p></li>
+<li><p><cite>replacements</cite> – filepath relative to course root.  The name of the .json file containing the list of replacements.</p></li>
+</ul>
 </div>
-<div class="section" id="links">
-<h3>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="meta-json-for-assignments">
+<h2>meta.json for Assignments<a class="headerlink" href="#meta-json-for-assignments" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="submission-type">
+<h3>Submission type<a class="headerlink" href="#submission-type" title="Permalink to this headline">¶</a></h3>
+<p>In the <cite>meta.json</cite> file for an assignment, the submission type is encoded by a line that looks like the following.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;submission_types&quot;</span><span class="p">:[</span><span class="s1">&#39;online_text_entry&#39;</span><span class="p">,</span> <span class="s1">&#39;online_url&#39;</span><span class="p">,</span> <span class="s1">&#39;media_recording&#39;</span><span class="p">,</span> <span class="s1">&#39;online_upload&#39;</span><span class="p">]</span>
+</pre></div>
 </div>
-<div class="section" id="files">
-<h3>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h3>
+<p>These are four of the five upload types available with Canvas. The other is an <cite>annotation</cite>, but I’ve never used those. You may any sublist of this list.</p>
 </div>
+<div class="section" id="if-online-upload-allowed-extensions">
+<h3>If <cite>online_upload</cite>, allowed extensions<a class="headerlink" href="#if-online-upload-allowed-extensions" title="Permalink to this headline">¶</a></h3>
+<p>If you choose to allow the <cite>online_upload</cite> submission type, you may also specify the allowable file types by including an allowed extensions list in your <cite>meta.json</cite> file for the assignment.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;allowed_extensions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span><span class="s2">&quot;docx&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="assignment-group-name">
+<h3>Assignment group name<a class="headerlink" href="#assignment-group-name" title="Permalink to this headline">¶</a></h3>
+<p>I put my assignments in groups according to my Syllabus.  <cite>markdown2canvas</cite> lets me express this programmatically by setting the <cite>assignment_group_name</cite> property in <cite>meta.json</cite>.  For example, in the <cite>meta.json</cite> for all parts of my semester project, I use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;assignment_group_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Project&quot;</span>
+</pre></div>
+</div>
+<p>At this time, it is not built-in to use <cite>markdown2canvas</cite> to set the weight of these groups in the gradebook – I’ve just been doing that in Canvas.  If you want a programmatic way, I suggest you use <cite>canvasapi</cite>, because <cite>mc</cite> already depends on that.  You could just write a script in your <cite>_tools</cite> folder to do it and put some new .json file in your <cite>_course_metadata</cite> folder.  There are always ways.</p>
+</div>
+<div class="section" id="due-dates">
+<h3>Due dates<a class="headerlink" href="#due-dates" title="Permalink to this headline">¶</a></h3>
+<p>Use these key-value pairs to set due dates for assignments:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">unlock_at</span>
+<span class="n">lock_at</span>
+<span class="n">due_at</span>
+</pre></div>
+</div>
+<p>The formatting of these strings is likely to be a pain in the ass.  The place I’ve most used this was in <cite>webwork2canvas</cite> – it’s in <a class="reference external" href="https://github.com/ofloveandhate/markdown2canvas/tree/main/tools/webwork2canvas">the tools folder (NOT MODULE) of the markdown2canvas repo</a></p>
+</div>
+<div class="section" id="more-direct-canvas-properties">
+<h3>More direct Canvas properties<a class="headerlink" href="#more-direct-canvas-properties" title="Permalink to this headline">¶</a></h3>
+<p>These are plucked from <cite>meta.json</cite> and set into the properties at publish-time.</p>
+<ul class="simple">
+<li><p><cite>external_tool_tag_attributes</cite></p></li>
+<li><p><cite>omit_from_final_grade</cite></p></li>
+<li><p><cite>grading_type</cite></p></li>
+</ul>
+<p>If you want additional properties, you’ll need to modify <cite>mc.Assignment._set_from_metadata</cite> to pass them through.  Full generic passthrough seems difficult to achieve (more difficult than I felt was worth it at this moment), since <cite>canvasapi</cite> might complain about invalid keys and the list might change.  I would need a list to populate from, and this probably means webcrawling.  You do it.</p>
+</div>
+</div>
+<div class="section" id="meta-json-for-pages">
+<h2>meta.json for Pages<a class="headerlink" href="#meta-json-for-pages" title="Permalink to this headline">¶</a></h2>
+<p>Nothing beyond that for <cite>Documents</cite> of any type.</p>
+</div>
+<div class="section" id="meta-json-for-links">
+<h2>meta.json for Links<a class="headerlink" href="#meta-json-for-links" title="Permalink to this headline">¶</a></h2>
+<p>Required:</p>
+<ul class="simple">
+<li><p><cite>external_url</cite> – the url to map to.</p></li>
+<li><p><cite>name</cite> – of course.  This is the string of text which will appear in Canvas, on which students will click.</p></li>
+</ul>
+</div>
+<div class="section" id="meta-json-for-files">
+<h2>meta.json for Files<a class="headerlink" href="#meta-json-for-files" title="Permalink to this headline">¶</a></h2>
+<p>Required:</p>
+<ul class="simple">
+<li><p><cite>filename</cite> – the name of the file, relative to the folder containing the <cite>meta.json</cite>.  This must be a strict match.</p></li>
+</ul>
+<p>Optional:</p>
+<ul class="simple">
+<li><p><cite>title</cite> – the name of the item inside a Canvas module in which the <cite>File</cite> is included.</p></li>
+</ul>
 </div>
 <div class="section" id="what-happens-if-i-specify-a-property-key-that-s-not-used-or-is-invalid">
 <h2>What happens if I specify a property / key that’s not used or is invalid?<a class="headerlink" href="#what-happens-if-i-specify-a-property-key-that-s-not-used-or-is-invalid" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Extra keys are ignored with no message.</p></li>
+<li><p>Missing required keys hopefully WILL generate a problem!!!</p></li>
+</ul>
+<p>The <cite>meta.json</cite> includes some things for Canvas, some things for <cite>markdown2canvas</cite>, and could, if you wish and write the code, some things for your creative uses, too.</p>
 </div>
 </div>
 
@@ -123,10 +212,13 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="making_links_to_existing_content.html" title="🔗 Making links to existing content"
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="markdown_1.html" title="Making sure markdown renders when there is a &lt;div&gt;"
              >next</a> |</li>
         <li class="right" >
-          <a href="tutorials/publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+          <a href="emoji.html" title="🙂 Emojification"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
       </ul>

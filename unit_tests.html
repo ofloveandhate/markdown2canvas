@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>markdown2canvas – detailed documentation &#8212; markdown2canvas  documentation</title>
+    <title>Unit tests &#8212; markdown2canvas  documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -17,8 +17,8 @@
     <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Concrete Classes for Canvas Objects" href="canvas_objects.html" />
-    <link rel="prev" title="Why this library exists" href="history.html" />
+    <link rel="next" title="Why this library exists" href="history.html" />
+    <link rel="prev" title="Wish list" href="wishlist.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -34,10 +34,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="canvas_objects.html" title="Concrete Classes for Canvas Objects"
+          <a href="history.html" title="Why this library exists"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="history.html" title="Why this library exists"
+          <a href="wishlist.html" title="Wish list"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
       </ul>
@@ -45,15 +45,15 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="history.html"
-                        title="previous chapter">Why this library exists</a></p>
+  <p class="topless"><a href="wishlist.html"
+                        title="previous chapter">Wish list</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="canvas_objects.html"
-                        title="next chapter">Concrete Classes for Canvas Objects</a></p>
+  <p class="topless"><a href="history.html"
+                        title="next chapter">Why this library exists</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/markdown2canvas.rst.txt"
+      <li><a href="_sources/unit_tests.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -75,23 +75,24 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="markdown2canvas-detailed-documentation">
-<h1>markdown2canvas – detailed documentation<a class="headerlink" href="#markdown2canvas-detailed-documentation" title="Permalink to this headline">¶</a></h1>
-<p>This is the detailed list of all functions and types available in the library.</p>
-<p>Python libraries used: <cite>canvasapi</cite></p>
-<div class="toctree-wrapper compound">
+  <div class="section" id="unit-tests">
+<h1>Unit tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h1>
+<p>This library comes with several test pages/assignments:</p>
+<ul class="simple">
+<li><p>pages:</p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="canvas_objects.html">Concrete Classes for Canvas Objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="canvas_objects.html#base-classes">Base Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="free_functions.html">Free functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="free_functions.html#module-markdown2canvas.setup_functions">Setup functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="free_functions.html#module-markdown2canvas.course_interaction_functions">Functions for interacting with a course on Canvas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="free_functions.html#module-markdown2canvas.translation_functions">Functions markdown2canvas uses to translate from markdown to Canvas-html</a></li>
+<li><p><cite>plain_text</cite> – source is just plain old text.  start simple, ya know?</p></li>
+<li><p><cite>uses_latex</cite> – a page that contains latex math</p></li>
+<li><p><cite>has_remote_images</cite> – a page that has remote images embedded</p></li>
+<li><p><cite>has_local_images</cite> – a page that uses local images</p></li>
+<li><p><cite>uses_droplets</cite> – a page using [the Droplets framework from UWEX](<a class="reference external" href="https://media.uwex.edu/app/droplets/index.html">https://media.uwex.edu/app/droplets/index.html</a>).</p></li>
+<li><p><cite>uses_droplets_via_style</cite> – a page using [the Droplets framework from UWEX](<a class="reference external" href="https://media.uwex.edu/app/droplets/index.html">https://media.uwex.edu/app/droplets/index.html</a>).  The code enabling Droplets comes from a header/footer contained in a style folder.  The main purpose of this test page is the header/footer style thing.</p></li>
 </ul>
 </li>
+<li><p>assignments:</p></li>
+<li><p><cite>programming_assignment</cite> – an assignment that has a local image</p></li>
 </ul>
-</div>
+<p>The above list is not exhaustive.</p>
 </div>
 
 
@@ -110,10 +111,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="canvas_objects.html" title="Concrete Classes for Canvas Objects"
+          <a href="history.html" title="Why this library exists"
              >next</a> |</li>
         <li class="right" >
-          <a href="history.html" title="Why this library exists"
+          <a href="wishlist.html" title="Wish list"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
       </ul>

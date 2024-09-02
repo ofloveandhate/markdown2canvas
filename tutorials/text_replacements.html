@@ -17,7 +17,7 @@
     <script src="../_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Publishing content from your computer to Canvas using markdown2canvas" href="publishing_content.html" />
+    <link rel="next" title="How to upload a file" href="uploading_files.html" />
     <link rel="prev" title="Styling Pages and Assignments" href="styling_content.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
@@ -31,7 +31,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="uploading_files.html" title="How to upload a file"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="styling_content.html" title="Styling Pages and Assignments"
@@ -56,8 +59,8 @@
   <p class="topless"><a href="styling_content.html"
                         title="previous chapter">Styling Pages and Assignments</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="publishing_content.html"
-                        title="next chapter">Publishing content from your computer to Canvas using <cite>markdown2canvas</cite></a></p>
+  <p class="topless"><a href="uploading_files.html"
+                        title="next chapter">How to upload a file</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -101,11 +104,16 @@
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Keep in mind that the order of replacement is unspecified. Thus, it is important to choose keys that will not appear within values, and will not appear within source documents where replacement is undesired.</p>
 </div>
 <div class="section" id="custom-text-replacements-per-content">
 <h2>Custom text replacements per-content<a class="headerlink" href="#custom-text-replacements-per-content" title="Permalink to this headline">¶</a></h2>
 <p>Content can override which replacements file is used, say in case you want all your assignments of a certain type to use one style, and the pages of another type to use their own.  It’s easy.</p>
-<p>In the <cite>meta.json</cite> for the content you want to use the non-default replacements file, specify the key-value pair <cite>‘replacements’:’path/to/custom_replacements.json’</cite></p>
+<p>In the <cite>meta.json</cite> for the content you want to use the non-default replacements file, specify the key-value pair</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;replacements&quot;</span><span class="p">:</span><span class="s2">&quot;path/to/custom_replacements.json&quot;</span>
+</pre></div>
+</div>
+<p>The path is relative to the root of the course folder.</p>
 </div>
 </div>
 
@@ -122,7 +130,10 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="uploading_files.html" title="How to upload a file"
              >next</a> |</li>
         <li class="right" >
           <a href="styling_content.html" title="Styling Pages and Assignments"

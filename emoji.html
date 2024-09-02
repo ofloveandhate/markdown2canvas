@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>markdown2canvas – detailed documentation &#8212; markdown2canvas  documentation</title>
+    <title>🙂 Emojification &#8212; markdown2canvas  documentation</title>
     <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -17,8 +17,8 @@
     <script src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Concrete Classes for Canvas Objects" href="canvas_objects.html" />
-    <link rel="prev" title="Why this library exists" href="history.html" />
+    <link rel="next" title="On the meta.json file" href="on_meta_dot_json.html" />
+    <link rel="prev" title="💥 Gotchas" href="gotchas.html" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!--[if lt IE 9]>
     <script src="_static/css3-mediaqueries.js"></script>
@@ -34,10 +34,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="canvas_objects.html" title="Concrete Classes for Canvas Objects"
+          <a href="on_meta_dot_json.html" title="On the meta.json file"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="history.html" title="Why this library exists"
+          <a href="gotchas.html" title="💥 Gotchas"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
       </ul>
@@ -45,15 +45,15 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="history.html"
-                        title="previous chapter">Why this library exists</a></p>
+  <p class="topless"><a href="gotchas.html"
+                        title="previous chapter">💥 Gotchas</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="canvas_objects.html"
-                        title="next chapter">Concrete Classes for Canvas Objects</a></p>
+  <p class="topless"><a href="on_meta_dot_json.html"
+                        title="next chapter">On the <cite>meta.json</cite> file</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/markdown2canvas.rst.txt"
+      <li><a href="_sources/emoji.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -75,23 +75,19 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="markdown2canvas-detailed-documentation">
-<h1>markdown2canvas – detailed documentation<a class="headerlink" href="#markdown2canvas-detailed-documentation" title="Permalink to this headline">¶</a></h1>
-<p>This is the detailed list of all functions and types available in the library.</p>
-<p>Python libraries used: <cite>canvasapi</cite></p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="canvas_objects.html">Concrete Classes for Canvas Objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="canvas_objects.html#base-classes">Base Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="free_functions.html">Free functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="free_functions.html#module-markdown2canvas.setup_functions">Setup functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="free_functions.html#module-markdown2canvas.course_interaction_functions">Functions for interacting with a course on Canvas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="free_functions.html#module-markdown2canvas.translation_functions">Functions markdown2canvas uses to translate from markdown to Canvas-html</a></li>
+  <div class="section" id="emojification">
+<h1>🙂 Emojification<a class="headerlink" href="#emojification" title="Permalink to this headline">¶</a></h1>
+<p>This library supports the automatic conversion of shortcodes to emoji.  During translation from local file to Canvas content, <cite>markdown2canvas</cite> will attempt to emojize your text from “shortcodes”.</p>
+<ul class="simple">
+<li><p>You may also just use emoji directly without using short codes.</p></li>
+<li><p>We felt that also allowing short codes would be helpful.</p></li>
 </ul>
-</li>
+<p>For example, <cite>:open_book:</cite> goes to 📖.</p>
+<ul class="simple">
+<li><p>We use the <cite>emoji</cite> library to do this.  Here’s <a class="reference external" href="https://pypi.org/project/emoji/">a link to their documentation</a>.</p></li>
+<li><p><a class="reference external" href="https://carpedm20.github.io/emoji/">Shortcodes can be found here</a>.</p></li>
 </ul>
-</div>
+<p>Right now, emoji shortcodes can only be used in content, not in names of things – shortcodes in names will not be emojized.</p>
 </div>
 
 
@@ -110,10 +106,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="canvas_objects.html" title="Concrete Classes for Canvas Objects"
+          <a href="on_meta_dot_json.html" title="On the meta.json file"
              >next</a> |</li>
         <li class="right" >
-          <a href="history.html" title="Why this library exists"
+          <a href="gotchas.html" title="💥 Gotchas"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
       </ul>

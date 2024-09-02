@@ -1,0 +1,303 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Concrete Classes for Canvas Objects &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Exceptions" href="exceptions.html" />
+    <link rel="prev" title="markdown2canvas – detailed documentation" href="markdown2canvas.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="markdown2canvas.html" title="markdown2canvas – detailed documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="markdown2canvas.html" accesskey="U">markdown2canvas – detailed documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Concrete Classes for Canvas Objects</a></li>
+<li><a class="reference internal" href="#base-classes">Base Classes</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="markdown2canvas.html"
+                        title="previous chapter">markdown2canvas – detailed documentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="exceptions.html"
+                        title="next chapter">Exceptions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/canvas_objects.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="concrete-classes-for-canvas-objects">
+<h1>Concrete Classes for Canvas Objects<a class="headerlink" href="#concrete-classes-for-canvas-objects" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="markdown2canvas.Page">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.</code><code class="sig-name descname">Page</code><span class="sig-paren">(</span><em class="sig-param">folder</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Page" title="Permalink to this definition">¶</a></dt>
+<dd><p>a Page is an abstraction around content for plain old canvas pages, which facilitates uploading to Canvas.</p>
+<p>folder – a string, the name of the folder we’re going to read data from.</p>
+<dl class="method">
+<dt id="markdown2canvas.Page.publish">
+<code class="sig-name descname">publish</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Page.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>if <cite>overwrite</cite> is False, then if an assignment is found with the same name already, the function will decline to make any edits.</p>
+<p>That is, if overwrite==False, then this function will only succeed if there’s no existing assignment of the same name.</p>
+<p>This base-class function will handle things like the html, images, etc.</p>
+<p>Other derived-class <cite>publish</cite> functions will handle things like due-dates for assignments, etc.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="markdown2canvas.Assignment">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.</code><code class="sig-name descname">Assignment</code><span class="sig-paren">(</span><em class="sig-param">folder</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>docstring for Assignment</p>
+<dl class="method">
+<dt id="markdown2canvas.Assignment.ensure_in_assignment_groups">
+<code class="sig-name descname">ensure_in_assignment_groups</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">create_if_necessary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Assignment.ensure_in_assignment_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.Assignment.publish">
+<code class="sig-name descname">publish</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">create_modules_if_necessary=False</em>, <em class="sig-param">create_assignment_group_if_necessary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Assignment.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>if <cite>overwrite</cite> is False, then if an assignment is found with the same name already, the function will decline to make any edits.</p>
+<p>That is, if overwrite==False, then this function will only succeed if there’s no existing assignment of the same name.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="markdown2canvas.Image">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.</code><code class="sig-name descname">Image</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">alttext=''</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Image" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper class for images on Canvas</p>
+<dl class="method">
+<dt id="markdown2canvas.Image.make_api_endpoint_url">
+<code class="sig-name descname">make_api_endpoint_url</code><span class="sig-paren">(</span><em class="sig-param">courseid</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Image.make_api_endpoint_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.Image.make_src_url">
+<code class="sig-name descname">make_src_url</code><span class="sig-paren">(</span><em class="sig-param">courseid</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Image.make_src_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>constructs a string which can be used to embed the image in a Canvas page.</p>
+<p>sadly, the JSON back from Canvas doesn’t just produce this for us.  lame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.Image.publish">
+<code class="sig-name descname">publish</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">dest</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">raise_if_already_uploaded=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Image.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>see also <a class="reference external" href="https://canvas.instructure.com/doc/api/file.file_uploads.html">https://canvas.instructure.com/doc/api/file.file_uploads.html</a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="markdown2canvas.Link">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.</code><code class="sig-name descname">Link</code><span class="sig-paren">(</span><em class="sig-param">folder</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Link" title="Permalink to this definition">¶</a></dt>
+<dd><p>a containerization of url’s, for uploading to Canvas modules</p>
+<dl class="method">
+<dt id="markdown2canvas.Link.is_already_uploaded">
+<code class="sig-name descname">is_already_uploaded</code><span class="sig-paren">(</span><em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Link.is_already_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.Link.is_in_module">
+<code class="sig-name descname">is_in_module</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">module_name</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Link.is_in_module" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.Link.publish">
+<code class="sig-name descname">publish</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.Link.publish" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="markdown2canvas.File">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.</code><code class="sig-name descname">File</code><span class="sig-paren">(</span><em class="sig-param">folder</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.File" title="Permalink to this definition">¶</a></dt>
+<dd><p>a containerization of arbitrary files, for uploading to Canvas</p>
+<dl class="method">
+<dt id="markdown2canvas.File.is_already_uploaded">
+<code class="sig-name descname">is_already_uploaded</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">require_same_path=True</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.File.is_already_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.File.is_in_module">
+<code class="sig-name descname">is_in_module</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">module_name</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.File.is_in_module" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.File.publish">
+<code class="sig-name descname">publish</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.File.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>publishes a file to Canvas in a particular folder</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="markdown2canvas.BareFile">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.</code><code class="sig-name descname">BareFile</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.BareFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper class for bare, unwrapped files on Canvas, for link to inline.</p>
+<dl class="method">
+<dt id="markdown2canvas.BareFile.make_api_endpoint_url">
+<code class="sig-name descname">make_api_endpoint_url</code><span class="sig-paren">(</span><em class="sig-param">courseid</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.BareFile.make_api_endpoint_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.BareFile.make_href_url">
+<code class="sig-name descname">make_href_url</code><span class="sig-paren">(</span><em class="sig-param">courseid</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.BareFile.make_href_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>constructs a string which can be used to reference the file in a Canvas page.</p>
+<p>sadly, the JSON back from Canvas doesn’t just produce this for us.  lame.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.BareFile.publish">
+<code class="sig-name descname">publish</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">dest</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">raise_if_already_uploaded=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.BareFile.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>see also <a class="reference external" href="https://canvas.instructure.com/doc/api/file.file_uploads.html">https://canvas.instructure.com/doc/api/file.file_uploads.html</a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="base-classes">
+<h1>Base Classes<a class="headerlink" href="#base-classes" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="markdown2canvas.canvas_objects.CanvasObject">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.canvas_objects.</code><code class="sig-name descname">CanvasObject</code><span class="sig-paren">(</span><em class="sig-param">canvas_obj=None</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.CanvasObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class for wrapping canvas objects.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="markdown2canvas.canvas_objects.Document">
+<em class="property">class </em><code class="sig-prename descclassname">markdown2canvas.canvas_objects.</code><code class="sig-name descname">Document</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">course=None</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.Document" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class which handles common pieces of interface for things like Pages and Assignments</p>
+<p>This type is abstract.  Assignments and Pages both derive from this.</p>
+<p>At least two files are required in the folder for a Document:</p>
+<ol class="arabic simple">
+<li><p><cite>meta.json</cite></p></li>
+<li><p><cite>source.md</cite></p></li>
+</ol>
+<p>You may have additional files in the folder for a Document, such as images and files to include in the content on Canvas.  This library will automatically upload those for you!</p>
+<dl class="method">
+<dt id="markdown2canvas.canvas_objects.Document.ensure_in_modules">
+<code class="sig-name descname">ensure_in_modules</code><span class="sig-paren">(</span><em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.Document.ensure_in_modules" title="Permalink to this definition">¶</a></dt>
+<dd><p>makes sure this item is listed in the Modules listed (by name) in self.modules, on Canvas.  If it’s not, it’s added to the bottom.  There’s not currently any way to control order.</p>
+<p>If the item doesn’t already exist, this function will raise <cite>DoesntExist</cite>.  Be sure to actually publish the content first.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.canvas_objects.Document.is_in_module">
+<code class="sig-name descname">is_in_module</code><span class="sig-paren">(</span><em class="sig-param">module_name</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.Document.is_in_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks whether this content is an item in the listed module, where <cite>module_name</cite> is a string.  It’s case sensitive and exact.</p>
+<p>passthrough raise if the module doesn’t exist</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.canvas_objects.Document.publish_linked_content_and_adjust_html">
+<code class="sig-name descname">publish_linked_content_and_adjust_html</code><span class="sig-paren">(</span><em class="sig-param">course</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.Document.publish_linked_content_and_adjust_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>this function should be called <em>after</em> <cite>translate_to_html</cite>, since it requires the internal variables that other function populates</p>
+<p>the result of this function is written to <cite>folder/result.html</cite></p>
+<ul class="simple">
+<li><p>This function does NOT make content appear on Canvas.</p></li>
+<li><p>It DOES leave behind a temporary file: <cite>{folder}/result.html</cite>.  Be sure to add <cite>*/result.html</cite> to your .gitignore for your course!</p></li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="markdown2canvas.canvas_objects.Document.translate_to_html">
+<code class="sig-name descname">translate_to_html</code><span class="sig-paren">(</span><em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.Document.translate_to_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>populates the internal variables with the results of translating from markdown to html.</p>
+<p>This step requires the <cite>course</cite> since this library allows for referencing of content already on canvas (or to be later published on Canvas)</p>
+<p>The main result of translation is held in self._translated_html.  The local content (on YOUR computer, NOT Canvas) is parsed out and held in <cite>self._local_images</cite> and <cite>self._local_files</cite>.</p>
+<ul class="simple">
+<li><p>This function does NOT make content appear on Canvas.</p></li>
+<li><p>It DOES leave behind a temporary file: <cite>{folder}/styled_source.md</cite>.  Be sure to add <cite>*/styled_source.md</cite> to your .gitignore for your course!</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="markdown2canvas.html" title="markdown2canvas – detailed documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="markdown2canvas.html" >markdown2canvas – detailed documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

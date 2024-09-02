@@ -1,0 +1,185 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Customize translation from Markdown to HTML via extensions to markdown &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="💥 Gotchas" href="../gotchas.html" />
+    <link rel="prev" title="Publishing content from your computer to Canvas using markdown2canvas" href="publishing_content.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../gotchas.html" title="💥 Gotchas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customize translation from Markdown to HTML via extensions to <cite>markdown</cite></a><ul>
+<li><a class="reference internal" href="#background">Background</a></li>
+<li><a class="reference internal" href="#provided-default-markdown-extensions">Provided default <cite>markdown</cite> extensions</a></li>
+<li><a class="reference internal" href="#specifying-your-own-list-of-extensions">Specifying your own list of extensions</a></li>
+<li><a class="reference internal" href="#where-to-find-more-extensions">Where to find more extensions</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="publishing_content.html"
+                        title="previous chapter">Publishing content from your computer to Canvas using <cite>markdown2canvas</cite></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../gotchas.html"
+                        title="next chapter">💥 Gotchas</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/markdown_python_extensions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="customize-translation-from-markdown-to-html-via-extensions-to-markdown">
+<h1>Customize translation from Markdown to HTML via extensions to <cite>markdown</cite><a class="headerlink" href="#customize-translation-from-markdown-to-html-via-extensions-to-markdown" title="Permalink to this headline">¶</a></h1>
+<p>This library, <cite>markdown2canvas</cite>, essentially acts as a wrapper around a translation function <cite>markdown2canvas.translation_functions.markdown2html</cite>, or just <cite>markdown2html</cite> for short.  The <cite>markdown2html</cite> function uses the Python library <cite>markdown</cite> (<a class="reference external" href="https://python-markdown.github.io/">link to library</a>) to translate.  You can customize the behaviour of this translation using “extensions” to the <cite>markdown</cite> library.</p>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>Before I tell you how to use your own custom set of extensions to <cite>markdown</cite>, here’s a brief rundown of how <cite>markdown2canvas</cite> works when you publish a page or assignment to Canvas:</p>
+<ol class="arabic">
+<li><p><a class="reference internal" href="styling_content.html"><span class="doc">The style is applied</span></a>.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The markdown header and footer from the used style are assembled around your <cite>source.md</cite>.</p></li>
+<li><p>The html header and footer from the used style are assembled around that.</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p><a class="reference internal" href="text_replacements.html"><span class="doc">Replacements are done</span></a>.</p></li>
+<li><p><a class="reference internal" href="../emoji.html"><span class="doc">Emoji shortcodes are emojified</span></a></p></li>
+<li><p>The markdown is translated to HTML.</p></li>
+<li><p><a class="reference internal" href="../making_links_to_existing_content.html"><span class="doc">Links to existing content are implemented</span></a>, further modifying the HTML.</p></li>
+<li><p>Local files and images which are linked-to in the source are uploaded (if necessary), and the HTML is adjusted to use the Canvas links to that content.</p></li>
+<li><p>Content properties are set from <cite>meta.json</cite>.</p></li>
+<li><p>The content is placed in modules as described in <cite>meta.json</cite>.</p></li>
+</ol>
+<p>This tutorial is about customizing the first translation to HTML, by using <cite>markdown</cite> extensions.</p>
+</div>
+<div class="section" id="provided-default-markdown-extensions">
+<h2>Provided default <cite>markdown</cite> extensions<a class="headerlink" href="#provided-default-markdown-extensions" title="Permalink to this headline">¶</a></h2>
+<p>This library provides a decent set of default extensions, chosen for</p>
+<ul class="simple">
+<li><p>Syntax highlighting of code</p></li>
+<li><p>Translating markdown tables</p></li>
+<li><p>Trying to make sure that markdown inside of HTML is translated, too</p></li>
+</ul>
+<p>The specific default list is <a class="reference internal" href="../free_functions.html#markdown2canvas.translation_functions.default_markdown_extensions" title="markdown2canvas.translation_functions.default_markdown_extensions"><code class="xref py py-attr docutils literal notranslate"><span class="pre">markdown2canvas.translation_functions.default_markdown_extensions</span></code></a>.</p>
+</div>
+<div class="section" id="specifying-your-own-list-of-extensions">
+<h2>Specifying your own list of extensions<a class="headerlink" href="#specifying-your-own-list-of-extensions" title="Permalink to this headline">¶</a></h2>
+<p>You may wish to use your own set of extensions.  Easy!  Just specify the list in your <cite>defaults.json</cite> file.</p>
+<ol class="arabic">
+<li><p>Edit <cite>_course_metadata/defaults.json</cite>.</p></li>
+<li><p>Add a key-value pair.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Key: <cite>markdown_extensions</cite></p></li>
+<li><p>Value: A list of strings which are names of extensions.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="where-to-find-more-extensions">
+<h2>Where to find more extensions<a class="headerlink" href="#where-to-find-more-extensions" title="Permalink to this headline">¶</a></h2>
+<p>I have found <a class="reference external" href="https://python-markdown.github.io/extensions/">the official markdown Extensions documentation</a> to be very helpful.</p>
+<p>Cruise the list, find one that you need, and try it out by:</p>
+<ul class="simple">
+<li><p>Add it to the list of extensions you are using</p></li>
+<li><p>Publish the content to a test or sandbox course on Canvas</p></li>
+<li><p>Check it out!  Did it do what you needed?</p></li>
+</ul>
+</div>
+<div class="section" id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h2>
+<p>ℹ️ Known limitation: This system is missing methods for you writing your own extensions to <cite>markdown</cite>.  I do not know what happens if your list of extensions includes references to your own, but I suspect errors because they’ll be strings, not Python modules, classes, or functions.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../gotchas.html" title="💥 Gotchas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

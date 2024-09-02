@@ -31,6 +31,9 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="writing_content.html" title="Writing content using markdown2canvas"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -280,7 +283,7 @@ This text here will get replaced: a source replacement with spaces
 <span class="n">course_folder</span><span class="o">/</span><span class="n">_tools</span><span class="o">/</span><span class="n">content_all</span>            <span class="c1"># a txt file with names of content folders</span>
 </pre></div>
 </div>
-<p>Here’s a script I use in DS710.  🎯 Copy-paste it.</p>
+<p>Here’s a script I use in DS710.  🎯 Copy-paste it into <cite>_tools/publish_ready_content.py</cite>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/python3</span>
 
 <span class="c1"># a script for publishing content that&#39;s ready to go!</span>
@@ -348,7 +351,12 @@ This text here will get replaced: a source replacement with spaces
 </div>
 <div class="section" id="publish-the-content">
 <h2>Publish the content!!!!!<a class="headerlink" href="#publish-the-content" title="Permalink to this headline">¶</a></h2>
-<p>Now, assuming you’ve completed the setup steps (Mac/Linux: saving your API key and URL in a .py file, and specifying the name of the file via an environment variable called <cite>CANVAS_CREDENTIALS_FILE</cite>), you should be able to publish the content to your course.</p>
+<p>Now, assuming you’ve completed the setup steps</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="setup_mac_linux.html"><span class="doc">How to set up Mac or Linux for using markdown2canvas</span></a></p></li>
+<li><p><a class="reference internal" href="setup_windows.html"><span class="doc">How to set up Windows for using markdown2canvas</span></a></p></li>
+</ul>
+<p>you should be able to publish the content to your course.</p>
 <p>🎯 Be sure you copied in your Canvas course number to the <cite>_tools/publish_ready_content.py</cite> script!</p>
 <p>🎯 From course root level, run</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">_tools</span><span class="o">/</span><span class="n">publish_ready_content</span><span class="o">.</span><span class="n">py</span>
@@ -370,6 +378,9 @@ This text here will get replaced: a source replacement with spaces
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="writing_content.html" title="Writing content using markdown2canvas"
              >next</a> |</li>

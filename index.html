@@ -30,6 +30,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="tutorials/setup_mac_linux.html" title="How to set up Mac or Linux for using markdown2canvas"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">markdown2canvas  documentation</a> &#187;</li> 
@@ -40,9 +43,10 @@
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#"><cite>markdown2canvas</cite></a></li>
-<li><a class="reference internal" href="#tutorials">Tutorials</a></li>
-<li><a class="reference internal" href="#notes">Notes</a></li>
-<li><a class="reference internal" href="#useful-links">Useful links</a></li>
+<li><a class="reference internal" href="#tutorials">Tutorials 👩‍🏫</a></li>
+<li><a class="reference internal" href="#usage-notes">Usage notes</a></li>
+<li><a class="reference internal" href="#useful-links">Useful links 🔗</a></li>
+<li><a class="reference internal" href="#implementation-notes">Implementation notes</a></li>
 <li><a class="reference internal" href="#details">Details 📝</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 <li><a class="reference internal" href="#contact">Contact 📧</a></li>
@@ -83,7 +87,7 @@
 </div>
 </div>
 <div class="section" id="tutorials">
-<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<h1>Tutorials 👩‍🏫<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/setup_mac_linux.html">How to set up Mac or Linux for using <cite>markdown2canvas</cite></a></li>
@@ -92,32 +96,65 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/writing_content.html">Writing content using <cite>markdown2canvas</cite></a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/styling_content.html">Styling Pages and Assignments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/text_replacements.html">Text replacements to reduce workload and increase uniformity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/uploading_files.html">How to upload a file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/publishing_content.html">Publishing content from your computer to Canvas using <cite>markdown2canvas</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/markdown_python_extensions.html">Customize translation from Markdown to HTML via extensions to <cite>markdown</cite></a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="notes">
-<h1>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="usage-notes">
+<h1>Usage notes<a class="headerlink" href="#usage-notes" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Some useful notes on aspects of using the library</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="on_meta_dot_json.html">On the <cite>meta.json</cite> file</a></li>
-<li class="toctree-l1"><a class="reference internal" href="making_links_to_existing_content.html">🔗 Making links to existing content</a></li>
-<li class="toctree-l1"><a class="reference internal" href="wishlist.html">Wish list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gotchas.html">💥 Gotchas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gotchas.html#markdown-lists-and-enumerations">Markdown lists and enumerations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="emoji.html">🙂 Emojification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="on_meta_dot_json.html">On the <cite>meta.json</cite> file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="on_meta_dot_json.html#meta-json-for-all-content-types">meta.json for ALL content types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="on_meta_dot_json.html#meta-json-for-document-types">meta.json for Document types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="on_meta_dot_json.html#meta-json-for-assignments">meta.json for Assignments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="on_meta_dot_json.html#meta-json-for-pages">meta.json for Pages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="on_meta_dot_json.html#meta-json-for-links">meta.json for Links</a></li>
+<li class="toctree-l2"><a class="reference internal" href="on_meta_dot_json.html#meta-json-for-files">meta.json for Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="on_meta_dot_json.html#what-happens-if-i-specify-a-property-key-that-s-not-used-or-is-invalid">What happens if I specify a property / key that’s not used or is invalid?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="markdown_1.html">Making sure markdown renders when there is a &lt;div&gt;</a></li>
+<li class="toctree-l1"><a class="reference internal" href="making_links_to_existing_content.html">🔗 Making links to existing content</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="making_links_to_existing_content.html#notes-for-links-to-all-content-types">Notes for links to all content types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="making_links_to_existing_content.html#link-to-an-assignment">Link to an assignment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="making_links_to_existing_content.html#link-to-a-page">Link to a page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="making_links_to_existing_content.html#link-to-an-uploaded-file">Link to an uploaded file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="making_links_to_existing_content.html#notes-about-making-links">Notes about making links</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div class="section" id="useful-links">
-<h1>Useful links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h1>
+<h1>Useful links 🔗<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p><a class="reference external" href="https://canvasapi.readthedocs.io/en/stable/">Canvas API documentation at root level</a></p></li>
 <li><p><a class="reference external" href="https://canvasapi.readthedocs.io/en/stable/class-reference.html">Canvas API class documentation</a>  I use this when chasing down how to set additional properties for various content types.</p></li>
 </ul>
 </div>
+<div class="section" id="implementation-notes">
+<h1>Implementation notes<a class="headerlink" href="#implementation-notes" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Notes about library implementation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="wishlist.html">Wish list</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unit_tests.html">Unit tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">Why this library exists</a></li>
+</ul>
+</div>
+</div>
 <div class="section" id="details">
 <h1>Details 📝<a class="headerlink" href="#details" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="markdown2canvas.html">markdown2canvas – detailed documentation</a></li>
 </ul>
@@ -148,6 +185,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="tutorials/setup_mac_linux.html" title="How to set up Mac or Linux for using markdown2canvas"
              >next</a> |</li>

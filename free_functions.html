@@ -1,0 +1,312 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Free functions &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Exceptions" href="exceptions.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="markdown2canvas.html" accesskey="U">markdown2canvas – detailed documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Free functions</a><ul>
+<li><a class="reference internal" href="#module-markdown2canvas.setup_functions">Setup functions</a></li>
+<li><a class="reference internal" href="#module-markdown2canvas.course_interaction_functions">Functions for interacting with a course on Canvas</a></li>
+<li><a class="reference internal" href="#module-markdown2canvas.translation_functions">Functions markdown2canvas uses to translate from markdown to Canvas-html</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="exceptions.html"
+                        title="previous chapter">Exceptions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/free_functions.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="free-functions">
+<h1>Free functions<a class="headerlink" href="#free-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-markdown2canvas.setup_functions">
+<span id="setup-functions"></span><h2>Setup functions<a class="headerlink" href="#module-markdown2canvas.setup_functions" title="Permalink to this headline">¶</a></h2>
+<p>Functions for making a <cite>canvasapi.Canvas</cite> object with which to work</p>
+<p>Uses environment variables to let you specify things.</p>
+<dl class="function">
+<dt id="markdown2canvas.setup_functions.get_canvas_key_url">
+<code class="sig-prename descclassname">markdown2canvas.setup_functions.</code><code class="sig-name descname">get_canvas_key_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.setup_functions.get_canvas_key_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads a file using an environment variable, namely the file specified in <cite>CANVAS_CREDENTIAL_FILE</cite>.</p>
+<p>We need the</p>
+<ul class="simple">
+<li><p>API_KEY</p></li>
+<li><p>API_URL</p></li>
+</ul>
+<p>variables from that file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.setup_functions.make_canvas_api_obj">
+<code class="sig-prename descclassname">markdown2canvas.setup_functions.</code><code class="sig-name descname">make_canvas_api_obj</code><span class="sig-paren">(</span><em class="sig-param">url=None</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.setup_functions.make_canvas_api_obj" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><p>reads the key from a python file, path to which must be in environment variable CANVAS_CREDENTIAL_FILE.</p></li>
+<li><p>optionally, pass in a url to use, in case you don’t want the default one you put in your CANVAS_CREDENTIAL_FILE.</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="module-markdown2canvas.course_interaction_functions">
+<span id="functions-for-interacting-with-a-course-on-canvas"></span><h2>Functions for interacting with a course on Canvas<a class="headerlink" href="#module-markdown2canvas.course_interaction_functions" title="Permalink to this headline">¶</a></h2>
+<p>Functions for making or getting things in Canvas, mostly by names-as-strings.</p>
+<p>Note that <cite>canvasapi</cite> mostly uses numeric identifiers to get things.  This annoyed me and so I wrote these functions.</p>
+<p>These functions do NOT require containerized content, so these functions are probably useful even without a containerized course using markdown2canvas.</p>
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.is_file_already_uploaded">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">is_file_already_uploaded</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.is_file_already_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a boolean, true if there’s a file of <cite>filename</cite> already in <cite>course</cite>.</p>
+<p>This function wants the full path to the file.</p>
+<p>See also <cite>find_file_in_course</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.find_file_in_course">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">find_file_in_course</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.find_file_in_course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see of the file at <cite>filename</cite> is already in the “files” part of <cite>course</cite>.</p>
+<p>It tests filename and size as reported on disk.  If it finds a match, then it’s up.</p>
+<p>This function wants the full path to the file.</p>
+<p>Note that <cite>canvasapi</cite> does NOT differentiate 
+between files in different “folders” on Canvas, 
+so if you have multiple files of the same name, 
+this will find the first one that matches both name and size.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.is_page_already_uploaded">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">is_page_already_uploaded</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.is_page_already_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a boolean indicating whether a page of the given <cite>name</cite> is already in the <cite>course</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.find_page_in_course">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">find_page_in_course</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.find_page_in_course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see if there’s already a page named <cite>name</cite> as part of <cite>course</cite>.</p>
+<p>tests merely based on the name.  assumes assignments are uniquely named.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.is_assignment_already_uploaded">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">is_assignment_already_uploaded</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.is_assignment_already_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a boolean indicating whether an assignment of the given <cite>name</cite> is already in the <cite>course</cite>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.find_assignment_in_course">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">find_assignment_in_course</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.find_assignment_in_course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks to see if there’s already an assignment named <cite>name</cite> as part of <cite>course</cite>.</p>
+<p>Tests merely based on the name.  assumes assingments are uniquely named.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.get_root_folder">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">get_root_folder</code><span class="sig-paren">(</span><em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.get_root_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the Folder object at root level in your course.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.get_assignment_group_id">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">get_assignment_group_id</code><span class="sig-paren">(</span><em class="sig-param">assignment_group_name</em>, <em class="sig-param">course</em>, <em class="sig-param">create_if_necessary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.get_assignment_group_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the ID number of an assignment group from its name-as-string.</p>
+<p><cite>create_if_necessary</cite>: There are two distinct behaviours available:</p>
+<p>False: [default] If such a group doesn’t exist, this will raise.
+True: Will make such an assignment group if it doesn’t exist.</p>
+<p>Gods, I hope the preceding description made you feel like “well duh” because my names were that spot-on.  If not, let’s grab a beer together and talk about it.  If you read this, you’re amazing, and I’m glad you’re using my software.  I’m trying so hard to leave positive legacy!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.create_or_get_assignment">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">create_or_get_assignment</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">course</em>, <em class="sig-param">even_if_exists=False</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.create_or_get_assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the <cite>canvasapi.Assignment</cite>.  Can tell it to make the assignment if it didn’t exist.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.create_or_get_page">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">create_or_get_page</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">course</em>, <em class="sig-param">even_if_exists</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.create_or_get_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the <cite>canvasapi.Page</cite>.  Can tell it to make the page if it didn’t exist.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.create_or_get_module">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">create_or_get_module</code><span class="sig-paren">(</span><em class="sig-param">module_name</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.create_or_get_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the <cite>canvasapi.Module</cite>.  Can tell it to make the module if it didn’t exist.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.get_module">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">get_module</code><span class="sig-paren">(</span><em class="sig-param">module_name</em>, <em class="sig-param">course</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.get_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns 
+* canvasapi.Module if such a module exists, 
+* raises if not</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.get_subfolder_named">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">get_subfolder_named</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">subfolder_name</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.get_subfolder_named" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the <cite>canvasapi.Folder</cite> with matching name.</p>
+<p>this is likely broken if subfolder has a / in its name, / gets converted to something else by Canvas.  don’t use / in subfolder names, that’s not allowed</p>
+<p>raises if doesn’t exist.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.course_interaction_functions.delete_module">
+<code class="sig-prename descclassname">markdown2canvas.course_interaction_functions.</code><code class="sig-name descname">delete_module</code><span class="sig-paren">(</span><em class="sig-param">module_name</em>, <em class="sig-param">course</em>, <em class="sig-param">even_if_doesnt_exist</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.course_interaction_functions.delete_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a module by name-as-string.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-markdown2canvas.translation_functions">
+<span id="functions-markdown2canvas-uses-to-translate-from-markdown-to-canvas-html"></span><h2>Functions markdown2canvas uses to translate from markdown to Canvas-html<a class="headerlink" href="#module-markdown2canvas.translation_functions" title="Permalink to this headline">¶</a></h2>
+<p>Functions for translating markdown to html, 
+putting headers/footers around content, 
+and manipulating links to link to or embed images and files on Canvas.</p>
+<dl class="function">
+<dt id="markdown2canvas.translation_functions.generate_course_link">
+<code class="sig-prename descclassname">markdown2canvas.translation_functions.</code><code class="sig-name descname">generate_course_link</code><span class="sig-paren">(</span><em class="sig-param">type</em>, <em class="sig-param">name</em>, <em class="sig-param">all_of_type</em>, <em class="sig-param">courseid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.translation_functions.generate_course_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a type (assignment or page) and the name of said object, generate a link
+within course to that object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.translation_functions.preprocess_replacements">
+<code class="sig-prename descclassname">markdown2canvas.translation_functions.</code><code class="sig-name descname">preprocess_replacements</code><span class="sig-paren">(</span><em class="sig-param">contents</em>, <em class="sig-param">replacements_path</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.translation_functions.preprocess_replacements" title="Permalink to this definition">¶</a></dt>
+<dd><p>attempts to read in a file containing substitutions to make, and then makes those substitutions</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="markdown2canvas.translation_functions.default_markdown_extensions">
+<code class="sig-prename descclassname">markdown2canvas.translation_functions.</code><code class="sig-name descname">default_markdown_extensions</code><em class="property"> = ['codehilite', 'fenced_code', 'md_in_html', 'tables', 'nl2br']</em><a class="headerlink" href="#markdown2canvas.translation_functions.default_markdown_extensions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default <cite>markdown</cite> extensions to use when translating from markdown to html during publishing</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.translation_functions.markdown2html">
+<code class="sig-prename descclassname">markdown2canvas.translation_functions.</code><code class="sig-name descname">markdown2html</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">course</em>, <em class="sig-param">replacements_path</em>, <em class="sig-param">markdown_extensions</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.translation_functions.markdown2html" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the main routine in the library.</p>
+<p>This function returns a string of html code.</p>
+<p>It does replacements, emojizes, converts markdown–&gt;html via <cite>markdown.markdown</cite>, and does page, assignment, and file reference link adjustments.</p>
+<p>If <cite>course</cite> is None, then you won’t get some of the functionality.  In particular, you won’t get link replacements for references to other content on Canvas.</p>
+<p>If <cite>replacements_path</cite> is None, then no replacements, duh.  Otherwise it should be a string or Path object to an existing json file containing key-value pairs of strings to replace with other strings.</p>
+<p><cite>markdown_extensions</cite> is a list of strings (or functions) specifying extensions to the <cite>markdown</cite> library to use during 
+translation from markdown to HTML.  
+The list I’ve been using for DS710/DS150 has been 
+[‘codehilite’,’fenced_code’,’md_in_html’,’tables’,’nl2br’].  
+You can find more on available extensions, and writing your own, at <a class="reference external" href="https://python-markdown.github.io/extensions/">https://python-markdown.github.io/extensions/</a></p>
+<p>You can provide your own list of extensions in the <cite>_course_metadata/defaults.json</cite> file 
+via the <cite>markdown_extensions</cite> key-value pair.  
+If no such key/value pair exists in <cite>defaults.json</cite>, then the following default will be provided for you: 
+<cite>[‘codehilite’,’fenced_code’,’md_in_html’,’tables’,’nl2br’]</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.translation_functions.adjust_html_for_images">
+<code class="sig-prename descclassname">markdown2canvas.translation_functions.</code><code class="sig-name descname">adjust_html_for_images</code><span class="sig-paren">(</span><em class="sig-param">html</em>, <em class="sig-param">published_images</em>, <em class="sig-param">courseid</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.translation_functions.adjust_html_for_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>published_images: a dict of Image objects, which should have been published (so we have their canvas objects stored into them)</p>
+<p>this function edits the html source, replacing local url’s
+with url’s to images on Canvas.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.canvas_objects.find_local_images">
+<code class="sig-prename descclassname">markdown2canvas.canvas_objects.</code><code class="sig-name descname">find_local_images</code><span class="sig-paren">(</span><em class="sig-param">html</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.find_local_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a dictionary of local url’s to markdown2canvas.Images</p>
+<p>works by assuming that local url’s don’t start with http or https, as those should be online.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="markdown2canvas.canvas_objects.find_local_files">
+<code class="sig-prename descclassname">markdown2canvas.canvas_objects.</code><code class="sig-name descname">find_local_files</code><span class="sig-paren">(</span><em class="sig-param">html</em><span class="sig-paren">)</span><a class="headerlink" href="#markdown2canvas.canvas_objects.find_local_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>constructs a dictionary of markdown2canvas.BareFiles, so that they can later be replaced with a url to a canvas thing after upload</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="Exceptions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="markdown2canvas.html" >markdown2canvas – detailed documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

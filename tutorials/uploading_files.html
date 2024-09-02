@@ -1,0 +1,149 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>How to upload a file &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="../_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Publishing content from your computer to Canvas using markdown2canvas" href="publishing_content.html" />
+    <link rel="prev" title="Text replacements to reduce workload and increase uniformity" href="text_replacements.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="text_replacements.html" title="Text replacements to reduce workload and increase uniformity"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to upload a file</a><ul>
+<li><a class="reference internal" href="#the-meta-json-file">The <cite>meta.json</cite> file</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="text_replacements.html"
+                        title="previous chapter">Text replacements to reduce workload and increase uniformity</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="publishing_content.html"
+                        title="next chapter">Publishing content from your computer to Canvas using <cite>markdown2canvas</cite></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/uploading_files.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-upload-a-file">
+<h1>How to upload a file<a class="headerlink" href="#how-to-upload-a-file" title="Permalink to this headline">¶</a></h1>
+<p>When uploading a file <cite>FILE.XXX</cite>, a <cite>meta.json</cite> file should be created in a folder named <cite>FILE.file</cite>,
+specifying where the file is sent on Canvas.</p>
+<div class="section" id="the-meta-json-file">
+<h2>The <cite>meta.json</cite> file<a class="headerlink" href="#the-meta-json-file" title="Permalink to this headline">¶</a></h2>
+<p>Filenames and titles of files are distinct on Canvas:
+the latter is what you will see when the file is placed in a module, while the former is what is shown in the file structure.</p>
+<p>You can place a file in as many modules as you wish by specifying the modules in the <cite>meta.json</cite> file.
+The key <cite>module</cite> has a value which is a list of names of modules in the Canvas course.
+If no module with the specified name exists, a module will be created to house the file.</p>
+<p>The <cite>destination</cite> key specifies where in the file structure you would like the file to be placed.</p>
+<p>Note that while a file cannot be simultaneously placed in multiple file structure locations using <cite>meta.json</cite>, if <cite>meta.json</cite> is updated,
+the file will <strong>not</strong> automatically be deleted from any previous location unless that instance is specifically deleted.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>If the <cite>meta.json</cite> file looks like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;file&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Syllabus&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;filename&quot;</span><span class="p">:</span><span class="s2">&quot;F24_Math100_syllabus.pdf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;modules&quot;</span><span class="p">:[</span><span class="s2">&quot;Course Information&quot;</span><span class="p">,</span> <span class="s2">&quot;Week 1&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;destination&quot;</span><span class="p">:</span> <span class="s2">&quot;course_info/syllabus_schedule&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>then the file in question will be named <cite>F24_Math100_syllabus.pdf</cite> and put into two modules: <cite>Course Information</cite> and <cite>Week 1</cite>.
+Within these two modules, its title will appear to students as <cite>Syllabus</cite>. The file will be located in <cite>course_info/syllabus_schedule</cite>,
+which will be created if it did not already exist.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="publishing_content.html" title="Publishing content from your computer to Canvas using markdown2canvas"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="text_replacements.html" title="Text replacements to reduce workload and increase uniformity"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

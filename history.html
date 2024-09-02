@@ -1,0 +1,152 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Why this library exists &#8212; markdown2canvas  documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="markdown2canvas – detailed documentation" href="markdown2canvas.html" />
+    <link rel="prev" title="Unit tests" href="unit_tests.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="markdown2canvas.html" title="markdown2canvas – detailed documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="unit_tests.html" title="Unit tests"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Why this library exists</a><ul>
+<li><a class="reference internal" href="#why-i-wrote-maintain-this-library">Why I wrote/maintain this library</a></li>
+<li><a class="reference internal" href="#history-2021-2024">History 2021-2024</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="unit_tests.html"
+                        title="previous chapter">Unit tests</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="markdown2canvas.html"
+                        title="next chapter">markdown2canvas – detailed documentation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/history.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="why-this-library-exists">
+<h1>Why this library exists<a class="headerlink" href="#why-this-library-exists" title="Permalink to this headline">¶</a></h1>
+<p>(This is silviana amethyst writing.)</p>
+<div class="section" id="why-i-wrote-maintain-this-library">
+<h2>Why I wrote/maintain this library<a class="headerlink" href="#why-i-wrote-maintain-this-library" title="Permalink to this headline">¶</a></h2>
+<p>The particular problem this library solves is that of putting Canvas content under version control, and also using Markdown for that content.  Canvas pages are not well-suited to version control <em>per se</em>, because they live on the LMS.  I wanted local files, with repos I can share with other designers and instrutors.</p>
+<p>Further, I wanted to be able to find-and-replace across many pieces of Canvas content at once.  Local files with my editor of choice is the way to do that; it’s impossible on Canvas.  Hence, this library.</p>
+<p>Additionally, uniform appearance and ability to change much with little effort.  I wrote a “style” system that puts headers and footers around my content, eliminating repetitive and error-prone work.  Want emester-specific text at the top of all your content?  Trivial with <cite>markdown2canvas</cite>: just change the header file, re-publish, and do something better with your time than wait for the stupid Canvas editor to load.</p>
+<p>A secondary problem this library solves is that of images.  Images on Canvas are bare, and it’s easy to end up with duplicate versions, as well as not have alt text.  By using markdown/html under version control, I can write my alt text directly into page source, instead of using the crappy click-heavy interface on Canvas.</p>
+<p>I’ve successfully automated many mundane and error-prone tasks using this library, including:</p>
+<ul class="simple">
+<li><p>Automating creation of Canvas assignments for the Webwork homework system</p></li>
+<li><p>Consistent and flexible styling and beautification of content across an entire course</p></li>
+</ul>
+<p>The cost of development and maintenance has paid itself off many times over, both in terms of mental load and time savings.</p>
+</div>
+<div class="section" id="history-2021-2024">
+<h2>History 2021-2024<a class="headerlink" href="#history-2021-2024" title="Permalink to this headline">¶</a></h2>
+<p>I (silviana) started writing this library in 2021 to meet the needs of a new course at UWEC, DS150: Computing in Python: Fundamentals and Procedural Programming.  I also anticipated using it for the upcoming 2022 re-design of DS710, Programming for Data Science at UWEC/UW Extended Campus.</p>
+<p>Mckenzie started contributing to <cite>markdown2canvas</cite> in 2022 during that DS710 re-design, and she really ran with it as she applied it to her math courses.  Mckenzie added significant features to this library, including</p>
+<ul class="simple">
+<li><p>links to existing pages, assignments, quizzes, and files</p></li>
+<li><p>warnings when some content doesn’t exist</p></li>
+<li><p>clarifications and consistency across parts of the library</p></li>
+<li><p>bugfixes</p></li>
+</ul>
+<p>Allison contributing to the library in summer 2024 as silviana prepared to move to MPI, contributing:</p>
+<ul class="simple">
+<li><p>improved unit testing</p></li>
+<li><p>documentation, particularly tutorials and notes</p></li>
+<li><p>finding more bugs and gotchas</p></li>
+</ul>
+<p>As I move to new things in August 2024, I wish you well.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="markdown2canvas.html" title="markdown2canvas – detailed documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="unit_tests.html" title="Unit tests"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">markdown2canvas  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, silviana amethyst, Mckenzie West, Allison Beemer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>
