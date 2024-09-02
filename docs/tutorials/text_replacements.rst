@@ -22,9 +22,10 @@ Note that `_course_metadata/replacements.json` is just a regular old JSON file. 
 
 
 
-
 Usage
 --------
+
+Keep in mind that the order of replacement is unspecified. Thus, it is important to choose keys that will not appear within values, and will not appear within source documents where replacement is undesired.
 
 
 Custom text replacements per-content
@@ -32,5 +33,10 @@ Custom text replacements per-content
 
 Content can override which replacements file is used, say in case you want all your assignments of a certain type to use one style, and the pages of another type to use their own.  It's easy.  
 
-In the `meta.json` for the content you want to use the non-default replacements file, specify the key-value pair `'replacements':'path/to/custom_replacements.json'`
+In the `meta.json` for the content you want to use the non-default replacements file, specify the key-value pair 
 
+.. code-block:: 
+
+	"replacements":"path/to/custom_replacements.json"
+
+The path is relative to the root of the course folder.

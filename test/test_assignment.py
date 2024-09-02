@@ -46,12 +46,12 @@ class TestAssignment():
 
 	def test_can_find_published(self, course, assignment):
 		assignment.publish(course,overwrite=True)
-		assert mc.is_assignment_already_uploaded(assignment.name,course)
+		assert mc.course_interaction_functions.is_assignment_already_uploaded(assignment.name,course)
 
 
 	def test_published_has_properties(self, course, assignment):
 		assignment.publish(course,overwrite=True)
-		on_canvas = mc.find_assignment_in_course(assignment.name,course)
+		on_canvas = mc.course_interaction_functions.find_assignment_in_course(assignment.name,course)
 		assert on_canvas.points_possible ==  assignment.points_possible
 
 		assert 'jpg' in on_canvas.allowed_extensions
@@ -64,15 +64,15 @@ class TestAssignment():
 		assignment.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with pytest.raises(mc.AlreadyExists):
+		with pytest.raises(mc.exception.AlreadyExists):
 			assignment.publish(course,overwrite=False) # default is False
 
 	def test_doesnt_find_deleted(self, course, assignment):
 		name = assignment.name
 
 		assignment.publish(course,overwrite=True)
-		assert mc.is_assignment_already_uploaded(name,course)
-		f = mc.find_assignment_in_course(name,course)
+		assert mc.course_interaction_functions.is_assignment_already_uploaded(name,course)
+		f = mc.course_interaction_functions.find_assignment_in_course(name,course)
 		f.delete()
 		# print([i.name for i in course.get_assignments()])
-		assert not mc.is_assignment_already_uploaded(name,course)
+		assert not mc.course_interaction_functions.is_assignment_already_uploaded(name,course)

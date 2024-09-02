@@ -192,7 +192,7 @@ I use a script to help me publish my content.  🎯 Let's add it:
 	course_folder/_tools/content_all            # a txt file with names of content folders
 
 
-Here's a script I use in DS710.  🎯 Copy-paste it.
+Here's a script I use in DS710.  🎯 Copy-paste it into `_tools/publish_ready_content.py`.
 
 
 .. literalinclude:: ../../example/starter_course/_tools/publish_ready_content.py
@@ -210,7 +210,12 @@ Note that you just list the folder, and `markdown2canvas` does all the work with
 Publish the content!!!!!
 --------------------------
 
-Now, assuming you've completed the setup steps (Mac/Linux: saving your API key and URL in a .py file, and specifying the name of the file via an environment variable called `CANVAS_CREDENTIALS_FILE`), you should be able to publish the content to your course. 
+Now, assuming you've completed the setup steps 
+
+* :doc:`setup_mac_linux` 
+* :doc:`setup_windows`
+
+you should be able to publish the content to your course. 
 
 🎯 Be sure you copied in your Canvas course number to the `_tools/publish_ready_content.py` script!
 

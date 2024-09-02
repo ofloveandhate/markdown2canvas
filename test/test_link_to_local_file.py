@@ -49,7 +49,7 @@ class TestPageWithLocalFile():
 		page.publish(course,overwrite=True)
 
 		# the second publish, with overwrite=False, should raise
-		with pytest.raises(mc.AlreadyExists):
+		with pytest.raises(mc.exception.AlreadyExists):
 			page.publish(course,overwrite=False) # default is False
 
 
@@ -60,17 +60,17 @@ class TestPageWithLocalFile():
 		name = page.name
 
 		page.publish(course,overwrite=True)
-		assert mc.is_page_already_uploaded(name,course)
-		f = mc.find_page_in_course(name,course)
+		assert mc.course_interaction_functions.is_page_already_uploaded(name,course)
+		f = mc.course_interaction_functions.find_page_in_course(name,course)
 		f.delete()
 		# print([i.name for i in course.get_pages()])
-		assert not mc.is_page_already_uploaded(name,course)
+		assert not mc.course_interaction_functions.is_page_already_uploaded(name,course)
 
 
 
 	def test_can_find_published(self, course, page):
 		page.publish(course,overwrite=True)
-		assert mc.is_page_already_uploaded(page.name,course)
+		assert mc.course_interaction_functions.is_page_already_uploaded(page.name,course)
 
 
 

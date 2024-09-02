@@ -1,6 +1,5 @@
 {
 	"type": "page",
 	"name": "Test Uses Droplets via Style",
-	"style":"_styles/generic",
 	"modules":["Automatically Added Module"]
 }

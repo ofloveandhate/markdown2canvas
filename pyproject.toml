@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "markdown2canvas"
+version = "0.2"
+authors = [
+  { name="Silviana Amethyst", email="amethyst@uwec.edu" },
+]
+description = "code for publishing markdown documents to Canvas pages"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: ",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/ofloveandhate/markdown2canvas"
+Issues = "https://github.com/ofloveandhate/markdown2canvas/issues"
